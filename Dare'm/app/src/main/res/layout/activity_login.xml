@@ -22,7 +22,7 @@
             android:id="@+id/lblEmail"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="54dp"
+            android:layout_marginTop="35dp"
             android:text="Email address"
             android:layout_alignParentTop="true"
             android:layout_alignStart="@+id/txtEmail" />
@@ -100,6 +100,25 @@
             android:layout_toEndOf="@+id/lblPassword"
             android:background="?android:attr/colorBackground"
             android:text="SIGN UP" />
+
+        <ImageView
+            android:id="@+id/imageView8"
+            android:layout_width="50px"
+            android:layout_height="50px"
+            android:layout_above="@+id/lblPassword"
+            android:layout_alignTop="@+id/txtEmail"
+            android:layout_toStartOf="@+id/txtEmail"
+            android:adjustViewBounds="false"
+            app:srcCompat="@mipmap/mail" />
+
+        <ImageView
+            android:id="@+id/imageView9"
+            android:layout_width="50px"
+            android:layout_height="50px"
+            android:layout_above="@+id/btnLogin"
+            android:layout_alignTop="@+id/txtPassword"
+            android:layout_toStartOf="@+id/txtPassword"
+            app:srcCompat="@mipmap/lock" />
 
     </RelativeLayout>
 

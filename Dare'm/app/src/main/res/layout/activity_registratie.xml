@@ -16,7 +16,7 @@
             android:id="@+id/lblName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="70dp"
+            android:layout_marginTop="35dp"
             android:text="Full name"
             android:layout_alignParentTop="true"
             android:layout_alignStart="@+id/txtName" />
@@ -103,6 +103,42 @@
             android:background="@color/colorPrimary"
             android:text="Register"
             android:textColor="@android:color/white" />
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="50px"
+            android:layout_height="50px"
+            android:layout_alignBottom="@+id/txtName"
+            android:layout_alignTop="@+id/txtName"
+            android:layout_toStartOf="@+id/txtName"
+            app:srcCompat="@mipmap/person" />
+
+        <ImageView
+            android:id="@+id/imageView2"
+            android:layout_width="50px"
+            android:layout_height="50px"
+            android:layout_alignBottom="@+id/txtEmail"
+            android:layout_alignTop="@+id/txtEmail"
+            android:layout_toStartOf="@+id/txtEmail"
+            app:srcCompat="@mipmap/mail" />
+
+        <ImageView
+            android:id="@+id/imageView3"
+            android:layout_width="50px"
+            android:layout_height="50px"
+            android:layout_alignBottom="@+id/txtPassword"
+            android:layout_alignTop="@+id/txtPassword"
+            android:layout_toStartOf="@+id/txtPassword"
+            app:srcCompat="@mipmap/lock" />
+
+        <ImageView
+            android:id="@+id/imageView4"
+            android:layout_width="50px"
+            android:layout_height="50px"
+            android:layout_above="@+id/btnRegister"
+            android:layout_alignTop="@+id/txtConfirmPassword"
+            android:layout_toStartOf="@+id/txtConfirmPassword"
+            app:srcCompat="@mipmap/lock" />
 
     </RelativeLayout>
 </layout>
