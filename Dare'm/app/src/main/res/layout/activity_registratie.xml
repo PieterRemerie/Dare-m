@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="registratie"
+            type="be.nmct.howest.darem.Model.Registratie" />
+    </data>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/lblName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="70dp"
+            android:text="Full name"
+            android:layout_alignParentTop="true"
+            android:layout_alignStart="@+id/txtName" />
+
+        <EditText
+            android:id="@+id/txtName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/lblName"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="5dp"
+            android:ems="10"
+            android:inputType="textPersonName"
+            android:text="@={registratie.name}"/>
+
+        <TextView
+            android:id="@+id/lblEmail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignStart="@+id/txtName"
+            android:layout_below="@+id/txtName"
+            android:layout_marginTop="20dp"
+            android:text="Email" />
+
+        <EditText
+            android:id="@+id/txtEmail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignStart="@+id/lblEmail"
+            android:layout_below="@+id/lblEmail"
+            android:layout_marginTop="5dp"
+            android:ems="10"
+            android:inputType="textPersonName"
+            android:text="@={registratie.email}"/>
+
+        <TextView
+            android:id="@+id/lblPassword"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignStart="@+id/txtEmail"
+            android:layout_below="@+id/txtEmail"
+            android:layout_marginTop="20dp"
+            android:text="Password" />
+
+        <EditText
+            android:id="@+id/txtPassword"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignStart="@+id/lblPassword"
+            android:layout_below="@+id/lblPassword"
+            android:layout_marginTop="5dp"
+            android:ems="10"
+            android:inputType="textPassword"
+            android:text="@={registratie.password}"/>
+
+        <TextView
+            android:id="@+id/lblConfirmPassword"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignStart="@+id/txtPassword"
+            android:layout_below="@+id/txtPassword"
+            android:layout_marginTop="20dp"
+            android:text="Confirm Password" />
+
+        <EditText
+            android:id="@+id/txtConfirmPassword"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignEnd="@+id/txtPassword"
+            android:layout_below="@+id/lblConfirmPassword"
+            android:layout_marginTop="5dp"
+            android:ems="10"
+            android:inputType="textPassword"
+            android:text="@={registratie.confirmPassword}"/>
+
+        <Button
+            android:id="@+id/btnRegister"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignEnd="@+id/txtConfirmPassword"
+            android:layout_alignStart="@+id/txtConfirmPassword"
+            android:layout_below="@+id/txtConfirmPassword"
+            android:layout_marginTop="30dp"
+            android:background="@color/colorPrimary"
+            android:text="Register"
+            android:textColor="@android:color/white" />
+
+    </RelativeLayout>
+</layout>
