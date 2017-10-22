@@ -99,6 +99,7 @@
             android:layout_marginTop="12dp"
             android:layout_toEndOf="@+id/lblPassword"
             android:background="?android:attr/colorBackground"
+            style="?android:attr/borderlessButtonStyle"
             android:text="SIGN UP" />
 
         <ImageView
