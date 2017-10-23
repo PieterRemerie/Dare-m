@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="login"
+            type="be.nmct.howest.darem.Model.Login" />
+
+
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/lblEmail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="35dp"
+            android:text="Email address"
+            android:layout_alignParentTop="true"
+            android:layout_alignStart="@+id/txtEmail" />
+
+        <EditText
+            android:id="@+id/txtEmail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="textPersonName"
+            android:layout_below="@+id/lblEmail"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="11dp"
+            android:text="@={login.email}"/>
+
+        <TextView
+            android:id="@+id/lblPassword"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignStart="@+id/txtEmail"
+            android:layout_below="@+id/txtEmail"
+            android:layout_marginTop="21dp"
+            android:text="Password" />
+
+        <EditText
+            android:id="@+id/txtPassword"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignStart="@+id/lblPassword"
+            android:layout_below="@+id/lblPassword"
+            android:layout_marginTop="12dp"
+            android:ems="10"
+            android:inputType="textPassword"
+            android:text="@={login.password}"/>
+
+        <Button
+            android:id="@+id/btnLogin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignEnd="@+id/txtPassword"
+            android:layout_alignStart="@+id/txtPassword"
+            android:layout_below="@+id/txtPassword"
+            android:layout_marginTop="34dp"
+            android:background="@color/colorPrimary"
+            android:text="Log in"
+            android:textColor="@android:color/white" />
+
+        <Button
+            android:id="@+id/button2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignEnd="@+id/btnLogin"
+            android:layout_alignStart="@+id/btnLogin"
+            android:layout_below="@+id/btnLogin"
+            android:layout_marginTop="23dp"
+            android:background="@color/colorPrimary"
+            android:text="Log in with Facebook"
+            android:textColor="@android:color/white" />
+
+        <TextView
+            android:id="@+id/textView6"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/button2"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="36dp"
+            android:text="Don't have a Dare'm account?" />
+
+        <Button
+            android:id="@+id/btnSignUp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/textView6"
+            android:layout_marginTop="12dp"
+            android:layout_toEndOf="@+id/lblPassword"
+            android:background="?android:attr/colorBackground"
+            style="?android:attr/borderlessButtonStyle"
+            android:text="SIGN UP" />
+
+        <ImageView
+            android:id="@+id/imageView8"
+            android:layout_width="50px"
+            android:layout_height="50px"
+            android:layout_above="@+id/lblPassword"
+            android:layout_alignTop="@+id/txtEmail"
+            android:layout_toStartOf="@+id/txtEmail"
+            android:adjustViewBounds="false"
+            app:srcCompat="@mipmap/mail" />
+
+        <ImageView
+            android:id="@+id/imageView9"
+            android:layout_width="50px"
+            android:layout_height="50px"
+            android:layout_above="@+id/btnLogin"
+            android:layout_alignTop="@+id/txtPassword"
+            android:layout_toStartOf="@+id/txtPassword"
+            app:srcCompat="@mipmap/lock" />
+
+    </RelativeLayout>
+
+</layout>
