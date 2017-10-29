@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/textViewChallengeName"
+        android:layout_width="match_parent"
+        android:layout_height="42dp"
+        android:text="Challenge name"
+        android:textAlignment="center"
+        android:textSize="30sp" />
+
+    <ImageView
+        android:id="@+id/imageViewChallenge"
+        android:layout_width="match_parent"
+        android:layout_height="91dp"
+        app:srcCompat="@drawable/football" />
+
+    <TextView
+        android:id="@+id/textViewChallengeDescription"
+        android:layout_width="match_parent"
+        android:layout_height="19dp"
+        android:text="Description about the challenge"
+        android:textAlignment="center" />
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="250dp"
+        android:id="@+id/framelayout_in_accept_challenge">
+
+    </FrameLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:textAlignment="center">
+
+        <Button
+            android:id="@+id/buttonAccept"
+            android:layout_width="190dp"
+            android:layout_height="60dp"
+            android:backgroundTint="@android:color/holo_green_light"
+            android:text="Accept" />
+
+        <Button
+            android:id="@+id/buttonDecline"
+            android:layout_width="190dp"
+            android:layout_height="60dp"
+            android:backgroundTint="@color/colorPrimary"
+            android:text="Decline" />
+
+    </LinearLayout>
+
+
+
+</LinearLayout>

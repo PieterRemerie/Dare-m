@@ -25,7 +25,10 @@
             android:name=".ChallengeActivity"
             android:label="@string/title_activity_challenge"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".InviteOverviewActivity"></activity>
+        <activity android:name=".InviteOverviewActivity" />
+        <activity android:name=".AcceptChallengeActivity" />
+        <activity android:name=".ProfileActivity" />
+        <activity android:name=".AddFriendsActivity"></activity>
     </application>
 
 </manifest>

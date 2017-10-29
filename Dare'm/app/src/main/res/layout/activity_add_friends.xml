@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="be.nmct.howest.darem.AddFriendsActivity"
+    android:orientation="vertical">
+
+
+    <SearchView
+        android:layout_width="match_parent"
+        android:layout_height="50dp" />
+
+    <layout android:id="@+id/layout"
+        android:layout_width="match_parent"
+        android:layout_height="240dp">
+
+        <FrameLayout
+            android:id="@+id/framelayout1_in_add_friends"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        </FrameLayout>
+
+    </layout>
+    <layout android:id="@+id/layout2"
+        android:layout_width="match_parent"
+        android:layout_height="240dp">
+
+        <FrameLayout
+            android:id="@+id/framelayout2_in_add_friends"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        </FrameLayout>
+
+    </layout>
+
+</LinearLayout>

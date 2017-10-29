@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="be.nmct.howest.darem.ProfileActivity"
+    android:orientation="vertical">
+
+
+    <ImageView
+        android:id="@+id/imgProfile"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.06"
+        app:srcCompat="@mipmap/person" />
+
+    <TextView
+        android:id="@+id/txtFullname"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="40dp"
+        android:text="Voornaam Naam"
+        android:textAlignment="center"
+        android:textSize="30sp" />
+
+    <TextView
+        android:id="@+id/txtProfileEmail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.01"
+        android:paddingLeft="10dp"
+        android:paddingTop="5dp"
+        android:text="Email"
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/txtEmail"
+        android:layout_width="match_parent"
+        android:layout_height="43dp"
+        android:layout_weight="0.01"
+        android:drawablePadding="@dimen/com_facebook_likeboxcountview_caret_width"
+        android:paddingLeft="20dp"
+        android:paddingTop="6dp"
+        android:text="example@example.com"
+        android:textAlignment="textStart"
+        android:textSize="18sp" />
+
+    <shape xmlns:android="http://schemas.android.com/apk/res/android"
+        android:shape="rectangle"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_marginLeft="18dp"
+        android:layout_marginRight="30dp">
+        <stroke
+            android:layout_width="2dp"
+            android:layout_height="2dp"
+            android:color="#000000" />
+    </shape>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="43dp"
+        android:layout_marginTop="30dp"
+        android:orientation="horizontal"
+        android:paddingTop="6dp">
+
+        <TextView
+            android:id="@+id/txtChalAc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:paddingLeft="20dp"
+            android:text="Challenges accepted"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/txtChalAccNr"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:paddingRight="35dp"
+            android:text="99"
+            android:textAlignment="textEnd"
+            android:textSize="18sp" />
+
+    </LinearLayout>
+
+
+    <shape xmlns:android="http://schemas.android.com/apk/res/android"
+        android:shape="rectangle"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_marginLeft="18dp"
+        android:layout_marginRight="30dp">
+        <stroke
+            android:layout_width="2dp"
+            android:layout_height="2dp"
+            android:color="#000000" />
+    </shape>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="43dp"
+        android:layout_marginTop="30dp"
+        android:orientation="horizontal"
+        android:paddingTop="6dp">
+
+        <TextView
+            android:id="@+id/txtChalCom"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:paddingLeft="20dp"
+            android:text="Challenges completed"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/txtChalComNr"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:paddingRight="35dp"
+            android:text="99"
+            android:textAlignment="textEnd"
+            android:textSize="18sp" />
+
+    </LinearLayout>
+
+
+    <shape xmlns:android="http://schemas.android.com/apk/res/android"
+        android:shape="rectangle"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_marginLeft="18dp"
+        android:layout_marginRight="30dp">
+        <stroke
+            android:layout_width="2dp"
+            android:layout_height="2dp"
+            android:color="#000000" />
+    </shape>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="78dp"
+        android:orientation="horizontal"
+        android:layout_weight="0.05"></LinearLayout>
+</LinearLayout>
