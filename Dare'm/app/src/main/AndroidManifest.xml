@@ -26,17 +26,14 @@
             android:label="@string/title_activity_challenge"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".InviteOverviewActivity" />
-<<<<<<< HEAD
         <activity android:name=".AcceptChallengeActivity" />
         <activity android:name=".ProfileActivity" />
         <activity android:name=".AddFriendsActivity"></activity>
-=======
         <activity
             android:name=".CreateChallengeActivity"
             android:label="@string/title_activity_create_challenge"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
->>>>>>> feature-create-challenge
     </application>
 
 </manifest>
