@@ -15,6 +15,7 @@ public class Challenge extends BaseObservable {
     private String category;
     private String friends;
 
+    public Challenge(){}
     public Challenge(String name, String description, String category, String friends) {
         this.name = name;
         this.description = description;

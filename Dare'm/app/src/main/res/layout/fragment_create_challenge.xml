@@ -7,6 +7,9 @@
         <variable
             name="Challenge"
             type="be.nmct.howest.darem.Model.Challenge" ></variable>
+        <variable
+            name="test"
+            type="be.nmct.howest.darem.CreateChallengeFragment"></variable>
     </data>
 
         <RelativeLayout
@@ -53,7 +56,8 @@
                 android:layout_marginBottom="41dp"
                 android:background="@color/colorPrimary"
                 android:text="Dare'm"
-                android:textColor="@android:color/white" />
+                android:textColor="@android:color/white"
+                android:onClick="@{() -> test.saveNewChallenge()}"/>
 
             <EditText
                 android:id="@+id/txtDescription"

@@ -1,10 +1,20 @@
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <import type="android.databinding.ObservableList"/>
+        <import type="be.nmct.howest.darem.Model.Challenge"/>
+        <variable
+            name="challengelist"
+            type="ObservableList&lt;Challenge&gt;"/>
+    </data>
+
     <android.support.v7.widget.RecyclerView
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context="be.nmct.howest.darem.ChallengeOverviewFragment"
-        tools:listitem="@layout/row_challenges"
-        android:id="@+id/recyclerviewChallengeOverview">
+        app:items="@{challengelist}"
+        android:id="@+id/recyclerview_challenges">
+        <!--tools:listitem="@layout/row_challenges"-->
     </android.support.v7.widget.RecyclerView>
 </layout>

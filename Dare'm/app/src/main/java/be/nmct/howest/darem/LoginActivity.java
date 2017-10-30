@@ -1,6 +1,7 @@
 package be.nmct.howest.darem;
 
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.databinding.DataBindingUtil;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -10,6 +11,7 @@ import android.widget.Button;
 import com.facebook.FacebookSdk;
 
 import be.nmct.howest.darem.Model.Login;
+import be.nmct.howest.darem.database.DatabaseHelper;
 import be.nmct.howest.darem.databinding.ActivityLoginBinding;
 
 public class LoginActivity extends AppCompatActivity {
@@ -18,7 +20,8 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-
+        /*DatabaseHelper helper = new DatabaseHelper(this);
+        SQLiteDatabase db = helper.getReadableDatabase();*/
         ActivityLoginBinding activityLoginBinding = DataBindingUtil.setContentView(this, R.layout.activity_login);
 
         //lege login
