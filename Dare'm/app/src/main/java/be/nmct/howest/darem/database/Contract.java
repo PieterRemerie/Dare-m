@@ -23,19 +23,39 @@ public class Contract {
         public static final String DELETE_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME;
     }
 
-    /*public interface UserColumns extends BaseColumns{
+    public interface UserColumns extends BaseColumns{
         public static final String TABLE_NAME = "Users";
         public static final String COLUMN_USER_NAAM = "userNaam";
         public static final String COLUMN_USER_VOORNAAM = "userVoornaam";
         public static final String COLUMN_USER_EMAIL= "userEmail";
+        public static final String COLUMN_USER_PASSWORD = "userPassword";
     }
     public static abstract class UserDB implements UserColumns{
         public static final String CREATE_TABLE = "create table "
-                + TABLE_NAME + "(" + _ID + "integer primary key autoincrement"
+                + TABLE_NAME + "(" + _ID + " integer primary key autoincrement, "
                 + COLUMN_USER_NAAM + " text not null, "
                 + COLUMN_USER_VOORNAAM + " text not null, "
-                + COLUMN_USER_EMAIL + " text not null "
+                + COLUMN_USER_EMAIL + " text not null, "
+                + COLUMN_USER_PASSWORD + " text not null"
                 + ");";
         public static final String DELETE_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME;
-    }*/
+    }
+    public interface UserChallengeColumns extends BaseColumns{
+        public static final String TABLE_NAME = "UserChallenge";
+        public static final String COLUMN_USERID = "userID";
+        public static final String COLUMN_CHALLENGEID = "challengeID";
+        public static abstract class UserChallengedB implements UserChallengeColumns{
+
+    }
+        public static final String CREATE_TABLE = "create table "
+                + TABLE_NAME + "(" + _ID + " integer primary key autoincrement, "
+                + COLUMN_USERID + " integer not null, "
+                + COLUMN_CHALLENGEID + " integer not null, "
+                + "Foreign key (" + COLUMN_USERID + ") references "
+                + UserColumns.TABLE_NAME + " (" + UserColumns._ID +") on delete cascade, "
+                + "Foreign key (" + COLUMN_CHALLENGEID + ") references "
+                + ChallengesColumns.TABLE_NAME + " (" + ChallengesColumns._ID + ") on delete cascade"
+                + ");";
+        public static final String DELETE_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME;
+    }
 }

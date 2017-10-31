@@ -27,33 +27,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(Contract.ChallengesDB.CREATE_TABLE);
+        db.execSQL(Contract.UserDB.CREATE_TABLE);
+        db.execSQL(Contract.UserChallengeColumns.CREATE_TABLE);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL(Contract.ChallengesDB.DELETE_TABLE);
+        db.execSQL(Contract.UserDB.DELETE_TABLE);
+        db.execSQL(Contract.UserChallengeColumns.DELETE_TABLE);
         onCreate(db);
     }
-
-    /*public boolean InsertChallenge(){
-        SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues contentValues = new ContentValues();
-        contentValues.put(Contract.ChallengesColumns.COLUMN_CHALLENGE_NAAM, "hier komt model + get");
-        contentValues.put(Contract.ChallengesColumns.COLUMN_CHALLENGE_DESCRIPTION, "hier komt model + get");
-        contentValues.put(Contract.ChallengesColumns.COLUMN_CHALLENGE_CATEGORYID, "hier komt model + get");
-        contentValues.put(Contract.ChallengesColumns.COLUMN_CHALLENGE_CREATORID, "hier komt model + get");
-        contentValues.put(Contract.ChallengesColumns.COLUMN_CHALLENGE_ISCOMPLETED, "hier komt model + get");
-        long result = db.insert(Contract.ChallengesDB.TABLE_NAME, null, contentValues);
-        if(result == -1){
-            return false;
-        }else{
-            return true;
-        }
-    }
-
-    public Cursor getAllChallenges(){
-        SQLiteDatabase db = this.getWritableDatabase();
-        Cursor res = db.rawQuery("select * from " + Contract.ChallengesColumns.TABLE_NAME, null);
-        return res;
-    }*/
 }
