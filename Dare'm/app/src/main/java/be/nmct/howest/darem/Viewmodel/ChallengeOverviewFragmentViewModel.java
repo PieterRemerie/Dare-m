@@ -50,6 +50,7 @@ public class ChallengeOverviewFragmentViewModel extends BaseObservable implement
             challenge.setDescription(cursor.getString(cursor.getColumnIndex(Contract.ChallengesColumns.COLUMN_CHALLENGE_DESCRIPTION)));
             challengesList.add(challenge);
         }
+
         this.binding.setChallengelist(challengesList);
         cursor.close();
     }

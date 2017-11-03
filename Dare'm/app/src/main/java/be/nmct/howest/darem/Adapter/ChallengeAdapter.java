@@ -7,6 +7,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import be.nmct.howest.darem.ChallengeOverviewFragment;
 import be.nmct.howest.darem.Model.Challenge;
@@ -36,7 +37,13 @@ public class ChallengeAdapter extends RecyclerView.Adapter<ChallengeAdapter.View
 
     @Override
     public void onBindViewHolder(Viewholder holder, int position) {
-        Challenge challenge = challenges.get(position);
+        final Challenge challenge = challenges.get(position);
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(v.getContext(),(String)challenge.getName(), Toast.LENGTH_LONG).show();
+            }
+        });
         holder.getBinding().setChallenge(challenge);
         holder.getBinding().executePendingBindings();
     }
@@ -49,6 +56,7 @@ public class ChallengeAdapter extends RecyclerView.Adapter<ChallengeAdapter.View
     public class Viewholder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
         final RowChallengesBinding binding;
+
         public Viewholder(RowChallengesBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
@@ -60,7 +68,6 @@ public class ChallengeAdapter extends RecyclerView.Adapter<ChallengeAdapter.View
 
         @Override
         public void onClick(View v) {
-
         }
     }
 }

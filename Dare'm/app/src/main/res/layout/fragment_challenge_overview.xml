@@ -15,6 +15,5 @@
         android:layout_height="match_parent"
         app:items="@{challengelist}"
         android:id="@+id/recyclerview_challenges">
-        <!--tools:listitem="@layout/row_challenges"-->
     </android.support.v7.widget.RecyclerView>
 </layout>

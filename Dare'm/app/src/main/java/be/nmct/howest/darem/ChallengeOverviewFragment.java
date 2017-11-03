@@ -15,6 +15,7 @@ import android.databinding.ObservableList;
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -50,8 +51,13 @@ public class ChallengeOverviewFragment extends Fragment{
     }
 
     @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        getLoaderManager().initLoader(0, null, challengeOverviewFragmentViewModel);
+        super.onActivityCreated(savedInstanceState);
+    }
+
+    @Override
     public void onStart() {
         super.onStart();
-        getLoaderManager().initLoader(0, null, challengeOverviewFragmentViewModel);
     }
 }

@@ -46,17 +46,6 @@ public class CreateChallengeFragment extends Fragment {
         View v = binding.getRoot();
         binding.setTest(this);
         binding.setChallenge(newChallenge);
-        //lege challenge
-        /*final Challenge challenge = new Challenge("","","sport","Pieter");
-        binding.setChallenge(challenge);*/
-
-        /*Button logIn = (Button) v.findViewById(R.id.btnCreate);
-        logIn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(v.getContext(), newChallenge.getName() + " " + newChallenge.getDescription(), Toast.LENGTH_SHORT).show();
-            }
-        });*/
         return v;
     }
 

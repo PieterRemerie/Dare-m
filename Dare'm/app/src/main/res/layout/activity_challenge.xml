@@ -31,21 +31,24 @@
             android:theme="@style/AppTheme">
 
             <TextView
+                android:id="@+id/txtWelcome1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Welcome" />
 
             <TextView
+                android:id="@+id/txtWelcome2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Press the button below to add some friends !" />
 
         </LinearLayout>
+
         <FrameLayout
+            android:id="@+id/framelayout_in_challengeactivity"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/framelayout_in_challengeactivity">
-        </FrameLayout>
+            android:layout_height="match_parent"
+            android:layout_marginTop="55dp"></FrameLayout>
         <com.getbase.floatingactionbutton.FloatingActionsMenu
             android:id="@+id/floatingactionMenu"
             android:layout_width="wrap_content"
