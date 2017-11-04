@@ -1,7 +1,9 @@
 <resources>
     <string name="app_name">Dare\'m</string>
-    <string name="facebook_app_id"></string>
-    <string name="fb_login_protocol_scheme"></string>
+    <string name="facebook_app_id">398917810525601</string>
+    <string name="fb_login_protocol_scheme">fb398917810525601</string>
+    <string name="com.facebook.sdk.ApplicationId">398917810525601</string>
+
     <string name="title_activity_challenge">ChallengeActivity</string>
 
     <!-- TODO: Remove or change this placeholder text -->
