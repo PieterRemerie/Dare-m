@@ -27,7 +27,7 @@ public class ChallengeActivity extends AppCompatActivity {
         fabChallenges.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(v.getContext(), InviteOverviewActivity.class);
+                Intent intent = new Intent(v.getContext(), CreateChallengeActivity.class);
                 startActivity(intent);
             }
         });
@@ -35,7 +35,8 @@ public class ChallengeActivity extends AppCompatActivity {
         fabFriends.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(ChallengeActivity.this,"add friends", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(v.getContext(), AddFriendsActivity.class);
+                startActivity(intent);
             }
         });
     }

@@ -1,9 +1,21 @@
 package be.nmct.howest.darem;
 
+import android.app.LoaderManager;
+import android.content.ContentValues;
 import android.content.Context;
+import android.content.Loader;
+import android.database.Cursor;
+import android.database.DatabaseUtils;
+import android.databinding.BaseObservable;
+import android.databinding.Bindable;
+import android.databinding.BindingAdapter;
+import android.databinding.DataBindingUtil;
+import android.databinding.ObservableArrayList;
+import android.databinding.ObservableList;
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -12,9 +24,18 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import be.nmct.howest.darem.Model.Challenge;
+import be.nmct.howest.darem.Viewmodel.ChallengeOverviewFragmentViewModel;
+import be.nmct.howest.darem.database.ChallengesLoader;
+import be.nmct.howest.darem.database.Contract;
+import be.nmct.howest.darem.databinding.FragmentChallengeOverviewBinding;
+import be.nmct.howest.darem.databinding.RowChallengesBinding;
 
-public class ChallengeOverviewFragment extends Fragment {
-    private RecyclerView recyclerViewChallengeOverview;
+
+public class ChallengeOverviewFragment extends Fragment{
+    private FragmentChallengeOverviewBinding binding;
+    private ChallengeOverviewFragmentViewModel challengeOverviewFragmentViewModel;
+    private ObservableList<Challenge> challengesList;
     public ChallengeOverviewFragment() {
         // Required empty public constructor
     }
@@ -23,41 +44,20 @@ public class ChallengeOverviewFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View v = inflater.inflate(R.layout.fragment_challenge_overview, container, false);
-        recyclerViewChallengeOverview = (RecyclerView) v.findViewById(R.id.recyclerviewChallengeOverview);
-        recyclerViewChallengeOverview.setLayoutManager(new LinearLayoutManager(this.getContext()));
-        ChallengeOverviewRecycleViewAdapter adapter = new ChallengeOverviewRecycleViewAdapter();
-        recyclerViewChallengeOverview.setAdapter(adapter);
-        return v;
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_challenge_overview, container, false);
+        binding.recyclerviewChallenges.setLayoutManager(new LinearLayoutManager(this.getActivity()));
+        challengeOverviewFragmentViewModel = new ChallengeOverviewFragmentViewModel(binding, getContext());
+        return binding.getRoot();
     }
 
-    public class ChallengeOverviewRecycleViewAdapter extends RecyclerView.Adapter<ChallengeOverviewFragment.ChallengeOverviewViewHolder>{
-
-        @Override
-        public ChallengeOverviewViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_challenges, parent, false);
-            return new ChallengeOverviewViewHolder(view);
-        }
-
-        @Override
-        public void onBindViewHolder(ChallengeOverviewViewHolder holder, int position) {
-            holder.textViewNaam.setText("naam challenge");
-            holder.imageViewCategory.setImageResource(R.mipmap.ic_launcher);
-        }
-
-        @Override
-        public int getItemCount() {
-            return 5;
-        }
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        getLoaderManager().initLoader(0, null, challengeOverviewFragmentViewModel);
+        super.onActivityCreated(savedInstanceState);
     }
-    public class ChallengeOverviewViewHolder extends RecyclerView.ViewHolder{
 
-        public final TextView textViewNaam;
-        public final ImageView imageViewCategory;
-        public ChallengeOverviewViewHolder(View view) {
-            super(view);
-            textViewNaam = (TextView) view.findViewById(R.id.textViewChallenge);
-            imageViewCategory = (ImageView) view.findViewById(R.id.categoryImage);
-        }
+    @Override
+    public void onStart() {
+        super.onStart();
     }
 }

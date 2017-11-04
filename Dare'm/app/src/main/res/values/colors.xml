@@ -6,4 +6,8 @@
 
     <color name="colortextBoxActivated">#d92c23</color>
     <color name="colortextBoxNormal">#ffffff</color>
+    <color name="primary_material_light">#9e2929</color>
+    <color name="primary_dark_material_light">#922828</color>
+    <color name="primary_text_default_material_light">#deffffff</color>
+    <color name="background_material_light">#fafafa</color>
 </resources>
