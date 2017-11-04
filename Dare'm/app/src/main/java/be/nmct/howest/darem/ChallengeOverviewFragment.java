@@ -47,6 +47,9 @@ public class ChallengeOverviewFragment extends Fragment{
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_challenge_overview, container, false);
         binding.recyclerviewChallenges.setLayoutManager(new LinearLayoutManager(this.getActivity()));
         challengeOverviewFragmentViewModel = new ChallengeOverviewFragmentViewModel(binding, getContext());
+
+        getActivity().setTitle("OVERVIEW");
+
         return binding.getRoot();
     }
 
@@ -54,6 +57,12 @@ public class ChallengeOverviewFragment extends Fragment{
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         getLoaderManager().initLoader(0, null, challengeOverviewFragmentViewModel);
         super.onActivityCreated(savedInstanceState);
+    }
+
+    @Override
+    public void onResume() {
+        getLoaderManager().restartLoader(0, null, challengeOverviewFragmentViewModel);
+        super.onResume();
     }
 
     @Override

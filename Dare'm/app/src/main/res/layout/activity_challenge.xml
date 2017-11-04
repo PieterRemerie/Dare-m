@@ -34,13 +34,18 @@
                 android:id="@+id/txtWelcome1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Welcome" />
+                android:text="Welcome"
+                android:textSize="24sp"
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/txtWelcome2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Press the button below to add some friends !" />
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp"
+                android:text="Press the button below to add some friends and create a challenge!"
+                android:textAlignment="center" />
 
         </LinearLayout>
 

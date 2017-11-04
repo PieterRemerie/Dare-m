@@ -2,6 +2,9 @@ package be.nmct.howest.darem.Model;
 
 import android.databinding.Bindable;
 import android.databinding.BaseObservable;
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import be.nmct.howest.darem.BR;
 
 
@@ -9,7 +12,7 @@ import be.nmct.howest.darem.BR;
  * Created by michv on 29/10/2017.
  */
 
-public class Challenge extends BaseObservable {
+public class Challenge extends BaseObservable implements Parcelable {
     private String name;
     private String description;
     private String category;
@@ -62,4 +65,37 @@ public class Challenge extends BaseObservable {
         this.friends = friends;
         notifyPropertyChanged(BR.friends);
     }
+
+    protected Challenge(Parcel in) {
+        name = in.readString();
+        description = in.readString();
+        category = in.readString();
+        friends = in.readString();
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(name);
+        dest.writeString(description);
+        dest.writeString(category);
+        dest.writeString(friends);
+    }
+
+    @SuppressWarnings("unused")
+    public static final Parcelable.Creator<Challenge> CREATOR = new Parcelable.Creator<Challenge>() {
+        @Override
+        public Challenge createFromParcel(Parcel in) {
+            return new Challenge(in);
+        }
+
+        @Override
+        public Challenge[] newArray(int size) {
+            return new Challenge[size];
+        }
+    };
 }

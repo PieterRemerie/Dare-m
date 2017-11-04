@@ -62,8 +62,7 @@ public class CreateChallengeFragment extends Fragment {
     public void saveNewChallenge(){
         saveChallengeToDb();
         resetProduct();
-        Intent intent = new Intent(getContext(), ChallengeActivity.class);
-        startActivity(intent);
+        this.getActivity().finish();
     }
     private void saveChallengeToDb(){
         ContentValues values = new ContentValues();

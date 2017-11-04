@@ -105,6 +105,5 @@ public class CreateChallengeActivity extends AppCompatActivity
         CreateChallengeFragment createChallengeFragment = new CreateChallengeFragment();
         fragmentTransaction.replace(R.id.framelayout_in_create_challenge_activity, createChallengeFragment);
         fragmentTransaction.commit();
-
     }
 }

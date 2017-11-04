@@ -40,12 +40,21 @@ public class ChallengeActivity extends AppCompatActivity {
             }
         });
     }
+
+    @Override
+    public void onBackPressed() {
+        if (getFragmentManager().getBackStackEntryCount() == 0) {
+            super.onBackPressed();
+        } else {
+            getFragmentManager().popBackStack();
+        }
+    }
+
     private void showChallengesOverviewFragment(){
         FragmentManager fragmentManager = getFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         ChallengeOverviewFragment challengesOverviewFragment = new ChallengeOverviewFragment();
         fragmentTransaction.replace(R.id.framelayout_in_challengeactivity, challengesOverviewFragment);
         fragmentTransaction.commit();
-
     }
 }
