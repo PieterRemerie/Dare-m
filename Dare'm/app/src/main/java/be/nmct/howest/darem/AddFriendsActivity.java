@@ -21,6 +21,8 @@ public class AddFriendsActivity extends AppCompatActivity {
 
     private void showAddFriendsAllFragment() {
 
+        //FRAGMENT WAARIN ALLE VRIENDEN STAAN DIE AL TOEGEVOEGD ZIJN
+
         FragmentManager fragmentManager = getFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         AddFriendsAllFragment addFriendsAllFragment = new AddFriendsAllFragment();
@@ -30,6 +32,8 @@ public class AddFriendsActivity extends AppCompatActivity {
     }
 
     private void showAddFriendsFragment() {
+
+        // FRAGMENT WAARIN DE LIJST STAAT VOOR DE VRIENDEN TE ZOEKEN EN TOE TE VOEGEN
 
         FragmentManager fragmentManager = getFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();

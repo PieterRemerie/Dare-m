@@ -12,9 +12,11 @@
         android:layout_width="match_parent"
         android:layout_height="50dp" />
 
-    <RelativeLayout android:id="@+id/layout"
+    <RelativeLayout
+        android:id="@+id/layout"
         android:layout_width="match_parent"
-        android:layout_height="240dp">
+        android:layout_height="240dp"
+        android:layout_marginBottom="20dp">
 
         <FrameLayout
             android:id="@+id/framelayout1_in_add_friends"
