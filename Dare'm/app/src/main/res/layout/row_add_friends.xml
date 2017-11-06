@@ -18,13 +18,13 @@
                 android:layout_gravity="center"
                 android:contentDescription="@string/categoryimage"
                 android:src="@mipmap/person" />
+
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="150dp"
                 android:id="@+id/textViewAddFriendName"
+                android:layout_width="250dp"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="Naam van de vriend"/>
+                android:text="Naam van de vriend" />
 
             <ImageView
                 android:id="@+id/AddFriendPlusImage"

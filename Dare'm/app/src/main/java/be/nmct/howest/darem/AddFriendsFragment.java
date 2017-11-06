@@ -4,6 +4,8 @@ import android.app.Fragment;
 import android.app.LoaderManager;
 import android.content.Loader;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
@@ -19,10 +21,15 @@ import android.widget.TextView;
 import com.facebook.AccessToken;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 import be.nmct.howest.darem.Loader.Friends;
 import be.nmct.howest.darem.Loader.FriendsLoader;
@@ -35,6 +42,8 @@ public class AddFriendsFragment extends Fragment implements LoaderManager.Loader
 
     private RecyclerView recyclerViewAddFriends;
     private AddFriendsRecycleViewAdapter addFriendsRecycleViewAdapter;
+    private URL url;
+    private Bitmap bmp;
 
     public AddFriendsFragment(){
         //empty constructor
@@ -60,7 +69,7 @@ public class AddFriendsFragment extends Fragment implements LoaderManager.Loader
     @Override
     public void onStart() {
         super.onStart();
-        getLoaderManager().initLoader(0, null, this);
+        getLoaderManager().initLoader(0, null, this).forceLoad();
     }
 
     @Override
@@ -102,10 +111,16 @@ public class AddFriendsFragment extends Fragment implements LoaderManager.Loader
             mCursorAddFriends.moveToPosition(position);
 
             int colnr1 = mCursorAddFriends.getColumnIndex(Friends.Columns.COLUMN_NAME);
+            int colnr2 = mCursorAddFriends.getColumnIndex(Friends.Columns.COLUMN_PICTURE);
 
 
             holder.textViewNaam.setText(mCursorAddFriends.getString(colnr1));
-            holder.imageViewFriend.setImageResource(R.mipmap.person);
+
+            String pictureURL = mCursorAddFriends.getString(colnr2);
+
+
+            Picasso.with(getContext()).load(pictureURL).resize(60 , 60).into(holder.imageViewFriend);
+
         }
 
         @Override

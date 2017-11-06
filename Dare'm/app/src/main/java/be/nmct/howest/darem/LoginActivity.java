@@ -71,6 +71,8 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
+
+        // READ permissions voor FACEBOOK gegevens op te laden
         loginFB = (LoginButton) findViewById(R.id.btnLoginFB);
         loginFB.setReadPermissions("public_profile");
         loginFB.setReadPermissions("user_birthday");
@@ -81,7 +83,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onSuccess(LoginResult loginResult) {
 
-                Log.i("blabla" , loginResult.getRecentlyGrantedPermissions().toString());
+                Log.i("onSuccesFACEBOOK" , loginResult.getRecentlyGrantedPermissions().toString());
                 Intent intent = new Intent(LoginActivity.this, ChallengeActivity.class);
                 startActivity(intent);
             }
@@ -93,7 +95,7 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             public void onError(FacebookException error) {
-                Log.i("ERRORRRRRR", error.getMessage());
+                Log.i("ERROR", error.getMessage());
             }
         });
 
