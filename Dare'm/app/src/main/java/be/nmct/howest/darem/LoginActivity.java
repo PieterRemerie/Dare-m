@@ -10,12 +10,20 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
+import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
+import com.facebook.HttpMethod;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import be.nmct.howest.darem.Model.Login;
 import be.nmct.howest.darem.database.DatabaseHelper;
@@ -25,6 +33,7 @@ public class LoginActivity extends AppCompatActivity {
 
     CallbackManager callbackManager;
     LoginButton loginFB;
+    JSONObject profileInformation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,12 +71,19 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
+
+        // READ permissions voor FACEBOOK gegevens op te laden
         loginFB = (LoginButton) findViewById(R.id.btnLoginFB);
+        loginFB.setReadPermissions("public_profile");
+        loginFB.setReadPermissions("user_birthday");
+        loginFB.setReadPermissions("user_friends");
+
 
         loginFB.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
-                Log.i("tag", "LOGIN SUCCES");
+
+                Log.i("onSuccesFACEBOOK" , loginResult.getRecentlyGrantedPermissions().toString());
                 Intent intent = new Intent(LoginActivity.this, ChallengeActivity.class);
                 startActivity(intent);
             }
@@ -79,7 +95,7 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             public void onError(FacebookException error) {
-
+                Log.i("ERROR", error.getMessage());
             }
         });
 
@@ -92,5 +108,7 @@ public class LoginActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         callbackManager.onActivityResult(requestCode, resultCode, data);
     }
+
+
 
 }
