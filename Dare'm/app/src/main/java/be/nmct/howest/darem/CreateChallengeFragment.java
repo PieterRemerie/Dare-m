@@ -11,11 +11,23 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.ProtocolException;
+import java.net.URL;
+
+import javax.net.ssl.HttpsURLConnection;
 
 import be.nmct.howest.darem.Model.Challenge;
 import be.nmct.howest.darem.Model.Login;
@@ -61,6 +73,7 @@ public class CreateChallengeFragment extends Fragment {
 
     public void saveNewChallenge(){
         saveChallengeToDb();
+        new SendPost().execute();
         resetProduct();
         this.getActivity().finish();
     }
@@ -81,5 +94,63 @@ public class CreateChallengeFragment extends Fragment {
         } else {
             task.execute(params);
         }
+    }
+
+    class SendPost extends AsyncTask<String, Void, String>{
+
+        @Override
+        protected String doInBackground(String... params) {
+            try {
+                postRequest();
+            } catch (IOException e) {
+                Log.i("dd", "doInBackground: fout");
+                e.printStackTrace();
+                return null;
+            }
+            return null;
+        }
+
+        private void postRequest() throws IOException {
+
+            try{
+                URL url = new URL("https://darem.herokuapp.com/challenge/add");
+                HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();
+                conn.setRequestMethod("POST");
+                conn.setRequestProperty("Content-Type", "application/json;charset=UTF-8");
+                conn.setRequestProperty("Accept","application/json");
+                conn.setDoOutput(true);
+                conn.setDoInput(true);
+
+                //Write
+                JSONObject js = new JSONObject();
+                js.put("name", newChallenge.getName());
+                js.put("description", newChallenge.getDescription());
+                js.put("category", "testcategory");
+                js.put("creatorId", "id CREATOR");
+                js.put("isCompleted", "false");
+
+                DataOutputStream os = new DataOutputStream(conn.getOutputStream());
+                os.writeBytes(js.toString());
+
+                os.flush();
+                os.close();
+
+                Log.i("STATUS", String.valueOf(conn.getResponseCode()));
+                Log.i("MSG" , conn.getResponseMessage());
+
+                conn.disconnect();
+
+                Log.i("ee", "SEND: DONE");
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            } catch (ProtocolException e) {
+                Log.i("ee", "ProtocolException: " + e.getMessage());
+            } catch (IOException e) {
+                Log.i("ee", "IOException: " + e.getMessage());
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
     }
 }
