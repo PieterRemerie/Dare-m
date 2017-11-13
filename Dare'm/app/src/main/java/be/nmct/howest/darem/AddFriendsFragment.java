@@ -49,6 +49,13 @@ public class AddFriendsFragment extends Fragment implements LoaderManager.Loader
         //empty constructor
     }
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
@@ -57,10 +64,9 @@ public class AddFriendsFragment extends Fragment implements LoaderManager.Loader
         View v = inflater.inflate(R.layout.fragment_add_friends, container, false);
 
         recyclerViewAddFriends = (RecyclerView) v.findViewById(R.id.recyclerviewAddFriends);
-        recyclerViewAddFriends.setLayoutManager(new LinearLayoutManager(this.getContext()));
-       // AddFriendsRecycleViewAdapter adapter = new AddFriendsRecycleViewAdapter();
-     //   recyclerViewAddFriends.setAdapter(adapter);
 
+       // AddFriendsRecycleViewAdapter adapter = new AddFriendsRecycleViewAdapter();
+     //recyclerViewAddFriends.setAdapter(adapter);
 
 
         return v;
@@ -69,7 +75,8 @@ public class AddFriendsFragment extends Fragment implements LoaderManager.Loader
     @Override
     public void onStart() {
         super.onStart();
-        getLoaderManager().initLoader(0, null, this).forceLoad();
+        getLoaderManager().initLoader(0, null, this);
+        recyclerViewAddFriends.setLayoutManager(new LinearLayoutManager(this.getContext()));
     }
 
     @Override
@@ -104,8 +111,6 @@ public class AddFriendsFragment extends Fragment implements LoaderManager.Loader
 
         @Override
         public void onBindViewHolder(AddFriendsViewHolder holder, int position) {
-
-
 
 
             mCursorAddFriends.moveToPosition(position);

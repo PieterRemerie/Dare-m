@@ -25,8 +25,6 @@ public class FriendsLoader extends AsyncTaskLoader<Cursor> {
     private Cursor mCursor;
     private static Object lock = new Object();
     AccessToken accessToken = AccessToken.getCurrentAccessToken();
-    JSONArray jsonArray ;
-
 
 
     public FriendsLoader(Context context) {
@@ -36,14 +34,19 @@ public class FriendsLoader extends AsyncTaskLoader<Cursor> {
 
     @Override
     protected void onStartLoading() {
-        RequestInfoProfile(accessToken);
-        if(mCursor != null){
+
+        if (mCursor != null) {
             deliverResult(mCursor);
 
         }
-        if(takeContentChanged() || mCursor == null) {
+        if (takeContentChanged() || mCursor == null) {
             forceLoad();
         }
+    }
+
+    @Override
+    protected void onForceLoad() {
+        super.onForceLoad();
     }
 
     @Override
@@ -54,15 +57,13 @@ public class FriendsLoader extends AsyncTaskLoader<Cursor> {
         return mCursor;
     }
 
-    private void loadData(){
+
+    private void loadData() {
 
 
+        synchronized (lock) {
 
-        synchronized(lock){
-
-            if(mCursor != null) return;
-
-            try{
+            if (mCursor != null) return;
 
                 String[] mColumnNames = new String[]{
                         Friends.Columns._ID,
@@ -70,15 +71,18 @@ public class FriendsLoader extends AsyncTaskLoader<Cursor> {
                         Friends.Columns.COLUMN_PICTURE
                 };
 
-                MatrixCursor cursor = new MatrixCursor(mColumnNames);
-                RequestInfoProfile(accessToken);
+                final MatrixCursor cursor = new MatrixCursor(mColumnNames);
 
-                try{
-                    if(jsonArray != null){
+
+                JSONArray info = RequestLoader.RequestInfoProfile();
+
+                try {
+
+                    if (info != null) {
                         int id = 1;
-                        for(int i = 0 ; i < jsonArray.length() ; i++){
+                        for (int i = 0; i < info.length(); i++) {
 
-                            JSONObject obj = jsonArray.getJSONObject(i);
+                            JSONObject obj = info.getJSONObject(i);
 
                             MatrixCursor.RowBuilder row = cursor.newRow();
                             row.add(i++);
@@ -95,58 +99,16 @@ public class FriendsLoader extends AsyncTaskLoader<Cursor> {
 
                         }
                     }
-                }
-                catch (Exception ex){
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    Log.i("ERROR", e.getMessage());
 
                 }
 
                 mCursor = cursor;
 
-            }
-            catch (Exception ex){
-                Log.w("myApp", ex.getMessage());
-            }
         }
-
-    }
-
-    public void RequestInfoProfile(AccessToken accToken){
-
-        JSONArray bla = null;
-
-        GraphRequest request = GraphRequest.newMeRequest(accToken, new GraphRequest.GraphJSONObjectCallback() {
-                    @Override
-                    public void onCompleted(JSONObject profile, GraphResponse response) {
-
-
-
-                        Log.i("INFORMATIE", profile.toString());
-
-                        try {
-                            // DIT IS DE JSONARRAY MET DE VRIENDENLIJST
-                            JSONArray info = profile.getJSONObject("invitable_friends").getJSONArray("data");
-
-                            jsonArray = info;
-
-
-
-
-
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                            Log.i("ERROR", e.getMessage());
-
-                        }
-
-
-                    }
-                });
-        Bundle parameters = new Bundle();
-        parameters.putString("fields", "id,name,picture,invitable_friends");
-        parameters.putInt("limit", 500);
-        request.setParameters(parameters);
-        request.executeAsync();
-        
 
     }
 
