@@ -30,6 +30,7 @@ import org.json.JSONObject;
 import java.io.BufferedWriter;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.net.MalformedURLException;
@@ -64,7 +65,7 @@ public class LoginActivity extends AppCompatActivity {
         callbackManager = CallbackManager.Factory.create();
 
         //lege login
-        final Login login = new Login("","");
+        final Login login = new Login("", "");
         activityLoginBinding.setLogin(login);
 
         Button logIn = (Button) findViewById(R.id.btnLogin);
@@ -96,7 +97,8 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onSuccess(LoginResult loginResult) {
 
-                Log.i("onSuccesFACEBOOK" , loginResult.getRecentlyGrantedPermissions().toString());
+                Log.i("onSuccesFACEBOOK", loginResult.getRecentlyGrantedPermissions().toString());
+                new SendPost(loginResult.getAccessToken().getToken()).execute();
                 Intent intent = new Intent(LoginActivity.this, ChallengeActivity.class);
                 startActivity(intent);
             }
@@ -121,4 +123,61 @@ public class LoginActivity extends AppCompatActivity {
         callbackManager.onActivityResult(requestCode, resultCode, data);
     }
 
+    class SendPost extends AsyncTask<String, Void, String>{
+
+        String token;
+
+        public SendPost(String token) {
+            this.token = token;
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+            try {
+                postRequest();
+            } catch (IOException e) {
+                Log.i("dd", "doInBackground: fout");
+                e.printStackTrace();
+                return null;
+            }
+            return null;
+        }
+
+        private void postRequest() throws IOException {
+
+            try{
+                URL url = new URL("https://darem.herokuapp.com/users/auth/facebook/token?access_token=" + token);
+                Log.i("token", url.toString());
+                HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();
+                conn.setRequestMethod("POST");
+                conn.setDoOutput(true);
+                conn.setDoInput(true);
+
+                DataOutputStream os = new DataOutputStream(conn.getOutputStream());
+
+                os.flush();
+                os.close();
+
+                Log.i("STATUS", String.valueOf(conn.getResponseCode()));
+
+                //get userid
+                InputStream is = conn.getInputStream();
+                int ch;
+                StringBuffer userID = new StringBuffer();
+                while ((ch = is.read()) != -1) {
+                    userID.append((char) ch);
+                }
+                Log.i("MSG" , userID.toString());
+
+                conn.disconnect();
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            } catch (ProtocolException e) {
+                Log.i("ee", "ProtocolException: " + e.getMessage());
+            } catch (IOException e) {
+                Log.i("ee", "IOException: " + e.getMessage());
+            }
+        }
+
+    }
 }

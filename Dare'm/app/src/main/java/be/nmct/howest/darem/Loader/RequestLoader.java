@@ -1,15 +1,21 @@
 package be.nmct.howest.darem.Loader;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Log;
 
 import com.facebook.AccessToken;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
+import com.facebook.HttpMethod;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.io.IOException;
+import java.net.URL;
 
 /**
  * Created by katrien on 13/11/2017.
@@ -23,6 +29,7 @@ public class RequestLoader {
 
         AccessToken accToken = AccessToken.getCurrentAccessToken();
 
+/*
         GraphRequest.GraphJSONObjectCallback jsonRequest = new GraphRequest.GraphJSONObjectCallback(){
 
             @Override
@@ -39,14 +46,27 @@ public class RequestLoader {
                 }
             }
         };
+*/
 
+        Bundle args = new Bundle();
+        args.putInt("limit", 1000);
+        GraphRequest request = new GraphRequest(accToken, "/me/friends", args, HttpMethod.GET, new GraphRequest.Callback() {
+            @Override
+            public void onCompleted(GraphResponse response) {
+                try {
+                    JSONObject graphObject = response.getJSONObject();
 
-        GraphRequest request = GraphRequest.newMeRequest(accToken, jsonRequest);
+                    JSONArray dataArray = graphObject.getJSONArray("data");
 
-        Bundle parameters = new Bundle();
-        parameters.putString("fields", "id,name,picture,invitable_friends");
-        parameters.putInt("limit", 500);
-        request.setParameters(parameters);
+                    friends[0] = dataArray;
+
+                } catch (Exception e) {
+                    System.out.println("Exception=" + e);
+                    e.printStackTrace();
+                }
+            }
+        });
+
         request.executeAndWait();
 
         if(friends[0] != null) {
