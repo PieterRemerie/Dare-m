@@ -6,6 +6,7 @@ import android.content.Loader;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
@@ -15,6 +16,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -27,9 +29,13 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.net.ProtocolException;
 import java.net.URL;
+
+import javax.net.ssl.HttpsURLConnection;
 
 import be.nmct.howest.darem.Loader.Friends;
 import be.nmct.howest.darem.Loader.FriendsLoader;
@@ -44,6 +50,7 @@ public class AddFriendsFragment extends Fragment implements LoaderManager.Loader
     private AddFriendsRecycleViewAdapter addFriendsRecycleViewAdapter;
     private URL url;
     private Bitmap bmp;
+
 
     public AddFriendsFragment(){
         //empty constructor
@@ -117,6 +124,7 @@ public class AddFriendsFragment extends Fragment implements LoaderManager.Loader
 
             int colnr1 = mCursorAddFriends.getColumnIndex(Friends.Columns.COLUMN_NAME);
             int colnr2 = mCursorAddFriends.getColumnIndex(Friends.Columns.COLUMN_PICTURE);
+            final int colnr3 = mCursorAddFriends.getColumnIndex(Friends.Columns._ID);
 
 
             holder.textViewNaam.setText(mCursorAddFriends.getString(colnr1));
@@ -124,7 +132,17 @@ public class AddFriendsFragment extends Fragment implements LoaderManager.Loader
             String pictureURL = mCursorAddFriends.getString(colnr2);
 
 
+
             Picasso.with(getContext()).load(pictureURL).resize(60 , 60).into(holder.imageViewFriend);
+
+
+            holder.btnAddFriends.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    new SendPost(mCursorAddFriends.getString(colnr3)).execute();
+                    Log.i("AddFRIENDS", "COMPLETED");
+                }
+            });
 
         }
 
@@ -138,12 +156,79 @@ public class AddFriendsFragment extends Fragment implements LoaderManager.Loader
 
         public final TextView textViewNaam;
         public final ImageView imageViewFriend;
+        public final Button btnAddFriends;
 
         public AddFriendsViewHolder(View view) {
             super(view);
 
             textViewNaam = (TextView) view.findViewById(R.id.textViewAddFriendName);
             imageViewFriend = (ImageView) view.findViewById(R.id.addFriendImage);
+            btnAddFriends = (Button) view.findViewById(R.id.AddFriendPlusImage);
+
+        }
+    }
+
+
+    class SendPost extends AsyncTask<String, Void, String> {
+
+        String friendId;
+
+        public SendPost(String friendId) {
+            this.friendId = friendId;
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+            try{
+                PostRequest();
+            }
+            catch(IOException e) {
+                Log.i("AddFriendEXCEPTION", e.getMessage());
+                e.printStackTrace();
+                return  null;
+            }
+            return null;
+        }
+
+        private void PostRequest()throws IOException {
+
+            try{
+                URL url = new URL("https://darem.herokuapp.com/users/friends/add");
+                HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();
+                conn.setRequestMethod("POST");
+                conn.setRequestProperty("Content-Type", "application/json;charset=UTF-8");
+                conn.setRequestProperty("Accept","application/json");
+                conn.setDoOutput(true);
+                conn.setDoInput(true);
+
+                //Write
+                JSONObject js = new JSONObject();
+                js.put("userOne", AccessToken.getCurrentAccessToken().getUserId().toString());
+                js.put("userTwo","" + friendId);
+
+                Log.i("jsonobject", js.toString());
+
+                DataOutputStream os = new DataOutputStream(conn.getOutputStream());
+                os.writeBytes(js.toString());
+
+                os.flush();
+                os.close();
+
+                Log.i("STATUS", String.valueOf(conn.getResponseCode()));
+                Log.i("MSG" , conn.getResponseMessage());
+
+                conn.disconnect();
+
+                Log.i("ee", "SEND: DONE");
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            } catch (ProtocolException e) {
+                Log.i("ee", "ProtocolException: " + e.getMessage());
+            } catch (IOException e) {
+                Log.i("ee", "IOException: " + e.getMessage());
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
 
         }
     }

@@ -16,9 +16,20 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+
+import be.nmct.howest.darem.Loader.UserLoader;
+
+import static be.nmct.howest.darem.Loader.UserLoader.getDataFromUrl;
 
 public class ChallengeActivity extends AppCompatActivity {
 
@@ -26,6 +37,9 @@ public class ChallengeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_challenge);
+
+        View view = getLayoutInflater().inflate(R.layout.activity_challenge,null);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -34,6 +48,8 @@ public class ChallengeActivity extends AppCompatActivity {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 int id = item.getItemId();
+
+
 
                 if (id == R.id.yourchallengesDrawer) {
                     Intent intent = new Intent(getApplicationContext(), ChallengeActivity.class);
@@ -50,8 +66,24 @@ public class ChallengeActivity extends AppCompatActivity {
                 DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
                 drawer.closeDrawer(GravityCompat.START);
                 return true;
+
+
             }
         });
+
+        View header = navigationView.getHeaderView(0);
+        TextView txtUserNaam = (TextView) header.findViewById(R.id.txtUserNaam);
+        txtUserNaam.setText("katrien");
+
+        JSONObject userInf = null;
+
+        //String info = getDataFromUrl("http://darem.herokuapp.com/userprofile?authToken=" + AccessToken.getCurrentAccessToken().getUserId());
+
+
+        //Log.i("USER INFO", info);
+
+        // Log.i("USER INFO", userInf.toString());
+
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);

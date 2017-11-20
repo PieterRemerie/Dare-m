@@ -34,15 +34,18 @@
                 android:layout_toEndOf="@+id/addFriendImage"
                 android:text="Naam van de vriend" />
 
-            <ImageView
+            <Button
                 android:id="@+id/AddFriendPlusImage"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
                 android:layout_gravity="center"
                 android:contentDescription="@string/categoryimage"
                 android:src="@android:drawable/ic_menu_add"
-                android:layout_centerVertical="true"
-                android:layout_alignParentEnd="true" />
+                android:textSize="28sp"
+                tools:text="+"
+                android:textColor="@drawable/com_facebook_tooltip_black_background"></Button>
         </RelativeLayout>
     </android.support.v7.widget.CardView>
 </layout>

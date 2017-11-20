@@ -35,7 +35,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/imgProfielFoto"
             android:layout_marginTop="5dp"
-            android:text="voornaam naam"
+            android:text="@{profile.name}"
             android:textAlignment="center"
             android:textSize="25sp" />
 
@@ -46,7 +46,7 @@
             android:layout_below="@+id/txtNaam"
             android:layout_marginLeft="25dp"
             android:layout_marginTop="25dp"
-            android:text="emailadres"
+            android:text="@{profile.email}"
             android:textSize="17sp" />
 
         <TextView

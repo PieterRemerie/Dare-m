@@ -89,10 +89,12 @@ public class FriendsLoader extends AsyncTaskLoader<Cursor> {
                         for (int i = 0; i < info.length(); i++) {
                             JSONObject obj = info.getJSONObject(i);
 
-                            Log.i("PictureJSON", "" + info.length());
+
+
+                            Log.i("PictureJSON", "" + obj.toString());
 
                             row = cursor.newRow();
-                            row.add(i);
+                            row.add(obj.getString("id"));
                             row.add(obj.getString("name"));
 
                             String pictureURL = "https://graph.facebook.com/" + obj.get("id") + "/picture?type=large";

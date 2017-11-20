@@ -13,6 +13,7 @@ public class Profile extends BaseObservable{
     public String email;
 
 
+
     public String getName() {
         return name;
     }
