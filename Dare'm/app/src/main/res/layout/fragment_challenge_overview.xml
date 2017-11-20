@@ -9,11 +9,11 @@
             type="ObservableList&lt;Challenge&gt;"/>
     </data>
 
-    <android.support.v7.widget.RecyclerView
-        xmlns:tools="http://schemas.android.com/tools"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:items="@{challengelist}"
-        android:id="@+id/recyclerview_challenges">
-    </android.support.v7.widget.RecyclerView>
+        <android.support.v7.widget.RecyclerView
+            xmlns:tools="http://schemas.android.com/tools"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:items="@{challengelist}"
+            android:id="@+id/recyclerview_challenges">
+        </android.support.v7.widget.RecyclerView>
 </layout>

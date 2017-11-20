@@ -28,7 +28,7 @@
         <activity android:name=".InviteOverviewActivity" />
         <activity android:name=".AcceptChallengeActivity" />
         <activity android:name=".ProfileActivity" />
-        <activity android:name=".AddFriendsActivity"></activity>
+        <activity android:name=".AddFriendsActivity"/>
         <activity
             android:name=".CreateChallengeActivity"
             android:label="@string/title_activity_create_challenge"
