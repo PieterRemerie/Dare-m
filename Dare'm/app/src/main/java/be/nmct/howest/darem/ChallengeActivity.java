@@ -2,11 +2,16 @@ package be.nmct.howest.darem;
 
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.media.Image;
 import android.os.Bundle;
 
 import com.facebook.AccessToken;
 import com.getbase.floatingactionbutton.FloatingActionButton;
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Transformation;
 
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -19,6 +24,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -31,6 +37,7 @@ import java.util.concurrent.ExecutionException;
 
 import be.nmct.howest.darem.Loader.HttpGetRequest;
 import be.nmct.howest.darem.Loader.HttpGetRequest;
+import be.nmct.howest.darem.Transforms.CircleTransform;
 
 
 public class ChallengeActivity extends AppCompatActivity {
@@ -74,6 +81,7 @@ public class ChallengeActivity extends AppCompatActivity {
         View header = navigationView.getHeaderView(0);
         TextView txtUserNaam = (TextView) header.findViewById(R.id.txtUserNaam);
         TextView txtUserMail = (TextView) header.findViewById(R.id.txtUserEmail);
+        ImageView imgUser = (ImageView) header.findViewById(R.id.imgUserPhoto);
 
         String url = "https://darem.herokuapp.com/userprofile?authToken=" + AccessToken.getCurrentAccessToken().getUserId();
         String result = null;
@@ -85,15 +93,18 @@ public class ChallengeActivity extends AppCompatActivity {
             if (result != null) {
 
                 JSONArray jObj = new JSONArray(result);
-                Log.i("Info jsonUser", jObj.getJSONObject(0).toString());
-               // Log.i("Info jsonUser", jObj.getJSONObject(0).getString("givenName"));
+
+
 
                 String Username = jObj.getJSONObject(0).getString("givenName") + " " + jObj.getJSONObject(0).getString("familyName");
                 String Usermail = jObj.getJSONObject(0).getString("email");
-                if (Username != null && Usermail != null) {
+                String Userimgurl = jObj.getJSONObject(0).getJSONObject("facebook").getString("photo");
+                Log.i("IMAGE PHOTO", Userimgurl);
+                if (Username != null && Usermail != null && Userimgurl != null) {
                     Log.i("USERNAME ", Username);
                     txtUserNaam.setText(Username);
                     txtUserMail.setText(Usermail);
+                    Picasso.with(view.getContext()).load(Userimgurl).transform(new CircleTransform()).into(imgUser);
                 }
             }
 
@@ -152,4 +163,6 @@ public class ChallengeActivity extends AppCompatActivity {
         fragmentTransaction.replace(R.id.framelayout_in_challengeactivity, challengesOverviewFragment);
         fragmentTransaction.commit();
     }
+
+
 }
