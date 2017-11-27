@@ -22,34 +22,34 @@ public class AddFriendsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_add_friends);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        final DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                int id = item.getItemId();
-
-                if (id == R.id.yourchallengesDrawer) {
-                    Intent intent = new Intent(getApplicationContext(), ChallengeActivity.class);
-                    startActivity(intent);
-                } else if (id == R.id.friendsDrawer) {
-                    Intent intent = new Intent(getApplicationContext(), AddFriendsActivity.class);
-                    startActivity(intent);
-
-                } else if (id == R.id.invitesDrawer) {
-                    Intent intent = new Intent(getApplicationContext(), InviteOverviewActivity.class);
-                    startActivity(intent);
-                }
-
-                DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-                drawer.closeDrawer(GravityCompat.START);
-                return true;
-            }
-        });
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
+        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                Intent intent = new Intent();
+                switch (item.getItemId()){
+                    case R.id.yourchallengesDrawer:
+                        intent = new Intent(getApplicationContext(), AddFriendsActivity.class);
+                        startActivity(intent);
+                        break;
+                    case R.id.friendsDrawer:
+                        intent = new Intent(getApplicationContext(), AddFriendsActivity.class);
+                        startActivity(intent);
+                        break;
+                    case R.id.invitesDrawer:
+                        intent = new Intent(getApplicationContext(), InviteOverviewActivity.class);
+                        startActivity(intent);
+                        break;
+                }
+                drawer.closeDrawers();
+                return false;
+            }
+        });
         if(savedInstanceState == null){
             showAddFriendsFragment();
             showAddFriendsAllFragment();
