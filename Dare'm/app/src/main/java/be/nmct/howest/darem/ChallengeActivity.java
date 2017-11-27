@@ -22,14 +22,16 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.concurrent.ExecutionException;
 
-import be.nmct.howest.darem.Loader.UserLoader;
+import be.nmct.howest.darem.Loader.HttpGetRequest;
+import be.nmct.howest.darem.Loader.HttpGetRequest;
 
-import static be.nmct.howest.darem.Loader.UserLoader.getDataFromUrl;
 
 public class ChallengeActivity extends AppCompatActivity {
 
@@ -38,7 +40,7 @@ public class ChallengeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_challenge);
 
-        View view = getLayoutInflater().inflate(R.layout.activity_challenge,null);
+        View view = getLayoutInflater().inflate(R.layout.activity_challenge, null);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -48,7 +50,6 @@ public class ChallengeActivity extends AppCompatActivity {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 int id = item.getItemId();
-
 
 
                 if (id == R.id.yourchallengesDrawer) {
@@ -70,19 +71,41 @@ public class ChallengeActivity extends AppCompatActivity {
 
             }
         });
-
         View header = navigationView.getHeaderView(0);
         TextView txtUserNaam = (TextView) header.findViewById(R.id.txtUserNaam);
-        txtUserNaam.setText("katrien");
+        TextView txtUserMail = (TextView) header.findViewById(R.id.txtUserEmail);
 
-        JSONObject userInf = null;
+        String url = "https://darem.herokuapp.com/userprofile?authToken=" + AccessToken.getCurrentAccessToken().getUserId();
+        String result = null;
+        JSONArray jsonUser = null;
+        HttpGetRequest getRequest = new HttpGetRequest();
+        try {
+            result = getRequest.execute(url).get();
 
-        //String info = getDataFromUrl("http://darem.herokuapp.com/userprofile?authToken=" + AccessToken.getCurrentAccessToken().getUserId());
+            if (result != null) {
 
+                JSONArray jObj = new JSONArray(result);
+                Log.i("Info jsonUser", jObj.getJSONObject(0).toString());
+               // Log.i("Info jsonUser", jObj.getJSONObject(0).getString("givenName"));
 
-        //Log.i("USER INFO", info);
+                String Username = jObj.getJSONObject(0).getString("givenName") + " " + jObj.getJSONObject(0).getString("familyName");
+                String Usermail = jObj.getJSONObject(0).getString("email");
+                if (Username != null && Usermail != null) {
+                    Log.i("USERNAME ", Username);
+                    txtUserNaam.setText(Username);
+                    txtUserMail.setText(Usermail);
+                }
+            }
 
-        // Log.i("USER INFO", userInf.toString());
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -90,7 +113,7 @@ public class ChallengeActivity extends AppCompatActivity {
         toggle.syncState();
 
 
-        if(savedInstanceState == null){
+        if (savedInstanceState == null) {
             showChallengesOverviewFragment();
         }
         final FloatingActionButton fabChallenges = (FloatingActionButton) findViewById(R.id.fab_addChallenge);
@@ -120,11 +143,10 @@ public class ChallengeActivity extends AppCompatActivity {
         }
     }
 
-    private void showChallengesOverviewFragment(){
+    private void showChallengesOverviewFragment() {
         FragmentManager fragmentManager = getFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         ChallengeOverviewFragment challengesOverviewFragment = new ChallengeOverviewFragment();
-
 
 
         fragmentTransaction.replace(R.id.framelayout_in_challengeactivity, challengesOverviewFragment);
