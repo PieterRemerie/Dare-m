@@ -135,11 +135,12 @@ public class AddFriendsFragment extends Fragment implements LoaderManager.Loader
 
             Picasso.with(getContext()).load(pictureURL).resize(60 , 60).into(holder.imageViewFriend);
 
+            final String friendID = mCursorAddFriends.getString(colnr3);
 
             holder.btnAddFriends.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    new SendPost(mCursorAddFriends.getString(colnr3)).execute();
+                    new SendPost(friendID).execute();
                     Log.i("AddFRIENDS", "COMPLETED");
                 }
             });
