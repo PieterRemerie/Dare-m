@@ -33,6 +33,7 @@ import java.util.concurrent.ExecutionException;
 
 import be.nmct.howest.darem.Loader.HttpGetRequest;
 import be.nmct.howest.darem.Loader.HttpGetRequest;
+import be.nmct.howest.darem.Navigation.Navigation;
 import be.nmct.howest.darem.Transforms.CircleTransform;
 
 
@@ -57,11 +58,10 @@ public class ChallengeActivity extends AppCompatActivity {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
 
-
                 Intent intent = new Intent();
                 switch (item.getItemId()){
                     case R.id.yourchallengesDrawer:
-                        intent = new Intent(getApplicationContext(), AddFriendsActivity.class);
+                        intent = new Intent(getApplicationContext(), ChallengeActivity.class);
                         startActivity(intent);
                         break;
                     case R.id.friendsDrawer:
@@ -76,50 +76,10 @@ public class ChallengeActivity extends AppCompatActivity {
                 drawer.closeDrawers();
                 return false;
 
-
-
             }
         });
-        View header = navigationView.getHeaderView(0);
-        TextView txtUserNaam = (TextView) header.findViewById(R.id.txtUserNaam);
-        TextView txtUserMail = (TextView) header.findViewById(R.id.txtUserEmail);
-        ImageView imgUser = (ImageView) header.findViewById(R.id.imgUserPhoto);
 
-        String url = "https://darem.herokuapp.com/userprofile?authToken=" + AccessToken.getCurrentAccessToken().getUserId();
-        String result = null;
-        JSONArray jsonUser = null;
-        HttpGetRequest getRequest = new HttpGetRequest();
-        try {
-            result = getRequest.execute(url).get();
-
-            if (result != null) {
-
-                JSONArray jObj = new JSONArray(result);
-                Log.i("Info jsonUser", jObj.getJSONObject(0).toString());
-               // Log.i("Info jsonUser", jObj.getJSONObject(0).getString("givenName"));
-
-                String Username = jObj.getJSONObject(0).getString("givenName") + " " + jObj.getJSONObject(0).getString("familyName");
-                String Usermail = jObj.getJSONObject(0).getString("email");
-                String Userimgurl = jObj.getJSONObject(0).getJSONObject("facebook").getString("photo");
-                if (Username != null && Usermail != null) {
-                    Log.i("USERNAME ", Username);
-                    txtUserNaam.setText(Username);
-                    txtUserMail.setText(Usermail);
-                    Picasso.with(view.getContext()).load(Userimgurl).transform(new CircleTransform()).into(imgUser);
-
-                }
-            }
-
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
+        Navigation.setHeader(navigationView, view);
 
 
         if (savedInstanceState == null) {
@@ -156,8 +116,6 @@ public class ChallengeActivity extends AppCompatActivity {
         FragmentManager fragmentManager = getFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         ChallengeOverviewFragment challengesOverviewFragment = new ChallengeOverviewFragment();
-
-
         fragmentTransaction.replace(R.id.framelayout_in_challengeactivity, challengesOverviewFragment);
         fragmentTransaction.commit();
     }

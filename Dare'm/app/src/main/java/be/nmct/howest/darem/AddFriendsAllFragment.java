@@ -1,6 +1,9 @@
 package be.nmct.howest.darem;
 
 import android.app.Fragment;
+import android.app.LoaderManager;
+import android.content.Loader;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
@@ -12,13 +15,20 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+
+import be.nmct.howest.darem.Loader.AddedFriendsLoader;
+import be.nmct.howest.darem.Loader.Friends;
+import be.nmct.howest.darem.Transforms.CircleTransform;
+
 /**
  * Created by katri on 29/10/2017.
  */
 
-public class AddFriendsAllFragment extends Fragment {
+public class AddFriendsAllFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
     private RecyclerView recyclerViewAddFriendsAll;
+    private AddFriendsAllRecycleViewAdapter addFriendsAllRecycleViewAdapter;
 
     public AddFriendsAllFragment(){
         //empty constructor
@@ -33,14 +43,39 @@ public class AddFriendsAllFragment extends Fragment {
 
         recyclerViewAddFriendsAll = (RecyclerView) v.findViewById(R.id.recyclerviewAddFriendsAll);
         recyclerViewAddFriendsAll.setLayoutManager(new LinearLayoutManager(this.getContext()));
-        AddFriendsAllRecycleViewAdapter adapter = new AddFriendsAllRecycleViewAdapter();
-        recyclerViewAddFriendsAll.setAdapter(adapter);
 
         return v;
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        getLoaderManager().initLoader(0, null, this);
+    }
+
+    @Override
+    public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
+        return new AddedFriendsLoader(this.getContext());
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        addFriendsAllRecycleViewAdapter = new AddFriendsAllRecycleViewAdapter(data);
+        recyclerViewAddFriendsAll.setAdapter(addFriendsAllRecycleViewAdapter);
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+
+    }
+
     public class AddFriendsAllRecycleViewAdapter extends RecyclerView.Adapter<AddFriendsAllFragment.AddFriendsAllViewHolder>{
 
+        Cursor mCursorAddFriends;
+
+        AddFriendsAllRecycleViewAdapter(Cursor cursor){
+            this.mCursorAddFriends = cursor;
+        }
 
         @Override
         public AddFriendsAllViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -51,14 +86,20 @@ public class AddFriendsAllFragment extends Fragment {
         @Override
         public void onBindViewHolder(AddFriendsAllViewHolder holder, int position) {
 
-            holder.textViewNaam.setText("naam van vriend");
-            holder.imageViewFriend.setImageResource(R.mipmap.person);
+            mCursorAddFriends.moveToPosition(position);
 
+            int colnr1 = mCursorAddFriends.getColumnIndex(Friends.Columns.COLUMN_NAME);
+            int colnr2 = mCursorAddFriends.getColumnIndex(Friends.Columns.COLUMN_PICTURE);
+
+            holder.textViewNaam.setText(mCursorAddFriends.getString(colnr1));
+
+            String pictureURL = mCursorAddFriends.getString(colnr2);
+            Picasso.with(getContext()).load(pictureURL).resize(60 , 60).transform(new CircleTransform()).into(holder.imageViewFriend);
         }
 
         @Override
         public int getItemCount() {
-            return 0;
+            return mCursorAddFriends.getCount();
         }
     }
 

@@ -26,14 +26,14 @@ import java.net.URL;
  * Created by katri on 4/11/2017.
  */
 
-public class FriendsLoader extends AsyncTaskLoader<Cursor> {
+public class FBFriendsLoader extends AsyncTaskLoader<Cursor> {
 
     private Cursor mCursor;
     private static Object lock = new Object();
     AccessToken accessToken = AccessToken.getCurrentAccessToken();
 
 
-    public FriendsLoader(Context context) {
+    public FBFriendsLoader(Context context) {
         super(context);
 
     }
@@ -89,16 +89,11 @@ public class FriendsLoader extends AsyncTaskLoader<Cursor> {
                         for (int i = 0; i < info.length(); i++) {
                             JSONObject obj = info.getJSONObject(i);
 
-
-
-                            Log.i("PictureJSON", "" + obj.toString());
-
                             row = cursor.newRow();
                             row.add(obj.getString("id"));
                             row.add(obj.getString("name"));
 
                             String pictureURL = "https://graph.facebook.com/" + obj.get("id") + "/picture?type=large";
-
                             row.add(pictureURL);
                         }
                     }

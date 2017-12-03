@@ -18,34 +18,32 @@
                 android:layout_height="65dp"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
-                android:layout_centerHorizontal="true"
-                android:layout_centerVertical="true"
                 android:layout_gravity="center"
+                android:layout_marginStart="21dp"
                 android:contentDescription="@string/categoryimage"
                 android:src="@mipmap/person" />
 
             <TextView
                 android:id="@+id/textViewAddFriendName"
-                android:layout_width="250dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
                 android:layout_centerVertical="true"
                 android:layout_gravity="center"
-                android:layout_marginStart="20dp"
-                android:layout_toEndOf="@+id/addFriendImage"
                 android:text="Naam van de vriend" />
 
             <Button
                 android:id="@+id/AddFriendPlusImage"
-                android:layout_width="wrap_content"
+                android:layout_width="50dp"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
-                android:layout_toEndOf="@id/textViewAddFriendName"
                 android:layout_centerVertical="true"
                 android:layout_gravity="center"
+                android:background="@android:color/white"
                 android:contentDescription="@string/categoryimage"
                 android:src="@android:drawable/ic_menu_add"
-                android:textSize="28sp"
-                android:text="+"/>
+                android:text="+"
+                android:textSize="28sp" />
         </RelativeLayout>
     </android.support.v7.widget.CardView>
 </layout>

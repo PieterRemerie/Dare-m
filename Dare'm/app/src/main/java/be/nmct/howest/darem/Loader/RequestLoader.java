@@ -29,25 +29,6 @@ public class RequestLoader {
 
         AccessToken accToken = AccessToken.getCurrentAccessToken();
 
-/*
-        GraphRequest.GraphJSONObjectCallback jsonRequest = new GraphRequest.GraphJSONObjectCallback(){
-
-            @Override
-            public void onCompleted(JSONObject object, GraphResponse response) {
-
-                try {
-                    JSONArray info = object.getJSONObject("invitable_friends").getJSONArray("data");
-
-                    friends[0] = info;
-
-                    Log.i("INFORMATIE", info.toString());
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        };
-*/
-
         Bundle args = new Bundle();
         args.putInt("limit", 1000);
         GraphRequest request = new GraphRequest(accToken, "/me/friends", args, HttpMethod.GET, new GraphRequest.Callback() {

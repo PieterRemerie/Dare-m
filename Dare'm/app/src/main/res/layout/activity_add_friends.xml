@@ -30,9 +30,16 @@
             tools:context="be.nmct.howest.darem.AddFriendsActivity"
             android:orientation="vertical">
 
-            <SearchView
+            <TextView
+                android:id="@+id/textView"
+                android:layout_marginTop="55dp"
                 android:layout_width="match_parent"
-                android:layout_height="50dp" />
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="Add some friends"
+                android:textAlignment="center"
+                android:textSize="20sp"
+                android:textStyle="bold" />
 
             <RelativeLayout
                 android:id="@+id/layout"
@@ -43,17 +50,19 @@
                     android:id="@+id/framelayout1_in_add_friends"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
-
                 </FrameLayout>
 
             </RelativeLayout>
 
             <TextView
-        android:id="@+id/textView8"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="All your invited friends:"
-        android:textSize="20sp" />
+                android:id="@+id/textView8"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="Friends"
+                android:textAlignment="center"
+                android:textSize="20sp"
+                android:textStyle="bold" />
 
             <RelativeLayout android:id="@+id/layout2"
                 android:layout_width="match_parent"
