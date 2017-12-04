@@ -38,6 +38,7 @@ import java.util.concurrent.ExecutionException;
 
 import be.nmct.howest.darem.Loader.HttpGetRequest;
 import be.nmct.howest.darem.Loader.HttpGetRequest;
+import be.nmct.howest.darem.Navigation.Navigation;
 import be.nmct.howest.darem.Transforms.CircleTransform;
 import be.nmct.howest.darem.database.Contract;
 import be.nmct.howest.darem.database.DatabaseHelper;
@@ -68,7 +69,6 @@ public class ChallengeActivity extends AppCompatActivity {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
 
-
                 Intent intent = new Intent();
                 switch (item.getItemId()){
                     case R.id.yourchallengesDrawer:
@@ -87,10 +87,9 @@ public class ChallengeActivity extends AppCompatActivity {
                 drawer.closeDrawers();
                 return false;
 
-
-
             }
         });
+
         View header = navigationView.getHeaderView(0);
         TextView txtUserNaam = (TextView) header.findViewById(R.id.txtUserNaam);
         TextView txtUserMail = (TextView) header.findViewById(R.id.txtUserEmail);
@@ -133,6 +132,7 @@ public class ChallengeActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
+        Navigation.setHeader(navigationView, view);
 
 
         if (savedInstanceState == null) {
@@ -195,8 +195,6 @@ public class ChallengeActivity extends AppCompatActivity {
         FragmentManager fragmentManager = getFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         ChallengeOverviewFragment challengesOverviewFragment = new ChallengeOverviewFragment();
-
-
         fragmentTransaction.replace(R.id.framelayout_in_challengeactivity, challengesOverviewFragment);
         fragmentTransaction.commit();
     }

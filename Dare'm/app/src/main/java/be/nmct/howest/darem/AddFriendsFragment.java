@@ -5,13 +5,11 @@ import android.app.LoaderManager;
 import android.content.Loader;
 import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.Layout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,11 +19,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.facebook.AccessToken;
-import com.facebook.GraphRequest;
-import com.facebook.GraphResponse;
 import com.squareup.picasso.Picasso;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -38,7 +33,8 @@ import java.net.URL;
 import javax.net.ssl.HttpsURLConnection;
 
 import be.nmct.howest.darem.Loader.Friends;
-import be.nmct.howest.darem.Loader.FriendsLoader;
+import be.nmct.howest.darem.Loader.FBFriendsLoader;
+import be.nmct.howest.darem.Transforms.CircleTransform;
 
 /**
  * Created by katri on 29/10/2017.
@@ -88,7 +84,7 @@ public class AddFriendsFragment extends Fragment implements LoaderManager.Loader
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        return new FriendsLoader(this.getContext());
+        return new FBFriendsLoader(this.getContext());
     }
 
     @Override
@@ -133,7 +129,7 @@ public class AddFriendsFragment extends Fragment implements LoaderManager.Loader
 
 
 
-            Picasso.with(getContext()).load(pictureURL).resize(60 , 60).into(holder.imageViewFriend);
+            Picasso.with(getContext()).load(pictureURL).resize(60 , 60).transform(new CircleTransform()).into(holder.imageViewFriend);
 
             final String friendID = mCursorAddFriends.getString(colnr3);
 

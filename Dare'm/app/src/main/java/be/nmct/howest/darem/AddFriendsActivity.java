@@ -14,6 +14,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 
+import be.nmct.howest.darem.Navigation.Navigation;
+
 public class AddFriendsActivity extends AppCompatActivity {
 
     @Override
@@ -22,6 +24,7 @@ public class AddFriendsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_add_friends);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        View view = getLayoutInflater().inflate(R.layout.activity_add_friends, null);
         final DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -50,6 +53,8 @@ public class AddFriendsActivity extends AppCompatActivity {
                 return false;
             }
         });
+
+        Navigation.setHeader(navigationView, view);
 
         if(savedInstanceState == null){
             showAddFriendsFragment();
@@ -81,5 +86,14 @@ public class AddFriendsActivity extends AppCompatActivity {
         fragmentTransaction.commit();
 
 
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (getFragmentManager().getBackStackEntryCount() == 0) {
+            super.onBackPressed();
+        } else {
+            getFragmentManager().popBackStack();
+        }
     }
 }
