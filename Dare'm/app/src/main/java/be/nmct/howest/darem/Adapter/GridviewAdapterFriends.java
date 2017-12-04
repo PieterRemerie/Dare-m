@@ -41,9 +41,9 @@ public class GridviewAdapterFriends extends BaseAdapter {
     private Context mContext;
     private final ArrayList<String> names;
     private final ArrayList<String> photos;
-    private final ArrayList<Integer> friendId;
+    private final ArrayList<String> friendId;
 
-    public GridviewAdapterFriends(Context context, ArrayList<String> names, ArrayList<String> photos, ArrayList<Integer> friendId){
+    public GridviewAdapterFriends(Context context, ArrayList<String> names, ArrayList<String> photos, ArrayList<String> friendId){
         mContext = context;
         this.names = names;
         this.photos = photos;

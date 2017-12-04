@@ -34,7 +34,7 @@ public class AddFriendToChallengeFragment extends Fragment {
 
     ArrayList<String> names = new ArrayList<String>();
     ArrayList<String> photos = new ArrayList<String>();
-    ArrayList<Integer> friendId = new ArrayList<Integer>();
+    ArrayList<String> friendId = new ArrayList<String>();
     ArrayList<String> friendsIdChallenge = new ArrayList<String>();
 
     public AddFriendToChallengeFragment() {
@@ -61,7 +61,7 @@ public class AddFriendToChallengeFragment extends Fragment {
                 for(int i = 0 ; i < arrayFriends.length(); i++){
                     names.add(arrayFriends.getJSONObject(i).getString("name"));
                     photos.add(arrayFriends.getJSONObject(i).getString("photo"));
-                    friendId.add(arrayFriends.getJSONObject(i).getInt("id"));
+                    friendId.add(arrayFriends.getJSONObject(i).getString("databaseid"));
                 }
 
             }
@@ -94,7 +94,7 @@ public class AddFriendToChallengeFragment extends Fragment {
             CheckBox checkBox = (CheckBox) v.findViewById(R.id.checkboxAddFriends);
             boolean itemChecked = checkBox.isChecked();
             if(itemChecked == true){
-                friendsIdChallenge.add("'"+ checkBox.getTag().toString() + "'");
+                friendsIdChallenge.add(checkBox.getTag().toString());
             }
         }
     }

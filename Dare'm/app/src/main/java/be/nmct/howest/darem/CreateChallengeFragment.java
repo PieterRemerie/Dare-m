@@ -28,10 +28,12 @@ import org.json.JSONObject;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import javax.net.ssl.HttpsURLConnection;
 
@@ -129,8 +131,7 @@ public class CreateChallengeFragment extends Fragment {
                 URL url = new URL("https://darem.herokuapp.com/challenge/add");
                 HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();
                 conn.setRequestMethod("POST");
-                conn.setRequestProperty("Content-Type", "application/json;charset=UTF-8");
-                conn.setRequestProperty("Accept","application/json");
+                conn.setRequestProperty("Content-Type", "application/json");
                 conn.setDoOutput(true);
                 conn.setDoInput(true);
 
@@ -138,7 +139,7 @@ public class CreateChallengeFragment extends Fragment {
                 JSONObject js = new JSONObject();
                 js.put("name", newChallenge.getName());
                 js.put("description", newChallenge.getDescription());
-                js.put("users", friendsId);
+                js.put("users", new JSONArray(friendsId));
                 js.put("category", "testcategory");
                 js.put("creatorId", "id CREATOR");
                 js.put("isCompleted", "false");
