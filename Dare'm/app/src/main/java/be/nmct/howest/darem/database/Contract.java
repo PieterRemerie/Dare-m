@@ -1,5 +1,6 @@
 package be.nmct.howest.darem.database;
 
+import android.os.ParcelUuid;
 import android.provider.BaseColumns;
 
 /**
@@ -13,10 +14,13 @@ public class Contract {
         public static final String TABLE_NAME = "challenges";
         public static final String COLUMN_CHALLENGE_NAAM = "challengeNaam";
         public static final String COLUMN_CHALLENGE_DESCRIPTION = "challengeDescription";
+        public static final String COLUMN_CHALLENGE_USERS = "challengeFriends";
+        public static final String COLUMN_CHALLENGE_CREATOR = "challengeCreator";
     }
     public static abstract class ChallengesDB implements ChallengesColumns{
         public static final String CREATE_TABLE = "create table "
                 + TABLE_NAME + "(" + _ID + " integer primary key autoincrement, "
+                + COLUMN_CHALLENGE_CREATOR + " integer not null, "
                 + COLUMN_CHALLENGE_NAAM + " text not null, "
                 + COLUMN_CHALLENGE_DESCRIPTION + " text not null "
                 + ");";
@@ -25,18 +29,18 @@ public class Contract {
 
     public interface UserColumns extends BaseColumns{
         public static final String TABLE_NAME = "Users";
-        public static final String COLUMN_USER_NAAM = "userNaam";
-        public static final String COLUMN_USER_VOORNAAM = "userVoornaam";
-        public static final String COLUMN_USER_EMAIL= "userEmail";
-        public static final String COLUMN_USER_PASSWORD = "userPassword";
+        public static final String COLUMN_USER_NAAM = "givenName";
+        public static final String COLUMN_USER_VOORNAAM = "familyName";
+        public static final String COLUMN_USER_EMAIL= "email";
+        public static final String COLUMN_USER_POINTS= "points";
     }
     public static abstract class UserDB implements UserColumns{
         public static final String CREATE_TABLE = "create table "
                 + TABLE_NAME + "(" + _ID + " integer primary key autoincrement, "
                 + COLUMN_USER_NAAM + " text not null, "
                 + COLUMN_USER_VOORNAAM + " text not null, "
-                + COLUMN_USER_EMAIL + " text not null, "
-                + COLUMN_USER_PASSWORD + " text not null"
+                + COLUMN_USER_EMAIL + " text not null UNIQUE, "
+                + COLUMN_USER_POINTS + " integer"
                 + ");";
         public static final String DELETE_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME;
     }

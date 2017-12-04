@@ -1,5 +1,6 @@
 package be.nmct.howest.darem;
 
+import android.content.ContentValues;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.databinding.DataBindingUtil;
@@ -36,9 +37,11 @@ import java.io.OutputStreamWriter;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
+import java.util.concurrent.ExecutionException;
 
 import javax.net.ssl.HttpsURLConnection;
 
+import be.nmct.howest.darem.Loader.HttpGetRequest;
 import be.nmct.howest.darem.Model.Login;
 import be.nmct.howest.darem.database.DatabaseHelper;
 import be.nmct.howest.darem.databinding.ActivityLoginBinding;
@@ -91,6 +94,7 @@ public class LoginActivity extends AppCompatActivity {
         loginFB.setReadPermissions("public_profile");
         loginFB.setReadPermissions("user_birthday");
         loginFB.setReadPermissions("user_friends");
+        loginFB.setReadPermissions("email");
 
 
         loginFB.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
@@ -116,7 +120,6 @@ public class LoginActivity extends AppCompatActivity {
 
 
     }
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);

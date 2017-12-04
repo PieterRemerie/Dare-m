@@ -2,7 +2,12 @@ package be.nmct.howest.darem;
 
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.ContentValues;
+import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
+import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 
 import com.facebook.AccessToken;
@@ -34,9 +39,15 @@ import java.util.concurrent.ExecutionException;
 import be.nmct.howest.darem.Loader.HttpGetRequest;
 import be.nmct.howest.darem.Loader.HttpGetRequest;
 import be.nmct.howest.darem.Transforms.CircleTransform;
+import be.nmct.howest.darem.database.Contract;
+import be.nmct.howest.darem.database.DatabaseHelper;
+import be.nmct.howest.darem.database.SaveNewChallengeToDBTask;
+import be.nmct.howest.darem.database.SaveNewUserToDBTask;
 
 
 public class ChallengeActivity extends AppCompatActivity {
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,7 +72,7 @@ public class ChallengeActivity extends AppCompatActivity {
                 Intent intent = new Intent();
                 switch (item.getItemId()){
                     case R.id.yourchallengesDrawer:
-                        intent = new Intent(getApplicationContext(), AddFriendsActivity.class);
+                        intent = new Intent(getApplicationContext(), ChallengeActivity.class);
                         startActivity(intent);
                         break;
                     case R.id.friendsDrawer:
@@ -106,7 +117,9 @@ public class ChallengeActivity extends AppCompatActivity {
                     txtUserNaam.setText(Username);
                     txtUserMail.setText(Usermail);
                     Picasso.with(view.getContext()).load(Userimgurl).transform(new CircleTransform()).into(imgUser);
-
+                    if(DoesUserExist(Usermail, getApplicationContext()) == false){
+                        saveUserToDB(Usermail, jObj.getJSONObject(0).getString("givenName"), jObj.getJSONObject(0).getString("familyName"), jObj.getJSONObject(0).getInt("_id"));
+                    }
                 }
             }
 
@@ -142,7 +155,33 @@ public class ChallengeActivity extends AppCompatActivity {
             }
         });
     }
+    public static boolean DoesUserExist(String fieldValue, Context context){
+        String Query = "Select * from " + Contract.UserDB.TABLE_NAME + " where " + Contract.UserColumns.COLUMN_USER_EMAIL + " = " + "'" +fieldValue + "'";
 
+        Cursor cursor = DatabaseHelper.getINSTANCE(context).getReadableDatabase().rawQuery(Query, null);
+        if(cursor.getCount() <= 0){
+            cursor.close();
+            return false;
+        }else{
+            cursor.close();
+            return true;
+        }
+    }
+    private void saveUserToDB(String mail, String givenName, String lastName, Integer Id){
+        ContentValues values = new ContentValues();
+        values.put(Contract.UserColumns._ID, Id);
+        values.put(Contract.UserColumns.COLUMN_USER_VOORNAAM, givenName);
+        values.put(Contract.UserColumns.COLUMN_USER_NAAM, lastName);
+        values.put(Contract.UserColumns.COLUMN_USER_EMAIL, mail);
+        executeAsyncTask(new SaveNewUserToDBTask(getApplicationContext()), values);
+    }
+    static private <T> void executeAsyncTask(AsyncTask<T, ?, ?> task, T... params) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+            task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, params);
+        } else {
+            task.execute(params);
+        }
+    }
     @Override
     public void onBackPressed() {
         if (getFragmentManager().getBackStackEntryCount() == 0) {

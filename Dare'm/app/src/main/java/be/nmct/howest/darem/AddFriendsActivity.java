@@ -34,7 +34,7 @@ public class AddFriendsActivity extends AppCompatActivity {
                 Intent intent = new Intent();
                 switch (item.getItemId()){
                     case R.id.yourchallengesDrawer:
-                        intent = new Intent(getApplicationContext(), AddFriendsActivity.class);
+                        intent = new Intent(getApplicationContext(), ChallengeActivity.class);
                         startActivity(intent);
                         break;
                     case R.id.friendsDrawer:
