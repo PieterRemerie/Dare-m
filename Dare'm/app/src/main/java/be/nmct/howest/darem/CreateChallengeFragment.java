@@ -140,8 +140,8 @@ public class CreateChallengeFragment extends Fragment {
                 js.put("name", newChallenge.getName());
                 js.put("description", newChallenge.getDescription());
                 js.put("users", new JSONArray(friendsId));
-                js.put("category", "testcategory");
-                js.put("creatorId", "id CREATOR");
+                js.put("category", "");
+                js.put("creatorId", AccessToken.getCurrentAccessToken().getUserId());
                 js.put("isCompleted", "false");
 
                 DataOutputStream os = new DataOutputStream(conn.getOutputStream());
