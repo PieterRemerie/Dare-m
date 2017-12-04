@@ -5,10 +5,11 @@ import android.content.Context;
 import android.os.AsyncTask;
 
 /**
+
  * Created by katri on 4/12/2017.
  */
 
-public class SaveNewUserToDBTask  extends AsyncTask<ContentValues, Void, Void>{
+public class SaveNewUserToDBTask  extends AsyncTask<ContentValues, Void, Void> {
 
     private Context mContext;
 
@@ -30,4 +31,6 @@ public class SaveNewUserToDBTask  extends AsyncTask<ContentValues, Void, Void>{
     protected void onPostExecute(Void aVoid) {
         super.onPostExecute((aVoid));
     }
+
+
 }

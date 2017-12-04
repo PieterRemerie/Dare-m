@@ -2,7 +2,12 @@ package be.nmct.howest.darem;
 
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.ContentValues;
+import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
+import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 
 import com.facebook.AccessToken;
@@ -35,9 +40,15 @@ import be.nmct.howest.darem.Loader.HttpGetRequest;
 import be.nmct.howest.darem.Loader.HttpGetRequest;
 import be.nmct.howest.darem.Navigation.Navigation;
 import be.nmct.howest.darem.Transforms.CircleTransform;
+import be.nmct.howest.darem.database.Contract;
+import be.nmct.howest.darem.database.DatabaseHelper;
+import be.nmct.howest.darem.database.SaveNewChallengeToDBTask;
+import be.nmct.howest.darem.database.SaveNewUserToDBTask;
 
 
 public class ChallengeActivity extends AppCompatActivity {
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,6 +90,48 @@ public class ChallengeActivity extends AppCompatActivity {
             }
         });
 
+        View header = navigationView.getHeaderView(0);
+        TextView txtUserNaam = (TextView) header.findViewById(R.id.txtUserNaam);
+        TextView txtUserMail = (TextView) header.findViewById(R.id.txtUserEmail);
+        ImageView imgUser = (ImageView) header.findViewById(R.id.imgUserPhoto);
+
+        String url = "https://darem.herokuapp.com/userprofile?authToken=" + AccessToken.getCurrentAccessToken().getUserId();
+        String result = null;
+        JSONArray jsonUser = null;
+        HttpGetRequest getRequest = new HttpGetRequest();
+        try {
+            result = getRequest.execute(url).get();
+
+            if (result != null) {
+
+                JSONArray jObj = new JSONArray(result);
+                Log.i("Info jsonUser", jObj.getJSONObject(0).toString());
+               // Log.i("Info jsonUser", jObj.getJSONObject(0).getString("givenName"));
+
+                String Username = jObj.getJSONObject(0).getString("givenName") + " " + jObj.getJSONObject(0).getString("familyName");
+                String Usermail = jObj.getJSONObject(0).getString("email");
+                String Userimgurl = jObj.getJSONObject(0).getJSONObject("facebook").getString("photo");
+                if (Username != null && Usermail != null) {
+                    Log.i("USERNAME ", Username);
+                    txtUserNaam.setText(Username);
+                    txtUserMail.setText(Usermail);
+                    Picasso.with(view.getContext()).load(Userimgurl).transform(new CircleTransform()).into(imgUser);
+                    if(DoesUserExist(Usermail, getApplicationContext()) == false){
+                        saveUserToDB(Usermail, jObj.getJSONObject(0).getString("givenName"), jObj.getJSONObject(0).getString("familyName"), jObj.getJSONObject(0).getInt("_id"));
+                    }
+                }
+            }
+
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
         Navigation.setHeader(navigationView, view);
 
 
@@ -102,7 +155,33 @@ public class ChallengeActivity extends AppCompatActivity {
             }
         });
     }
+    public static boolean DoesUserExist(String fieldValue, Context context){
+        String Query = "Select * from " + Contract.UserDB.TABLE_NAME + " where " + Contract.UserColumns.COLUMN_USER_EMAIL + " = " + "'" +fieldValue + "'";
 
+        Cursor cursor = DatabaseHelper.getINSTANCE(context).getReadableDatabase().rawQuery(Query, null);
+        if(cursor.getCount() <= 0){
+            cursor.close();
+            return false;
+        }else{
+            cursor.close();
+            return true;
+        }
+    }
+    private void saveUserToDB(String mail, String givenName, String lastName, Integer Id){
+        ContentValues values = new ContentValues();
+        values.put(Contract.UserColumns._ID, Id);
+        values.put(Contract.UserColumns.COLUMN_USER_VOORNAAM, givenName);
+        values.put(Contract.UserColumns.COLUMN_USER_NAAM, lastName);
+        values.put(Contract.UserColumns.COLUMN_USER_EMAIL, mail);
+        executeAsyncTask(new SaveNewUserToDBTask(getApplicationContext()), values);
+    }
+    static private <T> void executeAsyncTask(AsyncTask<T, ?, ?> task, T... params) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+            task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, params);
+        } else {
+            task.execute(params);
+        }
+    }
     @Override
     public void onBackPressed() {
         if (getFragmentManager().getBackStackEntryCount() == 0) {

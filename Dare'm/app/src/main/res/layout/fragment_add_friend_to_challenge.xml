@@ -1,0 +1,27 @@
+<RelativeLayout
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/add_friend_to_challenge"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <GridView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/gridViewFriends"
+        android:numColumns="3">
+
+    </GridView>
+
+    <Button
+        android:layout_width="225dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/btnAddFriendsToChallenge"
+        android:background="@color/colorPrimary"
+        android:textColor="@android:color/white"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="5dp"
+        android:text="Add Friends"/>
+
+</RelativeLayout>

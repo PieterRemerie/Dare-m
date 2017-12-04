@@ -95,6 +95,7 @@ public class LoginActivity extends AppCompatActivity {
         loginFB.setReadPermissions("public_profile");
         loginFB.setReadPermissions("user_birthday");
         loginFB.setReadPermissions("user_friends");
+        loginFB.setReadPermissions("email");
 
 
         loginFB.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {

@@ -1,5 +1,7 @@
 package be.nmct.howest.darem;
 
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
@@ -18,6 +20,9 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.facebook.AccessToken;
+
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -26,6 +31,7 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
+import java.util.ArrayList;
 
 import javax.net.ssl.HttpsURLConnection;
 
@@ -39,6 +45,9 @@ public class CreateChallengeFragment extends Fragment {
 
     private FragmentCreateChallengeBinding binding;
     private Challenge newChallenge = new Challenge();
+    private ArrayList<String> friendsId = new ArrayList<String>();
+    JSONArray jsonArray = new JSONArray();
+    private Bundle bundle;
     public CreateChallengeFragment() {
         // Required empty public constructor
     }
@@ -58,9 +67,13 @@ public class CreateChallengeFragment extends Fragment {
         View v = binding.getRoot();
         binding.setTest(this);
         binding.setChallenge(newChallenge);
+        bundle = getArguments();
+        if(bundle != null){
+            friendsId = bundle.getStringArrayList("key");
+            //friendsId.add(Integer.parseInt(AccessToken.getCurrentAccessToken().getUserId()));
+        }
         return v;
     }
-
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -74,8 +87,8 @@ public class CreateChallengeFragment extends Fragment {
     public void saveNewChallenge(){
         saveChallengeToDb();
         new SendPost().execute();
-        resetProduct();
         this.getActivity().finish();
+
     }
     private void saveChallengeToDb(){
         ContentValues values = new ContentValues();
@@ -125,6 +138,7 @@ public class CreateChallengeFragment extends Fragment {
                 JSONObject js = new JSONObject();
                 js.put("name", newChallenge.getName());
                 js.put("description", newChallenge.getDescription());
+                js.put("users", friendsId);
                 js.put("category", "testcategory");
                 js.put("creatorId", "id CREATOR");
                 js.put("isCompleted", "false");
@@ -139,7 +153,7 @@ public class CreateChallengeFragment extends Fragment {
                 Log.i("MSG" , conn.getResponseMessage());
 
                 conn.disconnect();
-
+                resetProduct();
                 Log.i("ee", "SEND: DONE");
             } catch (MalformedURLException e) {
                 e.printStackTrace();
@@ -152,5 +166,12 @@ public class CreateChallengeFragment extends Fragment {
             }
         }
 
+    }
+    public void showAddFriendToChallengeFragment(){
+        FragmentManager fragmentManager = getFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        AddFriendToChallengeFragment addFriendToChallengeFragment = new AddFriendToChallengeFragment();
+        fragmentTransaction.replace(R.id.framelayout_in_create_challenge_activity, addFriendToChallengeFragment);
+        fragmentTransaction.commit();
     }
 }

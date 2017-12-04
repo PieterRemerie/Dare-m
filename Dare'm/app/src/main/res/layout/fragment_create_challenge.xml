@@ -6,10 +6,14 @@
     <data>
         <variable
             name="Challenge"
-            type="be.nmct.howest.darem.Model.Challenge" ></variable>
+            type="be.nmct.howest.darem.Model.Challenge" >
+
+        </variable>
         <variable
             name="test"
-            type="be.nmct.howest.darem.CreateChallengeFragment"></variable>
+            type="be.nmct.howest.darem.CreateChallengeFragment">
+
+        </variable>
     </data>
 
         <RelativeLayout
@@ -46,6 +50,18 @@
                 android:layout_marginTop="17dp"
                 android:text="Description"
                 android:textStyle="bold" />
+
+            <Button
+                android:id="@+id/btnAddFriendsToUser"
+                android:layout_width="225dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="125dp"
+                android:background="@color/colorPrimary"
+                android:text="Add Friends"
+                android:textColor="@android:color/white"
+                android:onClick="@{() -> test.showAddFriendToChallengeFragment()}"/>
 
             <Button
                 android:id="@+id/btnCreate"
