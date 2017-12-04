@@ -1,5 +1,6 @@
 package be.nmct.howest.darem;
 
+import android.content.ContentValues;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.databinding.DataBindingUtil;
@@ -36,10 +37,13 @@ import java.io.OutputStreamWriter;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
+import java.util.concurrent.ExecutionException;
 
 import javax.net.ssl.HttpsURLConnection;
 
+import be.nmct.howest.darem.Loader.HttpGetRequest;
 import be.nmct.howest.darem.Model.Login;
+import be.nmct.howest.darem.database.Contract;
 import be.nmct.howest.darem.database.DatabaseHelper;
 import be.nmct.howest.darem.databinding.ActivityLoginBinding;
 
@@ -113,6 +117,49 @@ public class LoginActivity extends AppCompatActivity {
                 Log.i("ERROR", error.getMessage());
             }
         });
+
+
+    }
+
+    public void saveNewUser() {
+
+        ContentValues values = new ContentValues();
+        String url = "https://darem.herokuapp.com/userprofile?authToken=" + AccessToken.getCurrentAccessToken().getUserId();
+        String result = null;
+        JSONArray jsonUser = null;
+        HttpGetRequest getRequest = new HttpGetRequest();
+
+        try {
+            result = getRequest.execute(url).get();
+
+            if(result != null){
+
+                JSONArray jObj = new JSONArray(result);
+
+                String userFirstname = jObj.getJSONObject(0).getString("givenName");
+                String userLastname = jObj.getJSONObject(0).getString("familyName");
+                String userMail = jObj.getJSONObject(0).getString("email");
+                String userImgurl = jObj.getJSONObject(0).getJSONObject("facebook").getString("photo");
+
+                if(userFirstname != null && userLastname != null && userMail != null){
+                    values.put(Contract.UserColumns.COLUMN_USER_VOORNAAM, userFirstname );
+                    values.put(Contract.UserColumns.COLUMN_USER_NAAM, userLastname);
+                    values.put(Contract.UserColumns.COLUMN_USER_EMAIL, userMail);
+
+                }
+
+            }
+
+
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+
 
 
     }

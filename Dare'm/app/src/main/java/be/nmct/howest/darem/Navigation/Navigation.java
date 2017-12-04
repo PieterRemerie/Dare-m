@@ -66,4 +66,17 @@ public class Navigation {
         }
 
     }
+
+    public static void setHeaderOfflineData(NavigationView navigationView, View view){
+        View header = navigationView.getHeaderView(0);
+        TextView txtUserNaam = (TextView) header.findViewById(R.id.txtUserNaam);
+        TextView txtUserMail = (TextView) header.findViewById(R.id.txtUserEmail);
+        ImageView imgUser = (ImageView) header.findViewById(R.id.imgUserPhoto);
+
+
+
+    }
+
+
+
 }
