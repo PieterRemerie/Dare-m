@@ -90,7 +90,7 @@ public class ChallengeActivity extends AppCompatActivity {
             }
         });
 
-        View header = navigationView.getHeaderView(0);
+        /*View header = navigationView.getHeaderView(0);
         TextView txtUserNaam = (TextView) header.findViewById(R.id.txtUserNaam);
         TextView txtUserMail = (TextView) header.findViewById(R.id.txtUserEmail);
         ImageView imgUser = (ImageView) header.findViewById(R.id.imgUserPhoto);
@@ -130,9 +130,9 @@ public class ChallengeActivity extends AppCompatActivity {
 
         } catch (JSONException e) {
             e.printStackTrace();
-        }
+        }*/
 
-        Navigation.setHeader(navigationView, view);
+        Navigation.setHeaderOfflineData(navigationView, view);
 
 
         if (savedInstanceState == null) {

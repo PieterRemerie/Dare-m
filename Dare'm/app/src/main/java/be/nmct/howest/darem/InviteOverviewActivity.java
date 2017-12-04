@@ -11,7 +11,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.View;
 
+import be.nmct.howest.darem.Navigation.Navigation;
 import be.nmct.howest.darem.R;
 
 public class InviteOverviewActivity extends AppCompatActivity {
@@ -20,6 +22,9 @@ public class InviteOverviewActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_invite_overview);
+
+        View view = getLayoutInflater().inflate(R.layout.activity_invite_overview, null);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         final DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -50,6 +55,9 @@ public class InviteOverviewActivity extends AppCompatActivity {
                 return false;
             }
         });
+
+        Navigation.setHeaderOfflineData(navigationView, view);
+
         if(savedInstanceState == null){
             showInviteOverviewFragment();
         }

@@ -1,5 +1,8 @@
 package be.nmct.howest.darem.Navigation;
 
+import android.content.Context;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.support.design.widget.NavigationView;
 import android.util.Log;
 import android.view.View;
@@ -17,6 +20,8 @@ import java.util.concurrent.ExecutionException;
 import be.nmct.howest.darem.Loader.HttpGetRequest;
 import be.nmct.howest.darem.R;
 import be.nmct.howest.darem.Transforms.CircleTransform;
+import be.nmct.howest.darem.database.Contract;
+import be.nmct.howest.darem.database.DatabaseHelper;
 
 /**
  * Created by michv on 3/12/2017.
@@ -73,9 +78,35 @@ public class Navigation {
         TextView txtUserMail = (TextView) header.findViewById(R.id.txtUserEmail);
         ImageView imgUser = (ImageView) header.findViewById(R.id.imgUserPhoto);
 
+        String[] projection =  {
+            Contract.UserColumns._ID,
+                    Contract.UserColumns.COLUMN_USER_VOORNAAM,
+                    Contract.UserColumns.COLUMN_USER_NAAM,
+                    Contract.UserColumns.COLUMN_USER_EMAIL,
+                    Contract.UserColumns.COLUMN_USER_PHOTO };
+
+
+        SQLiteDatabase db = DatabaseHelper.getINSTANCE(view.getContext()).getReadableDatabase();
+
+        Cursor mData = db.query(Contract.UserDB.TABLE_NAME, projection, null, null, null, null, null);
+
+        mData.moveToFirst();
+
+        int colnr1 = mData.getColumnIndex(Contract.UserColumns.COLUMN_USER_VOORNAAM);
+        int colnr2 = mData.getColumnIndex(Contract.UserColumns.COLUMN_USER_NAAM);
+        int colnr3 = mData.getColumnIndex(Contract.UserColumns.COLUMN_USER_EMAIL);
+        int colnr4 = mData.getColumnIndex(Contract.UserColumns.COLUMN_USER_PHOTO);
+
+        txtUserNaam.setText(mData.getString(colnr1) + " " + mData.getString(colnr2));
+        txtUserMail.setText(mData.getString(colnr3));
+        Picasso.with(view.getContext()).load(mData.getString(colnr4)).transform(new CircleTransform()).into(imgUser);
+
+
 
 
     }
+
+
 
 
 

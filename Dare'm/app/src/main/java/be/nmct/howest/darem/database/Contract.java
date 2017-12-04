@@ -33,6 +33,7 @@ public class Contract {
         public static final String COLUMN_USER_VOORNAAM = "familyName";
         public static final String COLUMN_USER_EMAIL= "email";
         public static final String COLUMN_USER_POINTS= "points";
+        public static final String COLUMN_USER_PHOTO = "photo";
     }
     public static abstract class UserDB implements UserColumns{
         public static final String CREATE_TABLE = "create table "
@@ -40,7 +41,8 @@ public class Contract {
                 + COLUMN_USER_NAAM + " text not null, "
                 + COLUMN_USER_VOORNAAM + " text not null, "
                 + COLUMN_USER_EMAIL + " text not null UNIQUE, "
-                + COLUMN_USER_POINTS + " integer"
+                + COLUMN_USER_POINTS + " integer, "
+                + COLUMN_USER_PHOTO + " text not null"
                 + ");";
         public static final String DELETE_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME;
     }

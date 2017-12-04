@@ -15,6 +15,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import be.nmct.howest.darem.Navigation.Navigation;
+
 public class CreateChallengeActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -29,6 +31,8 @@ public class CreateChallengeActivity extends AppCompatActivity
 
         //Titel
         setTitle("Create Challenge");
+
+
     }
 
     @Override

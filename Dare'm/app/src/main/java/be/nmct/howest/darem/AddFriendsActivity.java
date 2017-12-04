@@ -54,7 +54,7 @@ public class AddFriendsActivity extends AppCompatActivity {
             }
         });
 
-        Navigation.setHeader(navigationView, view);
+        Navigation.setHeaderOfflineData(navigationView, view);
 
         if(savedInstanceState == null){
             showAddFriendsFragment();
