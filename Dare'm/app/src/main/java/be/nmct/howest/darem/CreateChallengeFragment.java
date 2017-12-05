@@ -13,6 +13,7 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -73,6 +74,10 @@ public class CreateChallengeFragment extends Fragment {
         if(bundle != null){
             friendsId = bundle.getStringArrayList("key");
             //friendsId.add(Integer.parseInt(AccessToken.getCurrentAccessToken().getUserId()));
+        }
+        if(savedInstanceState != null){
+            newChallenge.setName(savedInstanceState.getString("challengeNaam"));
+            newChallenge.setDescription(savedInstanceState.getString("challengeDescr"));
         }
         return v;
     }
@@ -173,6 +178,14 @@ public class CreateChallengeFragment extends Fragment {
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         AddFriendToChallengeFragment addFriendToChallengeFragment = new AddFriendToChallengeFragment();
         fragmentTransaction.replace(R.id.framelayout_in_create_challenge_activity, addFriendToChallengeFragment);
+        fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString("challengeNaam", newChallenge.getName());
+        outState.putString("challengeDescr", newChallenge.getDescription());
     }
 }
