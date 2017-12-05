@@ -1,5 +1,8 @@
 package be.nmct.howest.darem;
 
+import android.accounts.Account;
+import android.accounts.AccountAuthenticatorResponse;
+import android.accounts.AccountManager;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
@@ -51,11 +54,15 @@ import be.nmct.howest.darem.database.SaveNewChallengeToDBTask;
 import be.nmct.howest.darem.database.SaveNewUserToDBTask;
 import be.nmct.howest.darem.databinding.ActivityLoginBinding;
 
+
 public class LoginActivity extends AppCompatActivity {
 
     CallbackManager callbackManager;
     LoginButton loginFB;
     JSONObject profileInformation;
+
+    private AccountManager mAccountManager;
+    private AccountAuthenticatorResponse mAccountAuthenticatorResponse;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,6 +78,13 @@ public class LoginActivity extends AppCompatActivity {
         ActivityLoginBinding activityLoginBinding = DataBindingUtil.setContentView(this, R.layout.activity_login);
 
         callbackManager = CallbackManager.Factory.create();
+
+        //accountmanager
+        mAccountManager = AccountManager.get(this);
+        mAccountAuthenticatorResponse = this.getIntent().getParcelableExtra(AccountManager.KEY_ACCOUNT_AUTHENTICATOR_RESPONSE);
+        if (mAccountAuthenticatorResponse != null) {
+            mAccountAuthenticatorResponse.onRequestContinued();
+        }
 
         //lege login
         final Login login = new Login("", "");
@@ -105,7 +119,6 @@ public class LoginActivity extends AppCompatActivity {
         loginFB.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
-
                 Log.i("onSuccesFACEBOOK", loginResult.getRecentlyGrantedPermissions().toString());
                 new SendPost(loginResult.getAccessToken().getToken()).execute();
                 Intent intent = new Intent(LoginActivity.this, ChallengeActivity.class);
@@ -127,6 +140,38 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
+    private void addAccount(String userMail) {
+        Account[] accountsByType = mAccountManager.getAccountsByType(be.nmct.howest.darem.auth.Contract.ACCOUNT_TYPE);
+        Account account;
+        if (accountsByType.length == 0) {
+            // nog geen account aanwezig
+            account = new Account(userMail, be.nmct.howest.darem.auth.Contract.ACCOUNT_TYPE);
+            mAccountManager.addAccountExplicitly(account, null, null);
+        } else if (!userMail.equals(accountsByType[0].name)) {
+            // er bestaat reeds een account met andere naam
+            mAccountManager.removeAccount(accountsByType[0], this, null, null);
+            account = new Account(userMail, be.nmct.howest.darem.auth.Contract.ACCOUNT_TYPE);
+            mAccountManager.addAccountExplicitly(account, null, null);
+        } else {
+            // account met de zelfde username terug gevonden
+            account = accountsByType[0];
+        }
+
+        Intent intent = new Intent();
+        intent.putExtra(AccountManager.KEY_ACCOUNT_NAME, userMail);
+        intent.putExtra(AccountManager.KEY_ACCOUNT_TYPE, be.nmct.howest.darem.auth.Contract.ACCOUNT_TYPE);
+
+        if (mAccountAuthenticatorResponse != null) {
+            Bundle bundle = intent.getExtras();
+            bundle.putString(AccountManager.KEY_ACCOUNT_NAME, userMail);
+            bundle.putString(AccountManager.KEY_ACCOUNT_TYPE, be.nmct.howest.darem.auth.Contract.ACCOUNT_TYPE);
+            mAccountAuthenticatorResponse.onResult(bundle);
+        }
+
+        setResult(RESULT_OK, intent);
+        finish();
+    }
+
     public void saveNewUser() {
 
         ContentValues values = new ContentValues();
@@ -146,6 +191,8 @@ public class LoginActivity extends AppCompatActivity {
                 String userLastname = jObj.getJSONObject(0).getString("familyName");
                 String userMail = jObj.getJSONObject(0).getString("email");
                 String userImgurl = jObj.getJSONObject(0).getJSONObject("facebook").getString("photo");
+
+                addAccount(userMail);
 
                 if (userFirstname != null && userLastname != null && userMail != null) {
                     values.put(Contract.UserColumns.COLUMN_USER_VOORNAAM, userFirstname);
@@ -242,4 +289,5 @@ public class LoginActivity extends AppCompatActivity {
         }
 
     }
+
 }

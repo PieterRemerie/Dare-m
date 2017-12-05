@@ -15,6 +15,7 @@ import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.squareup.picasso.Picasso;
 
 import android.support.annotation.NonNull;
+import android.support.design.widget.BaseTransientBottomBar;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
@@ -40,6 +41,7 @@ import be.nmct.howest.darem.Loader.HttpGetRequest;
 import be.nmct.howest.darem.Loader.HttpGetRequest;
 import be.nmct.howest.darem.Navigation.Navigation;
 import be.nmct.howest.darem.Transforms.CircleTransform;
+import be.nmct.howest.darem.auth.AuthHelper;
 import be.nmct.howest.darem.database.Contract;
 import be.nmct.howest.darem.database.DatabaseHelper;
 import be.nmct.howest.darem.database.SaveNewChallengeToDBTask;
@@ -48,14 +50,15 @@ import be.nmct.howest.darem.database.SaveNewUserToDBTask;
 
 public class ChallengeActivity extends AppCompatActivity {
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_challenge);
 
         View view = getLayoutInflater().inflate(R.layout.activity_challenge, null);
+
+        Toast.makeText(this.getBaseContext(), "welcome: " + AuthHelper.getUsername(this), Toast.LENGTH_SHORT).show();
+
+        setContentView(R.layout.activity_challenge);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
