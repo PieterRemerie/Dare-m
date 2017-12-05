@@ -109,5 +109,4 @@ public class AddFriendToChallengeFragment extends Fragment {
         fragmentTransaction.replace(R.id.framelayout_in_create_challenge_activity, createChallengeFragment);
         fragmentTransaction.commit();
     }
-
 }
