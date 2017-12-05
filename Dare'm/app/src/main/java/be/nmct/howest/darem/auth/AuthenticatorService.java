@@ -6,7 +6,7 @@ import android.os.IBinder;
 import android.support.annotation.Nullable;
 
 /**
- * Created by Piete_000 on 28/11/2017.
+ * Created by Michiel on 28/11/2017.
  */
 
 public class AuthenticatorService extends Service{

@@ -55,12 +55,34 @@ public class Authenticator extends AbstractAccountAuthenticator {
 
     @Override
     public Bundle getAuthToken(AccountAuthenticatorResponse response, Account account, String authTokenType, Bundle options) throws NetworkErrorException {
-        return null;
+        if(authTokenType != "access_token") throw new IllegalArgumentException("Only access_token is available");
+
+        AccountManager mgt = AccountManager.get(mContext);
+        String accessToken = mgt.peekAuthToken(account, authTokenType);
+
+        //geen access-token aanwezig --> doorverwijzen naar Login-Activity
+        if (accessToken == null)
+            return createAuthenticatorActivityBundle(response);
+
+        //plaats accessToken in een bundle samen met name en type
+        return createAccessTokenBundle(account, accessToken);
+    }
+
+    private Bundle createAccessTokenBundle(Account account, String accessToken) {
+        Bundle reply = new Bundle();
+        reply.putString(AccountManager.KEY_AUTHTOKEN, accessToken);
+        reply.putString(AccountManager.KEY_ACCOUNT_NAME, account.name);
+        reply.putString(AccountManager.KEY_ACCOUNT_TYPE, account.type);
+        return reply;
     }
 
     @Override
     public String getAuthTokenLabel(String authTokenType) {
-        return null;
+        if(authTokenType.equals("access_token")){
+            return "Access Token";
+        }else{
+            return null;
+        }
     }
 
     @Override

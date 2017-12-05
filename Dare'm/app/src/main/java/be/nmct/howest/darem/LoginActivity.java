@@ -169,6 +169,9 @@ public class LoginActivity extends AppCompatActivity {
         }
 
         setResult(RESULT_OK, intent);
+
+        mAccountManager.setAuthToken(account, "access_token", AccessToken.getCurrentAccessToken().getUserId());
+
         finish();
     }
 
@@ -193,6 +196,7 @@ public class LoginActivity extends AppCompatActivity {
                 String userImgurl = jObj.getJSONObject(0).getJSONObject("facebook").getString("photo");
 
                 addAccount(userMail);
+
 
                 if (userFirstname != null && userLastname != null && userMail != null) {
                     values.put(Contract.UserColumns.COLUMN_USER_VOORNAAM, userFirstname);

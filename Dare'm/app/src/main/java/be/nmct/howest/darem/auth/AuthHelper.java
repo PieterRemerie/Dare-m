@@ -6,7 +6,7 @@ import android.accounts.AccountManager;
 import android.content.Context;
 
 /**
- * Created by Piete_000 on 28/11/2017.
+ * Created by Michiel on 28/11/2017.
  */
 
 public class AuthHelper {
