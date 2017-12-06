@@ -62,6 +62,7 @@ public class ChallengeActivity extends AppCompatActivity {
         View view = getLayoutInflater().inflate(R.layout.activity_challenge, null);
 
         Toast.makeText(this.getBaseContext(), "welcome: " + AuthHelper.getUsername(this), Toast.LENGTH_SHORT).show();
+        Toast.makeText(this.getBaseContext(), "welcome: " + AuthHelper.getUsername(this) + " AUTHTOKEN: " + AuthHelper.getAuthToken(this).getString("authtoken") , Toast.LENGTH_LONG).show();
 
         setContentView(R.layout.activity_challenge);
 
