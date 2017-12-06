@@ -63,7 +63,6 @@ public class ChallengeActivity extends AppCompatActivity {
 
         Toast.makeText(this.getBaseContext(), "welcome: " + AuthHelper.getUsername(this) + " AUTHTOKEN: " + AuthHelper.getAuthToken(this).getString("authtoken") , Toast.LENGTH_LONG).show();
 
-
         setContentView(R.layout.activity_challenge);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
