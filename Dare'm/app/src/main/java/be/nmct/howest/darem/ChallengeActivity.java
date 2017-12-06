@@ -61,23 +61,7 @@ public class ChallengeActivity extends AppCompatActivity {
 
         View view = getLayoutInflater().inflate(R.layout.activity_challenge, null);
 
-        Toast.makeText(this.getBaseContext(), "welcome: " + AuthHelper.getUsername(this), Toast.LENGTH_SHORT).show();
-
-        //test
-        AccountManager manager = AccountManager.get(this);
-        Account[] acc = manager.getAccountsByType(be.nmct.howest.darem.auth.Contract.ACCOUNT_TYPE);
-
-
-        AccountManagerFuture<Bundle> bundleToken = manager.getAuthToken(acc[0], "access_token", null, null, null, null);
-        try {
-            Bundle authToken = bundleToken.getResult();
-        } catch (OperationCanceledException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (AuthenticatorException e) {
-            e.printStackTrace();
-        }
+        Toast.makeText(this.getBaseContext(), "welcome: " + AuthHelper.getUsername(this) + " AUTHTOKEN: " + AuthHelper.getAuthToken(this).getString("authtoken") , Toast.LENGTH_LONG).show();
 
 
         setContentView(R.layout.activity_challenge);

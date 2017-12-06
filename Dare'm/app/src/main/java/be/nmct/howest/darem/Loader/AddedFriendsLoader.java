@@ -19,6 +19,8 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import be.nmct.howest.darem.auth.AuthHelper;
+
 /**
  * Created by michv on 3/12/2017.
  */
@@ -103,7 +105,7 @@ public class AddedFriendsLoader extends AsyncTaskLoader<Cursor> {
         int READ_TIMEOUT = 15000;
         int CONNECTION_TIMEOUT = 15000;
 
-        String stringUrl = "https://darem.herokuapp.com/userprofile?authToken=" + AccessToken.getCurrentAccessToken().getUserId();
+        String stringUrl = "https://darem.herokuapp.com/userprofile?authToken=" + AuthHelper.getAuthToken(getContext()).getString("authtoken");
         String result;
         String inputLine;
 
