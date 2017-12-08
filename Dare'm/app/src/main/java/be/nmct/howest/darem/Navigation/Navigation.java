@@ -29,7 +29,9 @@ import be.nmct.howest.darem.database.DatabaseHelper;
 
 public class Navigation {
 
+
     public static void setHeader(NavigationView navigationView, View view) {
+
         View header = navigationView.getHeaderView(0);
         TextView txtUserNaam = (TextView) header.findViewById(R.id.txtUserNaam);
         TextView txtUserMail = (TextView) header.findViewById(R.id.txtUserEmail);
@@ -77,19 +79,18 @@ public class Navigation {
         TextView txtUserNaam = (TextView) header.findViewById(R.id.txtUserNaam);
         TextView txtUserMail = (TextView) header.findViewById(R.id.txtUserEmail);
         ImageView imgUser = (ImageView) header.findViewById(R.id.imgUserPhoto);
-
         String[] projection =  {
-            Contract.UserColumns._ID,
                     Contract.UserColumns.COLUMN_USER_VOORNAAM,
                     Contract.UserColumns.COLUMN_USER_NAAM,
                     Contract.UserColumns.COLUMN_USER_EMAIL,
                     Contract.UserColumns.COLUMN_USER_PHOTO };
 
 
-        SQLiteDatabase db = DatabaseHelper.getINSTANCE(view.getContext()).getReadableDatabase();
+        /*SQLiteDatabase db = DatabaseHelper.getINSTANCE(view.getContext()).getReadableDatabase();
 
-        Cursor mData = db.query(Contract.UserDB.TABLE_NAME, projection, null, null, null, null, null);
-
+        Cursor mData = db.query(Contract.UserDB.TABLE_NAME, projection, null, null, null, null, null);*/
+        Cursor mData = view.getContext().getContentResolver().query(be.nmct.howest.darem.provider.Contract.USERS_URI, projection, null, null, null);
+        mData.getCount();
         mData.moveToFirst();
 
         int colnr1 = mData.getColumnIndex(Contract.UserColumns.COLUMN_USER_VOORNAAM);
@@ -101,7 +102,7 @@ public class Navigation {
         txtUserMail.setText(mData.getString(colnr3));
         Picasso.with(view.getContext()).load(mData.getString(colnr4)).transform(new CircleTransform()).into(imgUser);
 
-
+        mData.close();
 
 
     }

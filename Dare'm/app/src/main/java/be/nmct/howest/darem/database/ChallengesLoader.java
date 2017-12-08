@@ -4,6 +4,7 @@ import android.content.AsyncTaskLoader;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.net.Uri;
 import android.util.Log;
 
 import java.io.Console;
@@ -33,7 +34,14 @@ public class ChallengesLoader extends AsyncTaskLoader<Cursor> {
 
     @Override
     public Cursor loadInBackground() {
-        DatabaseHelper helper = DatabaseHelper.getINSTANCE(getContext());
+        String[] columns = new String[]{
+                Contract.ChallengesColumns._ID,
+                Contract.ChallengesColumns.COLUMN_CHALLENGE_CREATOR,
+                Contract.ChallengesColumns.COLUMN_CHALLENGE_NAAM,
+                Contract.ChallengesColumns.COLUMN_CHALLENGE_DESCRIPTION
+        };
+        mData = getContext().getContentResolver().query(be.nmct.howest.darem.provider.Contract.CHALLENGES_URI, columns, null, null, null);
+        /*DatabaseHelper helper = DatabaseHelper.getINSTANCE(getContext());
         SQLiteDatabase db = helper.getReadableDatabase();
         mData = db.query(Contract.ChallengesDB.TABLE_NAME,
                 new String[]{
@@ -46,7 +54,7 @@ public class ChallengesLoader extends AsyncTaskLoader<Cursor> {
                 null,
                 null,
                 null
-                );
+                );*/
         mData.getCount();
         return mData;
     }
