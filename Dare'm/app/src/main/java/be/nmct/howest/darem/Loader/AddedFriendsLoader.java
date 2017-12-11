@@ -105,7 +105,7 @@ public class AddedFriendsLoader extends AsyncTaskLoader<Cursor> {
         int READ_TIMEOUT = 15000;
         int CONNECTION_TIMEOUT = 15000;
 
-        String stringUrl = "https://darem.herokuapp.com/userprofile?authToken=" + AuthHelper.getAuthToken(getContext()).getString("authtoken");
+        String stringUrl = "https://darem.herokuapp.com/userprofile?authToken=" + AuthHelper.getAccessToken(getContext());
         String result;
         String inputLine;
 

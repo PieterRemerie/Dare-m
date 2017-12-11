@@ -14,7 +14,12 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.facebook.AccessToken;
+import com.facebook.FacebookSdk;
+import com.facebook.login.LoginManager;
+
 import be.nmct.howest.darem.Navigation.Navigation;
+import be.nmct.howest.darem.auth.AuthHelper;
 
 public class AddFriendsActivity extends AppCompatActivity {
 
@@ -46,6 +51,14 @@ public class AddFriendsActivity extends AppCompatActivity {
                         break;
                     case R.id.invitesDrawer:
                         intent = new Intent(getApplicationContext(), InviteOverviewActivity.class);
+                        startActivity(intent);
+                        break;
+                    case R.id.logoutUser:
+                        AuthHelper.logUserOff(getApplicationContext());
+                        FacebookSdk.sdkInitialize(getApplicationContext());
+                        LoginManager.getInstance().logOut();
+                        AccessToken.setCurrentAccessToken(null);
+                        intent = new Intent(getApplicationContext(), LoginActivity.class);
                         startActivity(intent);
                         break;
                 }

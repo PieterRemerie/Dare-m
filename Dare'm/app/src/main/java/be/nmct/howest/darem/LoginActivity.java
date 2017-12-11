@@ -48,6 +48,7 @@ import javax.net.ssl.HttpsURLConnection;
 
 import be.nmct.howest.darem.Loader.HttpGetRequest;
 import be.nmct.howest.darem.Model.Login;
+import be.nmct.howest.darem.auth.AuthHelper;
 import be.nmct.howest.darem.database.Contract;
 import be.nmct.howest.darem.database.DatabaseHelper;
 import be.nmct.howest.darem.database.SaveNewChallengeToDBTask;
@@ -69,6 +70,7 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         FacebookSdk.sdkInitialize(getApplicationContext());
+
 
         setContentView(R.layout.activity_login);
         View view = getLayoutInflater().inflate(R.layout.activity_login, null);
@@ -119,11 +121,14 @@ public class LoginActivity extends AppCompatActivity {
         loginFB.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
-                Log.i("onSuccesFACEBOOK", loginResult.getRecentlyGrantedPermissions().toString());
-                new SendPost(loginResult.getAccessToken().getToken()).execute();
                 Intent intent = new Intent(LoginActivity.this, ChallengeActivity.class);
-                saveNewUser();
-                startActivity(intent);
+                if(!AuthHelper.isUserLoggedIn(getApplicationContext())){
+                    new SendPost(loginResult.getAccessToken().getToken()).execute();
+                    saveNewUser();
+                    startActivity(intent);
+                }else{
+                    startActivity(intent);
+                }
             }
 
             @Override

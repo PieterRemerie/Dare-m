@@ -16,6 +16,8 @@ import android.os.Build;
 import android.os.Bundle;
 
 import com.facebook.AccessToken;
+import com.facebook.FacebookSdk;
+import com.facebook.login.LoginManager;
 import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.squareup.picasso.Picasso;
 
@@ -61,8 +63,7 @@ public class ChallengeActivity extends AppCompatActivity {
 
         View view = getLayoutInflater().inflate(R.layout.activity_challenge, null);
 
-        Toast.makeText(this.getBaseContext(), "welcome: " + AuthHelper.getUsername(this), Toast.LENGTH_SHORT).show();
-        Toast.makeText(this.getBaseContext(), "welcome: " + AuthHelper.getUsername(this) + " AUTHTOKEN: " + AuthHelper.getAuthToken(this).getString("authtoken") , Toast.LENGTH_LONG).show();
+        Toast.makeText(this.getBaseContext(), "welcome: " + AuthHelper.getUsername(this) + " AUTHTOKEN: " + AuthHelper.getAccessToken(this) , Toast.LENGTH_LONG).show();
 
         setContentView(R.layout.activity_challenge);
 
@@ -90,6 +91,14 @@ public class ChallengeActivity extends AppCompatActivity {
                         break;
                     case R.id.invitesDrawer:
                         intent = new Intent(getApplicationContext(), InviteOverviewActivity.class);
+                        startActivity(intent);
+                        break;
+                    case R.id.logoutUser:
+                        AuthHelper.logUserOff(getApplicationContext());
+                        FacebookSdk.sdkInitialize(getApplicationContext());
+                        LoginManager.getInstance().logOut();
+                        AccessToken.setCurrentAccessToken(null);
+                        intent = new Intent(getApplicationContext(), LoginActivity.class);
                         startActivity(intent);
                         break;
                 }
