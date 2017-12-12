@@ -143,14 +143,6 @@ public class ChallengeActivity extends AppCompatActivity {
         }
     }
 
-
-    private void syncData(Account account) {
-        Bundle bundle = new Bundle();
-        bundle.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);
-        bundle.putBoolean(ContentResolver.SYNC_EXTRAS_EXPEDITED, true);
-        getBaseContext().getContentResolver().requestSync(account, be.nmct.howest.darem.provider.Contract.AUTHORITY, bundle);
-    }
-
     private void showChallengesOverviewFragment() {
         FragmentManager fragmentManager = getFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();

@@ -68,13 +68,6 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
         try {
             Log.i("SyncAdapter", "syncChallengeItems");
 
-            ArrayList<ContentProviderOperation> operationList = new ArrayList<>();
-            //bestaande producten lokaal verwijderen
-            ContentProviderOperation contentProviderOperationDelete = ContentProviderOperation.newDelete(Contract.CHALLENGES_URI).build();
-            operationList.add(contentProviderOperationDelete);
-            contentResolver.applyBatch(Contract.AUTHORITY, operationList);
-            syncResult.stats.numDeletes++;
-
             String jsonData = downloadJSON();
             saveChallengeToDb(jsonData);
         } catch (Exception ex) {
@@ -87,8 +80,9 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
     private void saveChallengeToDb(String jsonData) throws JSONException {
         Challenge newChallenge;
         try{
-            JSONArray jsonArr = new JSONArray(jsonData).getJSONObject(0).getJSONArray("challengesArray");
+            DeletePreviousDB();
 
+            JSONArray jsonArr = new JSONArray(jsonData).getJSONObject(0).getJSONArray("challengesArray");
 
             for (int i = 0; i < jsonArr.length(); i++) {
                 JSONObject obj = jsonArr.getJSONObject(i);
@@ -103,12 +97,20 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                 values.put(be.nmct.howest.darem.database.Contract.ChallengesColumns.COLUMN_CHALLENGE_DESCRIPTION, newChallenge.getDescription());
                 values.put(be.nmct.howest.darem.database.Contract.ChallengesColumns.COLUMN_CHALLENGE_CREATOR, AuthHelper.getAccessToken(getContext()));
                 executeAsyncTask(new SaveNewChallengeToDBTask(getContext()), values);
-                contentResolver.notifyChange(Contract.CHALLENGES_URI, null);
             }
-        } catch (JSONException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             Log.i("ERROR", e.getMessage());
         }
+    }
+
+    private void DeletePreviousDB() throws RemoteException, OperationApplicationException {
+        ArrayList<ContentProviderOperation> operationList = new ArrayList<>();
+        //bestaande producten lokaal verwijderen
+        ContentProviderOperation contentProviderOperationDelete = ContentProviderOperation.newDelete(Contract.CHALLENGES_URI).build();
+        operationList.add(contentProviderOperationDelete);
+        contentResolver.applyBatch(Contract.AUTHORITY, operationList);
+        syncResult.stats.numDeletes++;
     }
 
     static private <T> void executeAsyncTask(AsyncTask<T, ?, ?> task, T... params) {

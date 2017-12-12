@@ -43,7 +43,8 @@
         <activity
             android:name=".ChallengeActivity"
             android:label="@string/title_activity_challenge"
-            android:theme="@style/AppTheme" />
+            android:theme="@style/AppTheme"
+            android:launchMode="singleInstance"/>
         <activity android:name=".InviteOverviewActivity" />
         <activity android:name=".AcceptChallengeActivity" />
         <activity android:name=".ProfileActivity" />

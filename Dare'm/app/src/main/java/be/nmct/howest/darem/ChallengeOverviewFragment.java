@@ -95,18 +95,18 @@ public class ChallengeOverviewFragment extends Fragment{
     public void onResume() {
         super.onResume();
 
-        //populate the recyclerview when resumed
-        refreshChallanges();
+        loadChallanges();
 
         //Luisteren met een  ContentObserver naar een contentprovider
         mObserver = new ContentObserver(new Handler(Looper.getMainLooper())) {
             public void onChange(boolean selfChange) {
                 Log.i("ContentObserverListener", "Content provider changed, refresh!!");
-                refreshChallanges();
+                getActivity().getLoaderManager().restartLoader(0, null, challengeOverviewFragmentViewModel);
             }
         };
+
         //niet vergeteren te registreren alsook mee te gevev naar wat hij specifiek moet luisteren
-        getContext().getContentResolver().registerContentObserver(be.nmct.howest.darem.provider.Contract.CHALLENGES_URI,false, mObserver);
+        getContext().getContentResolver().registerContentObserver(be.nmct.howest.darem.provider.Contract.CHALLENGES_URI, true, mObserver);
     }
 
     @Override
