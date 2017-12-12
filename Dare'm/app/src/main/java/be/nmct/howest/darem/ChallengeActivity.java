@@ -7,6 +7,7 @@ import android.accounts.AuthenticatorException;
 import android.accounts.OperationCanceledException;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
@@ -53,6 +54,8 @@ import be.nmct.howest.darem.database.Contract;
 import be.nmct.howest.darem.database.DatabaseHelper;
 import be.nmct.howest.darem.database.SaveNewChallengeToDBTask;
 import be.nmct.howest.darem.database.SaveNewUserToDBTask;
+
+import static be.nmct.howest.darem.provider.Contract.AUTHORITY;
 
 
 public class ChallengeActivity extends AppCompatActivity {
@@ -130,6 +133,7 @@ public class ChallengeActivity extends AppCompatActivity {
             }
         });
     }
+
     @Override
     public void onBackPressed() {
         if (getFragmentManager().getBackStackEntryCount() == 0) {
@@ -137,6 +141,14 @@ public class ChallengeActivity extends AppCompatActivity {
         } else {
             getFragmentManager().popBackStack();
         }
+    }
+
+
+    private void syncData(Account account) {
+        Bundle bundle = new Bundle();
+        bundle.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);
+        bundle.putBoolean(ContentResolver.SYNC_EXTRAS_EXPEDITED, true);
+        getBaseContext().getContentResolver().requestSync(account, be.nmct.howest.darem.provider.Contract.AUTHORITY, bundle);
     }
 
     private void showChallengesOverviewFragment() {

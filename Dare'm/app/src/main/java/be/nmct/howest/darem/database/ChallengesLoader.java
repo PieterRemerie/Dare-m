@@ -41,20 +41,7 @@ public class ChallengesLoader extends AsyncTaskLoader<Cursor> {
                 Contract.ChallengesColumns.COLUMN_CHALLENGE_DESCRIPTION
         };
         mData = getContext().getContentResolver().query(be.nmct.howest.darem.provider.Contract.CHALLENGES_URI, columns, null, null, null);
-        /*DatabaseHelper helper = DatabaseHelper.getINSTANCE(getContext());
-        SQLiteDatabase db = helper.getReadableDatabase();
-        mData = db.query(Contract.ChallengesDB.TABLE_NAME,
-                new String[]{
-                        Contract.ChallengesColumns._ID,
-                        Contract.ChallengesColumns.COLUMN_CHALLENGE_NAAM,
-                        Contract.ChallengesColumns.COLUMN_CHALLENGE_DESCRIPTION,
-                },
-                null,
-                null,
-                null,
-                null,
-                null
-                );*/
+        mData.setNotificationUri(getContext().getContentResolver() ,be.nmct.howest.darem.provider.Contract.CHALLENGES_URI);
         mData.getCount();
         return mData;
     }

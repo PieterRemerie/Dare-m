@@ -75,6 +75,11 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
         View view = getLayoutInflater().inflate(R.layout.activity_login, null);
 
+        if(AuthHelper.getAccount(this) != null){
+            Intent intent = new Intent(LoginActivity.this, ChallengeActivity.class);
+            startActivity(intent);
+        }
+
         DatabaseHelper helper = new DatabaseHelper(this);
         SQLiteDatabase db = helper.getWritableDatabase();
         ActivityLoginBinding activityLoginBinding = DataBindingUtil.setContentView(this, R.layout.activity_login);

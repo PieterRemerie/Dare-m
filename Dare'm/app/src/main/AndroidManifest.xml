@@ -20,8 +20,7 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".LoginActivity"
-            android:theme="@style/AppTheme"
-            android:launchMode="singleInstance">
+            android:theme="@style/AppTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -44,18 +43,15 @@
         <activity
             android:name=".ChallengeActivity"
             android:label="@string/title_activity_challenge"
-            android:theme="@style/AppTheme"
-            android:launchMode="singleInstance"/>
+            android:theme="@style/AppTheme" />
         <activity android:name=".InviteOverviewActivity" />
         <activity android:name=".AcceptChallengeActivity" />
         <activity android:name=".ProfileActivity" />
-        <activity android:name=".AddFriendsActivity"
-            android:launchMode="singleInstance"/>
+        <activity android:name=".AddFriendsActivity" />
         <activity
             android:name=".CreateChallengeActivity"
             android:label="@string/title_activity_create_challenge"
-            android:theme="@style/AppTheme"
-            android:launchMode="singleInstance">
+            android:theme="@style/AppTheme">
         </activity>
 
         <meta-data android:name="com.facebook.sdk.ApplicationId"
@@ -81,6 +77,17 @@
             android:authorities="be.howest.nmct.darem"
             android:name=".provider.ContentProviderDarem"
             android:exported="false"/>
+
+        <service
+            android:name="be.nmct.howest.darem.sync.SyncService"
+            android:exported="true"
+            android:process=":sync">
+            <intent-filter>
+                <action android:name="android.content.SyncAdapter"/>
+            </intent-filter>
+            <meta-data android:name="android.content.SyncAdapter"
+                android:resource="@xml/syncadapter" />
+        </service>
 
     </application>
 

@@ -1,0 +1,159 @@
+package be.nmct.howest.darem.sync;
+
+import android.accounts.Account;
+import android.content.AbstractThreadedSyncAdapter;
+import android.content.ContentProviderClient;
+import android.content.ContentProviderOperation;
+import android.content.ContentResolver;
+import android.content.ContentValues;
+import android.content.Context;
+import android.content.OperationApplicationException;
+import android.content.SyncResult;
+import android.os.AsyncTask;
+import android.os.Build;
+import android.os.Bundle;
+import android.os.RemoteException;
+import android.util.Log;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
+
+import be.nmct.howest.darem.Model.Challenge;
+import be.nmct.howest.darem.auth.AuthHelper;
+import be.nmct.howest.darem.provider.Contract;
+import be.nmct.howest.darem.database.SaveNewChallengeToDBTask;
+
+/**
+ * Created by michv on 12/11/2017.
+ */
+
+public class SyncAdapter extends AbstractThreadedSyncAdapter {
+
+    private ContentResolver contentResolver;
+
+    private SyncResult syncResult;
+
+    public SyncAdapter(Context context, boolean autoInitialize) {
+        super(context, autoInitialize);
+        this.contentResolver = context.getContentResolver();
+    }
+
+
+    public SyncAdapter(Context context, boolean autoInitialize, boolean allowParallelSyncs) {
+        super(context, autoInitialize, allowParallelSyncs);
+        this.contentResolver = context.getContentResolver();
+    }
+
+    @Override
+    public void onPerformSync(Account account, Bundle extras, String authority, ContentProviderClient provider, SyncResult syncResult) {
+        try {
+            this.syncResult = syncResult;
+            syncChallenges(account);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    private void syncChallenges(Account account) throws JSONException, RemoteException, OperationApplicationException {
+        try {
+            Log.i("SyncAdapter", "syncChallengeItems");
+
+            ArrayList<ContentProviderOperation> operationList = new ArrayList<>();
+            //bestaande producten lokaal verwijderen
+            ContentProviderOperation contentProviderOperationDelete = ContentProviderOperation.newDelete(Contract.CHALLENGES_URI).build();
+            operationList.add(contentProviderOperationDelete);
+            contentResolver.applyBatch(Contract.AUTHORITY, operationList);
+            syncResult.stats.numDeletes++;
+
+            String jsonData = downloadJSON();
+            saveChallengeToDb(jsonData);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            syncResult.stats.numIoExceptions++;
+            throw ex;
+        }
+    }
+
+    private void saveChallengeToDb(String jsonData) throws JSONException {
+        Challenge newChallenge;
+        try{
+            JSONArray jsonArr = new JSONArray(jsonData).getJSONObject(0).getJSONArray("challengesArray");
+
+
+            for (int i = 0; i < jsonArr.length(); i++) {
+                JSONObject obj = jsonArr.getJSONObject(i);
+
+                newChallenge = new Challenge();
+
+                newChallenge.setName(obj.getString("name"));
+                newChallenge.setDescription(obj.getString("description"));
+
+                ContentValues values = new ContentValues();
+                values.put(be.nmct.howest.darem.database.Contract.ChallengesColumns.COLUMN_CHALLENGE_NAAM, newChallenge.getName());
+                values.put(be.nmct.howest.darem.database.Contract.ChallengesColumns.COLUMN_CHALLENGE_DESCRIPTION, newChallenge.getDescription());
+                values.put(be.nmct.howest.darem.database.Contract.ChallengesColumns.COLUMN_CHALLENGE_CREATOR, AuthHelper.getAccessToken(getContext()));
+                executeAsyncTask(new SaveNewChallengeToDBTask(getContext()), values);
+                contentResolver.notifyChange(Contract.CHALLENGES_URI, null);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+            Log.i("ERROR", e.getMessage());
+        }
+    }
+
+    static private <T> void executeAsyncTask(AsyncTask<T, ?, ?> task, T... params) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+            task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, params);
+        } else {
+            task.execute(params);
+        }
+    }
+
+    private String downloadJSON() {
+        String REQUEST_METHOD = "GET";
+        int READ_TIMEOUT = 15000;
+        int CONNECTION_TIMEOUT = 15000;
+
+        String stringUrl = "https://darem.herokuapp.com/userprofile?authToken=" + AuthHelper.getAccessToken(getContext());
+        String result;
+        String inputLine;
+
+        try{
+            URL myUrl = new URL(stringUrl);
+            HttpURLConnection connection = (HttpURLConnection) myUrl.openConnection();
+            connection.setRequestMethod(REQUEST_METHOD);
+            connection.setReadTimeout(READ_TIMEOUT);
+            connection.setConnectTimeout(CONNECTION_TIMEOUT);
+
+            connection.connect();
+            InputStreamReader streamReader = new InputStreamReader(connection.getInputStream());
+            BufferedReader reader = new BufferedReader(streamReader);
+            StringBuilder stringBuilder = new StringBuilder();
+            while ((inputLine = reader.readLine()) != null) {
+                stringBuilder.append(inputLine);
+            }
+            reader.close();
+            streamReader.close();
+            result = stringBuilder.toString();
+
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+            result = null;
+        } catch (IOException e) {
+            e.printStackTrace();
+            result = null;
+        }
+
+        return result;
+    }
+}
