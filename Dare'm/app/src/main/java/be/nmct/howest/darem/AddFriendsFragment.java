@@ -17,6 +17,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.facebook.AccessToken;
 import com.squareup.picasso.Picasso;
@@ -114,29 +115,26 @@ public class AddFriendsFragment extends Fragment implements LoaderManager.Loader
 
         @Override
         public void onBindViewHolder(AddFriendsViewHolder holder, int position) {
-
-
             mCursorAddFriends.moveToPosition(position);
 
             int colnr1 = mCursorAddFriends.getColumnIndex(Friends.Columns.COLUMN_NAME);
             int colnr2 = mCursorAddFriends.getColumnIndex(Friends.Columns.COLUMN_PICTURE);
             final int colnr3 = mCursorAddFriends.getColumnIndex(Friends.Columns._ID);
 
-
             holder.textViewNaam.setText(mCursorAddFriends.getString(colnr1));
 
             String pictureURL = mCursorAddFriends.getString(colnr2);
 
-
-
             Picasso.with(getContext()).load(pictureURL).resize(60 , 60).transform(new CircleTransform()).into(holder.imageViewFriend);
 
+            final String name = mCursorAddFriends.getString(colnr1);
             final String friendID = mCursorAddFriends.getString(colnr3);
 
             holder.btnAddFriends.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     new SendPost(friendID).execute();
+                    Toast.makeText(getContext(), name + " is toegevoegd aan uw vrienden", Toast.LENGTH_LONG).show();
                     Log.i("AddFRIENDS", "COMPLETED");
                 }
             });

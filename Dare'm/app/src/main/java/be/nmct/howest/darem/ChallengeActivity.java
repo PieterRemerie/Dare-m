@@ -66,8 +66,6 @@ public class ChallengeActivity extends AppCompatActivity {
 
         View view = getLayoutInflater().inflate(R.layout.activity_challenge, null);
 
-        Toast.makeText(this.getBaseContext(), "welcome: " + AuthHelper.getUsername(this) + " AUTHTOKEN: " + AuthHelper.getAccessToken(this) , Toast.LENGTH_LONG).show();
-
         setContentView(R.layout.activity_challenge);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -132,6 +130,8 @@ public class ChallengeActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        Toast.makeText(this.getBaseContext(), "welcome: " + AuthHelper.getUsername(this) + " AUTHTOKEN: " + AuthHelper.getAccessToken(this) , Toast.LENGTH_LONG).show();
     }
 
     @Override

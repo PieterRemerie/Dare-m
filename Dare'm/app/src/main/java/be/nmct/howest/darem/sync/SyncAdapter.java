@@ -82,7 +82,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
         try{
             DeletePreviousDB();
 
-            JSONArray jsonArr = new JSONArray(jsonData).getJSONObject(0).getJSONArray("challengesArray");
+            JSONArray jsonArr = new JSONArray(jsonData).getJSONObject(0).getJSONArray("acceptedChallenges");
 
             for (int i = 0; i < jsonArr.length(); i++) {
                 JSONObject obj = jsonArr.getJSONObject(i);

@@ -95,7 +95,7 @@ public class ChallengeOverviewFragment extends Fragment{
     public void onResume() {
         super.onResume();
 
-        loadChallanges();
+        refreshChallanges();
 
         //Luisteren met een  ContentObserver naar een contentprovider
         mObserver = new ContentObserver(new Handler(Looper.getMainLooper())) {

@@ -118,7 +118,6 @@ public class LoginActivity extends AppCompatActivity {
         // READ permissions voor FACEBOOK gegevens op te laden
         loginFB = (LoginButton) findViewById(R.id.btnLoginFB);
         loginFB.setReadPermissions("public_profile");
-        loginFB.setReadPermissions("user_birthday");
         loginFB.setReadPermissions("user_friends");
         loginFB.setReadPermissions("email");
 
