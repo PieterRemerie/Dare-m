@@ -20,109 +20,80 @@
         android:background="@color/colorPrimary">
 
         <ImageView
-            android:id="@+id/imgLogo"
-            android:layout_width="200dp"
-            android:layout_height="100dp"
-            android:background="@android:color/transparent"
-            app:srcCompat="@drawable/logo"
+            android:id="@+id/imageView7"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/login"
+            android:scaleType = "centerCrop"
             android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true" />
-
-        <TextView
-            android:id="@+id/lblEmail"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignStart="@+id/txtEmail"
-            android:layout_marginTop="5dp"
-            android:text="Email address"
-            android:textColor="@android:color/white"
-            android:layout_below="@+id/imgLogo" />
-
-        <EditText
-            android:id="@+id/txtEmail"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/lblEmail"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="11dp"
-            android:ems="10"
-            android:inputType="textPersonName"
-            android:text="@={login.email}"
-            android:textColor="@android:color/white"
-            android:theme="@style/MyEditText"/>
-
-        <TextView
-            android:id="@+id/lblPassword"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignStart="@+id/txtEmail"
-            android:layout_below="@+id/txtEmail"
-            android:layout_marginTop="22dp"
-            android:text="Password"
-            android:textColor="@android:color/white" />
-
-        <EditText
-            android:id="@+id/txtPassword"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignStart="@+id/lblPassword"
-            android:layout_below="@+id/lblPassword"
-            android:layout_marginTop="12dp"
-            android:ems="10"
-            android:inputType="textPassword"
-            android:text="@={login.password}"
-            android:textColor="@android:color/white"
-            android:theme="@style/MyEditText"/>
-
-        <Button
-            android:id="@+id/btnLogin"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignEnd="@+id/txtPassword"
-            android:layout_alignStart="@+id/txtPassword"
-            android:layout_below="@+id/txtPassword"
-            android:layout_marginTop="34dp"
-            android:background="#cd89201b"
-            android:text="Log in"
-            android:textColor="@android:color/white" />
+            android:layout_alignParentStart="true" />
 
         <com.facebook.login.widget.LoginButton
             android:id="@+id/btnLoginFB"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignEnd="@+id/btnLogin"
-            android:layout_alignStart="@+id/btnLogin"
-            android:layout_below="@+id/btnLogin"
-            android:layout_marginTop="23dp"
             android:background="@color/com_facebook_blue"
             android:paddingBottom="13dp"
             android:paddingTop="13dp"
             android:text="Log in with Facebook"
-            android:textColor="@android:color/white">
+            android:textColor="@android:color/white"
+            android:layout_marginBottom="34dp"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true">
 
         </com.facebook.login.widget.LoginButton>
+
+        <TextView
+            android:id="@+id/textView5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="68dp"
+            android:fontFamily="sans-serif-condensed"
+            android:text="Welcome "
+            android:textColor="@android:color/background_light"
+            android:textSize="40sp"
+            android:textStyle="bold"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true" />
 
         <TextView
             android:id="@+id/textView6"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/btnLoginFB"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="36dp"
-            android:text="Don't have a Dare'm account?"
-            android:textColor="@android:color/white" />
+            android:layout_marginTop="35dp"
+            android:fontFamily="sans-serif-condensed"
+            android:text="To"
+            android:textColor="@android:color/background_light"
+            android:textSize="40sp"
+            android:textStyle="bold"
+            android:layout_below="@+id/textView5"
+            android:layout_centerHorizontal="true" />
 
-        <Button
-            android:id="@+id/btnSignUp"
-            style="?android:attr/borderlessButtonStyle"
+        <TextView
+            android:id="@+id/textView7"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_above="@+id/btnLoginFB"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="21dp"
+            android:fontFamily="sans-serif-condensed"
+            android:text="Join now!"
+            android:textColor="@android:color/background_light"
+            android:textSize="30sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/textView9"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-condensed"
+            android:text="Dare'm"
+            android:textColor="@android:color/background_light"
+            android:textSize="80sp"
+            android:textStyle="bold"
             android:layout_below="@+id/textView6"
-            android:layout_marginTop="12dp"
-            android:layout_toEndOf="@+id/lblPassword"
-            android:text="SIGN UP" />
-
-
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="38dp" />
 
     </RelativeLayout>
 

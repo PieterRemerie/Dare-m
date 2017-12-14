@@ -69,11 +69,15 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        FacebookSdk.sdkInitialize(getApplicationContext());
-
-
         setContentView(R.layout.activity_login);
         View view = getLayoutInflater().inflate(R.layout.activity_login, null);
+
+        if( getIntent().getBooleanExtra("Exit me", false)){
+            finish();
+            return; // add this to prevent from doing unnecessary stuffs
+        }
+
+        FacebookSdk.sdkInitialize(getApplicationContext());
 
         if(AuthHelper.getAccount(this) != null){
             Intent intent = new Intent(LoginActivity.this, ChallengeActivity.class);
@@ -96,24 +100,6 @@ public class LoginActivity extends AppCompatActivity {
         //lege login
         final Login login = new Login("", "");
         activityLoginBinding.setLogin(login);
-
-        Button logIn = (Button) findViewById(R.id.btnLogin);
-        logIn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(v.getContext(), ChallengeActivity.class);
-                startActivity(intent);
-            }
-        });
-        Button signUP = (Button) findViewById(R.id.btnSignUp);
-        signUP.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(v.getContext(), RegistratieActivity.class);
-                startActivity(intent);
-            }
-        });
-
 
         // READ permissions voor FACEBOOK gegevens op te laden
         loginFB = (LoginButton) findViewById(R.id.btnLoginFB);
