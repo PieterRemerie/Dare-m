@@ -70,7 +70,7 @@ public class ChallengeOverviewFragment extends Fragment{
         challengeOverviewFragmentViewModel = new ChallengeOverviewFragmentViewModel(binding, getContext());
         getActivity().setTitle("OVERVIEW");
 
-        syncDataManual();
+
 
         return binding.getRoot();
     }
@@ -94,6 +94,8 @@ public class ChallengeOverviewFragment extends Fragment{
     @Override
     public void onResume() {
         super.onResume();
+
+        syncDataManual();
 
         refreshChallanges();
 

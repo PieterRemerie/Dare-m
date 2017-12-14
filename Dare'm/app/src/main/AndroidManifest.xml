@@ -44,8 +44,9 @@
             android:name=".ChallengeActivity"
             android:label="@string/title_activity_challenge"
             android:theme="@style/AppTheme"
-            android:launchMode="singleInstance"/>
-        <activity android:name=".InviteOverviewActivity" />
+            android:launchMode="singleTask"/>
+        <activity android:name=".InviteOverviewActivity"
+                  android:launchMode="singleTask"/>
         <activity android:name=".AcceptChallengeActivity" />
         <activity android:name=".ProfileActivity" />
         <activity android:name=".AddFriendsActivity" />

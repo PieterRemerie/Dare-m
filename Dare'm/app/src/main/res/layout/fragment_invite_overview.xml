@@ -5,6 +5,7 @@
         android:layout_height="match_parent"
         tools:context="be.nmct.howest.darem.ChallengeInviteFragment"
         tools:listitem="@layout/row_invite_overview"
-        android:id="@+id/recyclerviewInviteOverview">
+        android:id="@+id/recyclerviewInviteOverview"
+        android:layout_marginTop="55dp">
     </android.support.v7.widget.RecyclerView>
 </layout>
