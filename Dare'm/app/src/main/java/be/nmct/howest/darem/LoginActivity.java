@@ -192,7 +192,6 @@ public class LoginActivity extends AppCompatActivity {
 
                 addAccount(userMail);
 
-
                 if (userFirstname != null && userLastname != null && userMail != null) {
                     values.put(Contract.UserColumns.COLUMN_USER_VOORNAAM, userFirstname);
                     values.put(Contract.UserColumns.COLUMN_USER_NAAM, userLastname);
@@ -205,7 +204,6 @@ public class LoginActivity extends AppCompatActivity {
                 }
 
             }
-
 
         } catch (InterruptedException e) {
             e.printStackTrace();

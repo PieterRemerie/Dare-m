@@ -10,14 +10,16 @@ import android.provider.BaseColumns;
 public class Contract {
     public static final int DATABASE_VERSION = 1;
     public static final String DATABASE_NAME = "database.db";
-    public interface ChallengesColumns extends BaseColumns{
+
+    public interface ChallengesColumns extends BaseColumns {
         public static final String TABLE_NAME = "challenges";
         public static final String COLUMN_CHALLENGE_NAAM = "challengeNaam";
         public static final String COLUMN_CHALLENGE_DESCRIPTION = "challengeDescription";
         public static final String COLUMN_CHALLENGE_USERS = "challengeFriends";
         public static final String COLUMN_CHALLENGE_CREATOR = "challengeCreator";
     }
-    public static abstract class ChallengesDB implements ChallengesColumns{
+
+    public static abstract class ChallengesDB implements ChallengesColumns {
         public static final String CREATE_TABLE = "create table "
                 + TABLE_NAME + "(" + _ID + " integer primary key autoincrement, "
                 + COLUMN_CHALLENGE_CREATOR + " integer not null, "
@@ -27,15 +29,16 @@ public class Contract {
         public static final String DELETE_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME;
     }
 
-    public interface UserColumns extends BaseColumns{
+    public interface UserColumns extends BaseColumns {
         public static final String TABLE_NAME = "Users";
         public static final String COLUMN_USER_NAAM = "givenName";
         public static final String COLUMN_USER_VOORNAAM = "familyName";
-        public static final String COLUMN_USER_EMAIL= "email";
-        public static final String COLUMN_USER_POINTS= "points";
+        public static final String COLUMN_USER_EMAIL = "email";
+        public static final String COLUMN_USER_POINTS = "points";
         public static final String COLUMN_USER_PHOTO = "photo";
     }
-    public static abstract class UserDB implements UserColumns{
+
+    public static abstract class UserDB implements UserColumns {
         public static final String CREATE_TABLE = "create table "
                 + TABLE_NAME + "(" + _ID + " integer primary key autoincrement, "
                 + COLUMN_USER_NAAM + " text not null, "
@@ -46,22 +49,42 @@ public class Contract {
                 + ");";
         public static final String DELETE_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME;
     }
-    public interface UserChallengeColumns extends BaseColumns{
+
+    public interface UserChallengeColumns extends BaseColumns {
         public static final String TABLE_NAME = "UserChallenge";
         public static final String COLUMN_USERID = "userID";
         public static final String COLUMN_CHALLENGEID = "challengeID";
-        public static abstract class UserChallengedB implements UserChallengeColumns{
 
-    }
+        public static abstract class UserChallengedB implements UserChallengeColumns {
+
+        }
+
         public static final String CREATE_TABLE = "create table "
                 + TABLE_NAME + "(" + _ID + " integer primary key autoincrement, "
                 + COLUMN_USERID + " integer not null, "
                 + COLUMN_CHALLENGEID + " integer not null, "
                 + "Foreign key (" + COLUMN_USERID + ") references "
-                + UserColumns.TABLE_NAME + " (" + UserColumns._ID +") on delete cascade, "
+                + UserColumns.TABLE_NAME + " (" + UserColumns._ID + ") on delete cascade, "
                 + "Foreign key (" + COLUMN_CHALLENGEID + ") references "
                 + ChallengesColumns.TABLE_NAME + " (" + ChallengesColumns._ID + ") on delete cascade"
                 + ");";
         public static final String DELETE_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME;
     }
+
+    public interface FriendsColumns extends BaseColumns {
+        public static final String TABLE_NAME = "Friends";
+        public static final String COLUMN_FRIEND_FULLNAME = "fullName";
+        public static final String COLUMN_FRIEND_PHOTO = "photo";
+    }
+
+    public static abstract class FriendsDB implements FriendsColumns {
+        public static final String CREATE_TABLE = "create table "
+                + TABLE_NAME + "(" + _ID + " integer primary key autoincrement, "
+                + COLUMN_FRIEND_FULLNAME + " text not null, "
+                + COLUMN_FRIEND_PHOTO + " text not null"
+                +  ");";
+
+        public static final String DELETE_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME;
+    }
+
 }
