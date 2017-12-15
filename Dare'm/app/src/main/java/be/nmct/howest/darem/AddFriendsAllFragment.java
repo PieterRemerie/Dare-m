@@ -3,12 +3,16 @@ package be.nmct.howest.darem;
 import android.app.Fragment;
 import android.app.LoaderManager;
 import android.content.Loader;
+import android.database.ContentObserver;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Layout;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,6 +35,7 @@ public class AddFriendsAllFragment extends Fragment implements LoaderManager.Loa
 
     public RecyclerView recyclerViewAddFriendsAll;
     public AddFriendsAllRecycleViewAdapter addFriendsAllRecycleViewAdapter;
+    private ContentObserver mObserver;
 
     public AddFriendsAllFragment(){
         //empty constructor
@@ -53,6 +58,22 @@ public class AddFriendsAllFragment extends Fragment implements LoaderManager.Loa
     public void onStart() {
         super.onStart();
         getLoaderManager().initLoader(0, null, this);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        //Luisteren met een  ContentObserver naar een contentprovider
+        mObserver = new ContentObserver(new Handler(Looper.getMainLooper())) {
+            public void onChange(boolean selfChange) {
+                Log.i("ContentObserverListener", "Content provider changed - FRIENDS");
+                getLoaderManager().restartLoader(0, null, AddFriendsAllFragment.this);
+            }
+        };
+
+        //niet vergeteren te registreren alsook mee te gevev naar wat hij specifiek moet luisteren
+        getContext().getContentResolver().registerContentObserver(be.nmct.howest.darem.provider.Contract.FRIENDS_URI, true, mObserver);
     }
 
     @Override

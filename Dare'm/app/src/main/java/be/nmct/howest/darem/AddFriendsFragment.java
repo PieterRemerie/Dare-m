@@ -132,8 +132,6 @@ public class AddFriendsFragment extends Fragment implements LoaderManager.Loader
 
             holder.textViewNaam.setText(mCursorAddFriends.getString(colnr1));
 
-            String pictureURL = mCursorAddFriends.getString(colnr2);
-
             holder.textViewNaam.setText(friendName);
 
             final String pictureURL = mCursorAddFriends.getString(colnr2);
@@ -151,23 +149,16 @@ public class AddFriendsFragment extends Fragment implements LoaderManager.Loader
 
                     ContentValues values = new ContentValues();
 
-                    values.put(Contract.FriendsColumns.COLUMN_FRIEND_FULLNAME,friendName );
+                    values.put(Contract.FriendsColumns.COLUMN_FRIEND_FULLNAME, friendName);
                     values.put(Contract.FriendsColumns.COLUMN_FRIEND_PHOTO, pictureURL);
 
                     executeAsyncTask(new SaveNewFriendToDBTask(getContext()), values);
 
                     new SendPost(friendID).execute();
 
-                    Toast.makeText(getContext(), name + " is toegevoegd aan uw vrienden", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getContext(), name + " is toegevoegd aan uw vrienden", Toast.LENGTH_SHORT).show();
 
                     Log.i("AddFRIENDS", "COMPLETED");
-
-                    FragmentManager fragmentManager = getFragmentManager();
-                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                    AddFriendsAllFragment addFriendsAllFragment = new AddFriendsAllFragment();
-                    fragmentTransaction.replace(R.id.framelayout2_in_add_friends, addFriendsAllFragment);
-                    fragmentTransaction.commit();
-
                 }
             });
 
