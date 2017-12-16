@@ -2,7 +2,11 @@ package be.nmct.howest.darem;
 
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.ContentProviderOperation;
+import android.content.ContentResolver;
 import android.content.Intent;
+import android.content.OperationApplicationException;
+import android.os.RemoteException;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -17,6 +21,8 @@ import android.view.View;
 import com.facebook.AccessToken;
 import com.facebook.FacebookSdk;
 import com.facebook.login.LoginManager;
+
+import java.util.ArrayList;
 
 import be.nmct.howest.darem.Navigation.Navigation;
 import be.nmct.howest.darem.auth.AuthHelper;
@@ -54,12 +60,18 @@ public class AddFriendsActivity extends AppCompatActivity {
                         startActivity(intent);
                         break;
                     case R.id.logoutUser:
-                        AuthHelper.logUserOff(getApplicationContext());
-                        FacebookSdk.sdkInitialize(getApplicationContext());
-                        LoginManager.getInstance().logOut();
-                        AccessToken.setCurrentAccessToken(null);
-                        intent = new Intent(getApplicationContext(), LoginActivity.class);
-                        startActivity(intent);
+                        try {
+                            AuthHelper.logUserOff(getApplicationContext());
+                            FacebookSdk.sdkInitialize(getApplicationContext());
+                            LoginManager.getInstance().logOut();
+                            AccessToken.setCurrentAccessToken(null);
+                            DeletePreviousDBUser();
+                            intent = new Intent(getApplicationContext(), LoginActivity.class);
+                            startActivity(intent);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+
                         break;
                 }
                 drawer.closeDrawers();
@@ -108,5 +120,14 @@ public class AddFriendsActivity extends AppCompatActivity {
         } else {
             getFragmentManager().popBackStack();
         }
+    }
+
+    private void DeletePreviousDBUser() throws RemoteException, OperationApplicationException {
+        ContentResolver contentResolver = getBaseContext().getContentResolver();
+        ArrayList<ContentProviderOperation> operationList = new ArrayList<>();
+        //bestaande producten lokaal verwijderen
+        ContentProviderOperation contentProviderOperationDelete = ContentProviderOperation.newDelete(be.nmct.howest.darem.provider.Contract.USERS_URI).build();
+        operationList.add(contentProviderOperationDelete);
+        contentResolver.applyBatch(be.nmct.howest.darem.provider.Contract.AUTHORITY, operationList);
     }
 }

@@ -7,10 +7,12 @@ import android.accounts.AuthenticatorException;
 import android.accounts.OperationCanceledException;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.ContentProviderOperation;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.content.OperationApplicationException;
 import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -22,6 +24,7 @@ import com.facebook.login.LoginManager;
 import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.squareup.picasso.Picasso;
 
+import android.os.RemoteException;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BaseTransientBottomBar;
 import android.support.design.widget.NavigationView;
@@ -43,6 +46,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 
 import be.nmct.howest.darem.Loader.HttpGetRequest;
@@ -95,12 +99,18 @@ public class ChallengeActivity extends AppCompatActivity {
                         startActivity(intent);
                         break;
                     case R.id.logoutUser:
-                        AuthHelper.logUserOff(getApplicationContext());
-                        FacebookSdk.sdkInitialize(getApplicationContext());
-                        LoginManager.getInstance().logOut();
-                        AccessToken.setCurrentAccessToken(null);
-                        intent = new Intent(getApplicationContext(), LoginActivity.class);
-                        startActivity(intent);
+                        try {
+                            AuthHelper.logUserOff(getApplicationContext());
+                            FacebookSdk.sdkInitialize(getApplicationContext());
+                            LoginManager.getInstance().logOut();
+                            AccessToken.setCurrentAccessToken(null);
+                            DeletePreviousDBUser();
+                            intent = new Intent(getApplicationContext(), LoginActivity.class);
+                            startActivity(intent);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+
                         break;
                 }
                 drawer.closeDrawers();
@@ -153,5 +163,14 @@ public class ChallengeActivity extends AppCompatActivity {
         ChallengeOverviewFragment challengesOverviewFragment = new ChallengeOverviewFragment();
         fragmentTransaction.replace(R.id.framelayout_in_challengeactivity, challengesOverviewFragment);
         fragmentTransaction.commit();
+    }
+
+    private void DeletePreviousDBUser() throws RemoteException, OperationApplicationException {
+        ContentResolver contentResolver = getBaseContext().getContentResolver();
+        ArrayList<ContentProviderOperation> operationList = new ArrayList<>();
+        //bestaande producten lokaal verwijderen
+        ContentProviderOperation contentProviderOperationDelete = ContentProviderOperation.newDelete(be.nmct.howest.darem.provider.Contract.USERS_URI).build();
+        operationList.add(contentProviderOperationDelete);
+        contentResolver.applyBatch(be.nmct.howest.darem.provider.Contract.AUTHORITY, operationList);
     }
 }
