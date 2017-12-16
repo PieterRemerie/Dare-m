@@ -30,6 +30,7 @@ import java.util.List;
 
 import be.nmct.howest.darem.Model.Challenge;
 import be.nmct.howest.darem.auth.AuthHelper;
+import be.nmct.howest.darem.database.SaveNewFriendToDBTask;
 import be.nmct.howest.darem.provider.Contract;
 import be.nmct.howest.darem.database.SaveNewChallengeToDBTask;
 
@@ -58,18 +59,18 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
     public void onPerformSync(Account account, Bundle extras, String authority, ContentProviderClient provider, SyncResult syncResult) {
         try {
             this.syncResult = syncResult;
-            syncChallenges(account);
+            String jsonData = downloadJSON();
+            syncChallenges(account, jsonData);
         } catch (Exception ex) {
             ex.printStackTrace();
         }
     }
 
-    private void syncChallenges(Account account) throws JSONException, RemoteException, OperationApplicationException {
+    private void syncChallenges(Account account, String jsonData) throws JSONException, RemoteException, OperationApplicationException {
         try {
             Log.i("SyncAdapter", "syncChallengeItems");
-
-            String jsonData = downloadJSON();
             saveChallengeToDb(jsonData);
+            saveFriendsToDb(jsonData);
         } catch (Exception ex) {
             ex.printStackTrace();
             syncResult.stats.numIoExceptions++;
@@ -108,6 +109,43 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
         ArrayList<ContentProviderOperation> operationList = new ArrayList<>();
         //bestaande producten lokaal verwijderen
         ContentProviderOperation contentProviderOperationDelete = ContentProviderOperation.newDelete(Contract.CHALLENGES_URI).build();
+        operationList.add(contentProviderOperationDelete);
+        contentResolver.applyBatch(Contract.AUTHORITY, operationList);
+        syncResult.stats.numDeletes++;
+    }
+
+
+    private void saveFriendsToDb(String jsonData) {
+        try {
+            DeletePreviousDBFriends();
+
+            JSONArray jsonArr = new JSONArray(jsonData).getJSONObject(0).getJSONArray("friends");
+
+            for (int i = 0; i < jsonArr.length(); i++) {
+                JSONObject obj = jsonArr.getJSONObject(i);
+
+                ContentValues values = new ContentValues();
+
+                values.put(be.nmct.howest.darem.database.Contract.FriendsColumns.COLUMN_FRIEND_FULLNAME, obj.getString("name"));
+                values.put(be.nmct.howest.darem.database.Contract.FriendsColumns.COLUMN_FRIEND_PHOTO, obj.getString("photo"));
+
+                executeAsyncTask(new SaveNewFriendToDBTask(getContext()), values);
+            }
+
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        } catch (OperationApplicationException e) {
+            e.printStackTrace();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    private void DeletePreviousDBFriends() throws RemoteException, OperationApplicationException {
+        ArrayList<ContentProviderOperation> operationList = new ArrayList<>();
+        //bestaande producten lokaal verwijderen
+        ContentProviderOperation contentProviderOperationDelete = ContentProviderOperation.newDelete(Contract.FRIENDS_URI).build();
         operationList.add(contentProviderOperationDelete);
         contentResolver.applyBatch(Contract.AUTHORITY, operationList);
         syncResult.stats.numDeletes++;
