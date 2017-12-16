@@ -157,7 +157,7 @@ public class AddFriendsFragment extends Fragment implements LoaderManager.Loader
                     new SendPost(friendID).execute();
 
                     Toast.makeText(getContext(), name + " is toegevoegd aan uw vrienden", Toast.LENGTH_SHORT).show();
-
+                    getLoaderManager().restartLoader(0, null, AddFriendsFragment.this);
                     Log.i("AddFRIENDS", "COMPLETED");
                 }
             });
