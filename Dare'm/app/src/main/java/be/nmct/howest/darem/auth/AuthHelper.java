@@ -48,6 +48,11 @@ public class AuthHelper {
         return accessToken;
     }
 
+    public static String getDbToken(Context context) {
+        AccountManager mgt = AccountManager.get(context);
+        String accessToken = mgt.peekAuthToken(getAccount(context), "db_token");
+        return accessToken;
+    }
 
     public static Boolean isUserLoggedIn(Context context){
         mAccountManager = AccountManager.get(context);

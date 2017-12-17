@@ -43,6 +43,7 @@ import javax.net.ssl.HttpsURLConnection;
 import be.nmct.howest.darem.Loader.Challenge;
 import be.nmct.howest.darem.Loader.Friends;
 import be.nmct.howest.darem.Loader.InviteChallenge;
+import be.nmct.howest.darem.auth.AuthHelper;
 
 
 public class InviteOverviewFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
@@ -182,7 +183,7 @@ public class InviteOverviewFragment extends Fragment implements LoaderManager.Lo
 
                 //Write
                 JSONObject js = new JSONObject();
-                js.put("user", "5a3286734b529e0014fb10c5");
+                js.put("user", AuthHelper.getDbToken(getContext()));
                 js.put("challenge", challengeId);
                 js.put("response", "accept");
 

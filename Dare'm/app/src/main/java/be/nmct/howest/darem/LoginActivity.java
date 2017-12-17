@@ -135,41 +135,6 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
-    private void addAccount(String userMail) {
-        Account[] accountsByType = mAccountManager.getAccountsByType(be.nmct.howest.darem.auth.Contract.ACCOUNT_TYPE);
-        Account account;
-        if (accountsByType.length == 0) {
-            // nog geen account aanwezig
-            account = new Account(userMail, be.nmct.howest.darem.auth.Contract.ACCOUNT_TYPE);
-            mAccountManager.addAccountExplicitly(account, null, null);
-        } else if (!userMail.equals(accountsByType[0].name)) {
-            // er bestaat reeds een account met andere naam
-            mAccountManager.removeAccount(accountsByType[0], this, null, null);
-            account = new Account(userMail, be.nmct.howest.darem.auth.Contract.ACCOUNT_TYPE);
-            mAccountManager.addAccountExplicitly(account, null, null);
-        } else {
-            // account met de zelfde username terug gevonden
-            account = accountsByType[0];
-        }
-
-        Intent intent = new Intent();
-        intent.putExtra(AccountManager.KEY_ACCOUNT_NAME, userMail);
-        intent.putExtra(AccountManager.KEY_ACCOUNT_TYPE, be.nmct.howest.darem.auth.Contract.ACCOUNT_TYPE);
-
-        if (mAccountAuthenticatorResponse != null) {
-            Bundle bundle = intent.getExtras();
-            bundle.putString(AccountManager.KEY_ACCOUNT_NAME, userMail);
-            bundle.putString(AccountManager.KEY_ACCOUNT_TYPE, be.nmct.howest.darem.auth.Contract.ACCOUNT_TYPE);
-            mAccountAuthenticatorResponse.onResult(bundle);
-        }
-
-        setResult(RESULT_OK, intent);
-
-        mAccountManager.setAuthToken(account, "access_token", AccessToken.getCurrentAccessToken().getUserId());
-
-        finish();
-    }
-
     public void saveNewUser() {
 
         ContentValues values = new ContentValues();
@@ -189,8 +154,9 @@ public class LoginActivity extends AppCompatActivity {
                 String userLastname = jObj.getJSONObject(0).getString("familyName");
                 String userMail = jObj.getJSONObject(0).getString("email");
                 String userImgurl = jObj.getJSONObject(0).getJSONObject("facebook").getString("photo");
+                String userdb = jObj.getJSONObject(0).getJSONObject("facebook").getString("databaseid");
 
-                addAccount(userMail);
+                addAccount(userMail, userdb);
 
                 if (userFirstname != null && userLastname != null && userMail != null) {
                     values.put(Contract.UserColumns.COLUMN_USER_VOORNAAM, userFirstname);
@@ -285,6 +251,42 @@ public class LoginActivity extends AppCompatActivity {
             }
         }
 
+    }
+
+    private void addAccount(String userMail, String userDb) {
+        Account[] accountsByType = mAccountManager.getAccountsByType(be.nmct.howest.darem.auth.Contract.ACCOUNT_TYPE);
+        Account account;
+        if (accountsByType.length == 0) {
+            // nog geen account aanwezig
+            account = new Account(userMail, be.nmct.howest.darem.auth.Contract.ACCOUNT_TYPE);
+            mAccountManager.addAccountExplicitly(account, null, null);
+        } else if (!userMail.equals(accountsByType[0].name)) {
+            // er bestaat reeds een account met andere naam
+            mAccountManager.removeAccount(accountsByType[0], this, null, null);
+            account = new Account(userMail, be.nmct.howest.darem.auth.Contract.ACCOUNT_TYPE);
+            mAccountManager.addAccountExplicitly(account, null, null);
+        } else {
+            // account met de zelfde username terug gevonden
+            account = accountsByType[0];
+        }
+
+        Intent intent = new Intent();
+        intent.putExtra(AccountManager.KEY_ACCOUNT_NAME, userMail);
+        intent.putExtra(AccountManager.KEY_ACCOUNT_TYPE, be.nmct.howest.darem.auth.Contract.ACCOUNT_TYPE);
+
+        if (mAccountAuthenticatorResponse != null) {
+            Bundle bundle = intent.getExtras();
+            bundle.putString(AccountManager.KEY_ACCOUNT_NAME, userMail);
+            bundle.putString(AccountManager.KEY_ACCOUNT_TYPE, be.nmct.howest.darem.auth.Contract.ACCOUNT_TYPE);
+            mAccountAuthenticatorResponse.onResult(bundle);
+        }
+
+        setResult(RESULT_OK, intent);
+
+        mAccountManager.setAuthToken(account, "access_token", AccessToken.getCurrentAccessToken().getUserId());
+        mAccountManager.setAuthToken(account, "db_token", userDb);
+
+        finish();
     }
 
 }

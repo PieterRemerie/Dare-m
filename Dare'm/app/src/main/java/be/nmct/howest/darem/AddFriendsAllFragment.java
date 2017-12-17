@@ -77,6 +77,12 @@ public class AddFriendsAllFragment extends Fragment implements LoaderManager.Loa
     }
 
     @Override
+    public void onPause() {
+        super.onPause();
+        getContext().getContentResolver().unregisterContentObserver(mObserver);
+    }
+
+    @Override
     public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
        // return new AddedFriendsLoader(this.getContext());
         return new FriendLoader(this.getContext());

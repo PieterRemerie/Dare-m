@@ -141,7 +141,7 @@ public class ChallengeActivity extends AppCompatActivity {
             }
         });
 
-        Toast.makeText(this.getBaseContext(), "welcome: " + AuthHelper.getUsername(this) + " AUTHTOKEN: " + AuthHelper.getAccessToken(this) , Toast.LENGTH_LONG).show();
+        Toast.makeText(this.getBaseContext(), "welcome: " + AuthHelper.getUsername(this) + " AUTHTOKEN: " + AuthHelper.getAccessToken(this) + " DBToken: " + AuthHelper.getDbToken(this) , Toast.LENGTH_LONG).show();
     }
 
     @Override
