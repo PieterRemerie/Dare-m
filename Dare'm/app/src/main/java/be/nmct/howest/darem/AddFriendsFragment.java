@@ -1,11 +1,16 @@
 package be.nmct.howest.darem;
 
 import android.app.Fragment;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.app.LoaderManager;
+import android.content.ContentValues;
+import android.content.Context;
 import android.content.Loader;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
@@ -17,6 +22,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.facebook.AccessToken;
 import com.squareup.picasso.Picasso;
@@ -35,6 +41,9 @@ import javax.net.ssl.HttpsURLConnection;
 import be.nmct.howest.darem.Loader.Friends;
 import be.nmct.howest.darem.Loader.FBFriendsLoader;
 import be.nmct.howest.darem.Transforms.CircleTransform;
+import be.nmct.howest.darem.database.Contract;
+import be.nmct.howest.darem.database.SaveNewFriendToDBTask;
+import be.nmct.howest.darem.database.SaveNewUserToDBTask;
 
 /**
  * Created by katri on 29/10/2017.
@@ -114,29 +123,41 @@ public class AddFriendsFragment extends Fragment implements LoaderManager.Loader
 
         @Override
         public void onBindViewHolder(AddFriendsViewHolder holder, int position) {
-
-
             mCursorAddFriends.moveToPosition(position);
 
-            int colnr1 = mCursorAddFriends.getColumnIndex(Friends.Columns.COLUMN_NAME);
+            final int colnr1 = mCursorAddFriends.getColumnIndex(Friends.Columns.COLUMN_NAME);
             int colnr2 = mCursorAddFriends.getColumnIndex(Friends.Columns.COLUMN_PICTURE);
             final int colnr3 = mCursorAddFriends.getColumnIndex(Friends.Columns._ID);
-
+            final String friendName = mCursorAddFriends.getString(colnr1);
 
             holder.textViewNaam.setText(mCursorAddFriends.getString(colnr1));
 
-            String pictureURL = mCursorAddFriends.getString(colnr2);
+            holder.textViewNaam.setText(friendName);
 
-
+            final String pictureURL = mCursorAddFriends.getString(colnr2);
 
             Picasso.with(getContext()).load(pictureURL).resize(60 , 60).transform(new CircleTransform()).into(holder.imageViewFriend);
 
+            final String name = mCursorAddFriends.getString(colnr1);
             final String friendID = mCursorAddFriends.getString(colnr3);
+
+
 
             holder.btnAddFriends.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+
+                    ContentValues values = new ContentValues();
+
+                    values.put(Contract.FriendsColumns.COLUMN_FRIEND_FULLNAME, friendName);
+                    values.put(Contract.FriendsColumns.COLUMN_FRIEND_PHOTO, pictureURL);
+
+                    executeAsyncTask(new SaveNewFriendToDBTask(getContext()), values);
+
                     new SendPost(friendID).execute();
+
+                    Toast.makeText(getContext(), name + " is toegevoegd aan uw vrienden", Toast.LENGTH_SHORT).show();
+                    getLoaderManager().restartLoader(0, null, AddFriendsFragment.this);
                     Log.i("AddFRIENDS", "COMPLETED");
                 }
             });
@@ -229,6 +250,16 @@ public class AddFriendsFragment extends Fragment implements LoaderManager.Loader
 
         }
     }
+
+
+    static private <T> void executeAsyncTask(AsyncTask<T, ?, ?> task, T... params) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+            task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, params);
+        } else {
+            task.execute(params);
+        }
+    }
+
 
 
 }

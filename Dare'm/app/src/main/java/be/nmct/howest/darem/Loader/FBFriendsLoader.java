@@ -18,9 +18,15 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+
+import be.nmct.howest.darem.auth.AuthHelper;
+import be.nmct.howest.darem.json.jsonDownloader;
 
 /**
  * Created by katri on 4/11/2017.
@@ -58,12 +64,16 @@ public class FBFriendsLoader extends AsyncTaskLoader<Cursor> {
     @Override
     public Cursor loadInBackground() {
         if (mCursor == null) {
-            loadData();
+            try {
+                loadData();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
         }
         return mCursor;
     }
 
-    private void loadData() {
+    private void loadData() throws JSONException {
 
 
         synchronized (lock) {
@@ -80,6 +90,7 @@ public class FBFriendsLoader extends AsyncTaskLoader<Cursor> {
 
 
                 JSONArray info = RequestLoader.RequestInfoProfile();
+                String json = jsonDownloader.jsonUser(getContext());
 
                 try {
 
@@ -88,17 +99,18 @@ public class FBFriendsLoader extends AsyncTaskLoader<Cursor> {
                         MatrixCursor.RowBuilder row;
                         for (int i = 0; i < info.length(); i++) {
                             JSONObject obj = info.getJSONObject(i);
+                            if(!json.toString().contains(obj.getString("id"))){
+                                row = cursor.newRow();
+                                row.add(obj.getString("id"));
+                                row.add(obj.getString("name"));
 
-                            row = cursor.newRow();
-                            row.add(obj.getString("id"));
-                            row.add(obj.getString("name"));
-
-                            String pictureURL = "https://graph.facebook.com/" + obj.get("id") + "/picture?type=large";
-                            row.add(pictureURL);
+                                String pictureURL = "https://graph.facebook.com/" + obj.get("id") + "/picture?type=large";
+                                row.add(pictureURL);
+                            }
                         }
                     }
 
-                } catch (JSONException e) {
+                } catch (Exception e) {
                     e.printStackTrace();
                     Log.i("ERROR", e.getMessage());
 
@@ -109,6 +121,5 @@ public class FBFriendsLoader extends AsyncTaskLoader<Cursor> {
         }
 
     }
-
 
 }

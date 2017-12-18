@@ -6,8 +6,6 @@ import android.database.Cursor;
 import android.database.MatrixCursor;
 import android.util.Log;
 
-import com.facebook.AccessToken;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -22,33 +20,26 @@ import java.net.URL;
 import be.nmct.howest.darem.auth.AuthHelper;
 
 /**
- * Created by michv on 3/12/2017.
+ * Created by michv on 14/12/2017.
  */
 
-public class AddedFriendsLoader extends AsyncTaskLoader<Cursor> {
+public class InviteChallenge extends AsyncTaskLoader<Cursor> {
 
     private Cursor mCursor;
     private static Object lock = new Object();
 
-    public AddedFriendsLoader(Context context) {
+    public InviteChallenge(Context context) {
         super(context);
     }
 
     @Override
     protected void onStartLoading() {
-
-        if (mCursor != null) {
+        if(mCursor != null){
             deliverResult(mCursor);
-
         }
-        if (takeContentChanged() || mCursor == null) {
+        if(takeContentChanged() || mCursor == null){
             forceLoad();
         }
-    }
-
-    @Override
-    protected void onForceLoad() {
-        super.onForceLoad();
     }
 
     @Override
@@ -62,16 +53,16 @@ public class AddedFriendsLoader extends AsyncTaskLoader<Cursor> {
     private void loadData() {
 
         synchronized (lock) {
+
             if (mCursor != null) return;
 
             String[] mColumnNames = new String[]{
-                    Friends.Columns._ID,
-                    Friends.Columns.COLUMN_NAME,
-                    Friends.Columns.COLUMN_PICTURE
+                    Challenge.Columns._ID,
+                    Challenge.Columns.COLUMN_NAME,
+                    Challenge.Columns.COLUMN_DESCRIPTION
             };
 
             final MatrixCursor cursor = new MatrixCursor(mColumnNames);
-
 
             String jsonData = downloadJSON();
 
@@ -79,25 +70,28 @@ public class AddedFriendsLoader extends AsyncTaskLoader<Cursor> {
 
                 if (jsonData != null) {
                     MatrixCursor.RowBuilder row;
-                    JSONArray jsonArr = new JSONArray(jsonData).getJSONObject(0).getJSONArray("friends");
+                    JSONArray json = new JSONArray(jsonData).getJSONObject(0).getJSONArray("challengesArray");
 
-
-                    for (int i = 0; i < jsonArr.length(); i++) {
-                        JSONObject obj = jsonArr.getJSONObject(i);
+                    for (int i = 0; i <  json.length(); i++) {
+                        JSONObject obj = json.getJSONObject(i);
 
                         row = cursor.newRow();
-                        row.add(obj.getString("id"));
+                        row.add(obj.getString("_id"));
                         row.add(obj.getString("name"));
-                        row.add(obj.getString("photo"));
+                        row.add(obj.getString("description"));
                     }
                 }
 
             } catch (JSONException e) {
                 e.printStackTrace();
                 Log.i("ERROR", e.getMessage());
+
             }
+
             mCursor = cursor;
+
         }
+
     }
 
     private String downloadJSON() {
@@ -137,4 +131,6 @@ public class AddedFriendsLoader extends AsyncTaskLoader<Cursor> {
 
         return result;
     }
+
+
 }

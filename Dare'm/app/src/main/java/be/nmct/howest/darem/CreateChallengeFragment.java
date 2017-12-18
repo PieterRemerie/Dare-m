@@ -48,6 +48,7 @@ import javax.net.ssl.HttpsURLConnection;
 import be.nmct.howest.darem.Model.Challenge;
 import be.nmct.howest.darem.Model.Login;
 import be.nmct.howest.darem.Model.Notification;
+import be.nmct.howest.darem.auth.AuthHelper;
 import be.nmct.howest.darem.database.Contract;
 import be.nmct.howest.darem.database.SaveNewChallengeToDBTask;
 import be.nmct.howest.darem.databinding.FragmentCreateChallengeBinding;
@@ -112,7 +113,7 @@ public class CreateChallengeFragment extends Fragment {
         ContentValues values = new ContentValues();
         values.put(Contract.ChallengesColumns.COLUMN_CHALLENGE_NAAM, newChallenge.getName());
         values.put(Contract.ChallengesColumns.COLUMN_CHALLENGE_DESCRIPTION, newChallenge.getDescription());
-        values.put(Contract.ChallengesColumns.COLUMN_CHALLENGE_CREATOR, 123);
+        values.put(Contract.ChallengesColumns.COLUMN_CHALLENGE_CREATOR, AuthHelper.getAccessToken(getContext()));
         executeAsyncTask(new SaveNewChallengeToDBTask(getContext()), values);
     }
     private void resetProduct(){

@@ -31,24 +31,44 @@ public class AuthHelper {
         }
     }
 
-    public static Bundle getAuthToken(Context context){
+    public static Account getAccount(Context context){
         mAccountManager = AccountManager.get(context);
-        Account[] acc = mAccountManager.getAccountsByType(be.nmct.howest.darem.auth.Contract.ACCOUNT_TYPE);
 
+        Account[] accounts =  mAccountManager.getAccountsByType(Contract.ACCOUNT_TYPE);
 
-        AccountManagerFuture<Bundle> bundleToken = mAccountManager.getAuthToken(acc[0], "access_token", null, null, null, null);
-        Bundle authToken = new Bundle();
-        try {
-            authToken = bundleToken.getResult();
-            return authToken;
-        } catch (OperationCanceledException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (AuthenticatorException e) {
-            e.printStackTrace();
+        if(accounts.length>0){
+            return accounts[0];
         }
-
-        return authToken;
+        else return null;
     }
-}
+
+    public static String getAccessToken(Context context) {
+        AccountManager mgt = AccountManager.get(context);
+        String accessToken = mgt.peekAuthToken(getAccount(context), "access_token");
+        return accessToken;
+    }
+
+    public static String getDbToken(Context context) {
+        AccountManager mgt = AccountManager.get(context);
+        String accessToken = mgt.peekAuthToken(getAccount(context), "db_token");
+        return accessToken;
+    }
+
+    public static Boolean isUserLoggedIn(Context context){
+        mAccountManager = AccountManager.get(context);
+        Account[] accounts =  mAccountManager.getAccountsByType(Contract.ACCOUNT_TYPE);
+        if(accounts.length>0){
+            return true;
+        }
+        else return false;
+
+    }
+
+    public static void logUserOff(Context context) {
+        mAccountManager = AccountManager.get(context);
+        Account[] accounts = mAccountManager.getAccountsByType(Contract.ACCOUNT_TYPE);
+        for (int index = 0; index < accounts.length; index++) {
+            mAccountManager.removeAccount(accounts[index], null, null, null);
+        }
+    }
+ }

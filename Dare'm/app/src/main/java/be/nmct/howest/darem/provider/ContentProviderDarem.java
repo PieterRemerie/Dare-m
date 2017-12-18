@@ -27,6 +27,8 @@ public class ContentProviderDarem extends ContentProvider {
     private static final int CHALLENGES_ID = 2;
     private static final int USERS = 3;
     private static final int USERS_ID = 4;
+    private static final int FRIENDS = 5;
+    private static final int FRIENDS_ID = 6;
 
     private static final UriMatcher uriMatcher;
     private static HashMap<String, String> DAREM_PROJECTION_MAP;
@@ -41,6 +43,10 @@ public class ContentProviderDarem extends ContentProvider {
         //Users
         uriMatcher.addURI(Contract.AUTHORITY, "users", USERS);
         uriMatcher.addURI(Contract.AUTHORITY, "users/#", USERS_ID);
+
+        //Friends
+        uriMatcher.addURI(Contract.AUTHORITY, "friends", FRIENDS);
+        uriMatcher.addURI(Contract.AUTHORITY, "friends/#", FRIENDS_ID);
     }
 
 
@@ -63,6 +69,11 @@ public class ContentProviderDarem extends ContentProvider {
         DAREM_PROJECTION_MAP.put(be.nmct.howest.darem.database.Contract.UserColumns.COLUMN_USER_EMAIL, be.nmct.howest.darem.database.Contract.UserColumns.COLUMN_USER_EMAIL);
         DAREM_PROJECTION_MAP.put(be.nmct.howest.darem.database.Contract.UserColumns.COLUMN_USER_PHOTO, be.nmct.howest.darem.database.Contract.UserColumns.COLUMN_USER_PHOTO);
         DAREM_PROJECTION_MAP.put(be.nmct.howest.darem.database.Contract.UserColumns.COLUMN_USER_POINTS, be.nmct.howest.darem.database.Contract.UserColumns.COLUMN_USER_POINTS);
+
+        //inladen Friends
+        DAREM_PROJECTION_MAP.put(be.nmct.howest.darem.database.Contract.FriendsColumns._ID, be.nmct.howest.darem.database.Contract.FriendsColumns._ID);
+        DAREM_PROJECTION_MAP.put(be.nmct.howest.darem.database.Contract.FriendsColumns.COLUMN_FRIEND_FULLNAME, be.nmct.howest.darem.database.Contract.FriendsColumns.COLUMN_FRIEND_FULLNAME);
+        DAREM_PROJECTION_MAP.put(be.nmct.howest.darem.database.Contract.FriendsColumns.COLUMN_FRIEND_PHOTO, be.nmct.howest.darem.database.Contract.FriendsColumns.COLUMN_FRIEND_PHOTO);
         return true;
     }
 
@@ -94,9 +105,22 @@ public class ContentProviderDarem extends ContentProvider {
                 queryBuilder.setTables(be.nmct.howest.darem.database.Contract.UserDB.TABLE_NAME);
                 queryBuilder.setProjectionMap(DAREM_PROJECTION_MAP);
 
-                String productid = uri.getPathSegments().get(Contract.CHALLENGE_ID_PATH_POSITION);
+                String productid = uri.getPathSegments().get(Contract.USER_ID_PATH_POSITION);
                 DatabaseUtils.concatenateWhere(selection, "( " + be.nmct.howest.darem.database.Contract.UserColumns._ID + " = ?" + ")"); //strict genomen haakjes niet nodig
                 selectionArgs = DatabaseUtils.appendSelectionArgs(selectionArgs, new String[]{"" + productid});
+
+                break;
+            case FRIENDS:
+                queryBuilder.setTables(be.nmct.howest.darem.database.Contract.FriendsDB.TABLE_NAME);
+                queryBuilder.setProjectionMap(DAREM_PROJECTION_MAP);
+                break;
+            case FRIENDS_ID:
+                queryBuilder.setTables(be.nmct.howest.darem.database.Contract.FriendsDB.TABLE_NAME);
+                queryBuilder.setProjectionMap(DAREM_PROJECTION_MAP);
+
+                String friendsid = uri.getPathSegments().get(Contract.FRIEND_ID_PATH_POSITION);
+                DatabaseUtils.concatenateWhere(selection, "( " + be.nmct.howest.darem.database.Contract.FriendsColumns._ID + " = ?" + ")"); //strict genomen haakjes niet nodig
+                selectionArgs = DatabaseUtils.appendSelectionArgs(selectionArgs, new String[]{"" + friendsid});
 
                 break;
             default:
@@ -133,6 +157,10 @@ public class ContentProviderDarem extends ContentProvider {
                 return Contract.USER_CONTENT_TYPE;
             case USERS_ID:
                 return Contract.USER_ITEM_CONTENT_TYPE;
+            case FRIENDS:
+                return Contract.FRIEND_CONTENT_TYPE;
+            case FRIENDS_ID:
+                return Contract.FRIEND_ITEM_CONTENT_TYPE;
             default:
                 throw new IllegalArgumentException("Unknown URI " + uri);
         }
@@ -163,7 +191,16 @@ public class ContentProviderDarem extends ContentProvider {
                     getContext().getContentResolver().notifyChange(daremItemUri, null);
                     return daremItemUri;
                 }
-
+                break;
+            case FRIENDS:
+                newRowId = db.insert(be.nmct.howest.darem.database.Contract.FriendsDB.TABLE_NAME, null, values);
+                if(newRowId > 0){
+                    Uri daremItemUri = ContentUris.withAppendedId(Contract.FRIENDS_ITEM_URI, newRowId);
+                    //eventuele observers verwittigen
+                    getContext().getContentResolver().notifyChange(daremItemUri, null);
+                    return daremItemUri;
+                }
+                break;
             default:
                 throw new IllegalArgumentException("Unknown URI " + uri);
         }
@@ -214,6 +251,27 @@ public class ContentProviderDarem extends ContentProvider {
 
                 count = db.delete(
                         be.nmct.howest.darem.database.Contract.UserDB.TABLE_NAME,
+                        finalWhere,
+                        selectionArgs
+                );
+                break;
+            case FRIENDS:
+                count = db.delete(
+                        be.nmct.howest.darem.database.Contract.FriendsDB.TABLE_NAME,
+                        selection,
+                        selectionArgs
+                );
+                break;
+            case FRIENDS_ID:
+                String friendId = uri.getPathSegments().get(1);
+                finalWhere = "Id = " + friendId;
+
+                if (selection != null) {
+                    finalWhere = DatabaseUtils.concatenateWhere(finalWhere, selection);
+                }
+
+                count = db.delete(
+                        be.nmct.howest.darem.database.Contract.FriendsDB.TABLE_NAME,
                         finalWhere,
                         selectionArgs
                 );
@@ -275,6 +333,29 @@ public class ContentProviderDarem extends ContentProvider {
 
                 count = db.update(
                         be.nmct.howest.darem.database.Contract.UserDB.TABLE_NAME,
+                        values,
+                        finalWhere,
+                        selectionArgs
+                );
+                break;
+            case FRIENDS:
+                count = db.update(
+                        be.nmct.howest.darem.database.Contract.FriendsDB.TABLE_NAME,
+                        values,
+                        selection,
+                        selectionArgs
+                );
+                break;
+            case FRIENDS_ID:
+                String friendId = uri.getPathSegments().get(1);
+                finalWhere = "Id = " + friendId;
+
+                if (selection != null) {
+                    finalWhere = DatabaseUtils.concatenateWhere(finalWhere, selection);
+                }
+
+                count = db.update(
+                        be.nmct.howest.darem.database.Contract.FriendsDB.TABLE_NAME,
                         values,
                         finalWhere,
                         selectionArgs

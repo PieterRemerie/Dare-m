@@ -48,6 +48,7 @@ import javax.net.ssl.HttpsURLConnection;
 
 import be.nmct.howest.darem.Loader.HttpGetRequest;
 import be.nmct.howest.darem.Model.Login;
+import be.nmct.howest.darem.auth.AuthHelper;
 import be.nmct.howest.darem.database.Contract;
 import be.nmct.howest.darem.database.DatabaseHelper;
 import be.nmct.howest.darem.database.SaveNewChallengeToDBTask;
@@ -68,10 +69,20 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        FacebookSdk.sdkInitialize(getApplicationContext());
-
         setContentView(R.layout.activity_login);
         View view = getLayoutInflater().inflate(R.layout.activity_login, null);
+
+        if( getIntent().getBooleanExtra("Exit me", false)){
+            finish();
+            return; // add this to prevent from doing unnecessary stuffs
+        }
+
+        FacebookSdk.sdkInitialize(getApplicationContext());
+
+        if(AuthHelper.getAccount(this) != null){
+            Intent intent = new Intent(LoginActivity.this, ChallengeActivity.class);
+            startActivity(intent);
+        }
 
         DatabaseHelper helper = new DatabaseHelper(this);
         SQLiteDatabase db = helper.getWritableDatabase();
@@ -90,28 +101,9 @@ public class LoginActivity extends AppCompatActivity {
         final Login login = new Login("", "");
         activityLoginBinding.setLogin(login);
 
-        Button logIn = (Button) findViewById(R.id.btnLogin);
-        logIn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(v.getContext(), ChallengeActivity.class);
-                startActivity(intent);
-            }
-        });
-        Button signUP = (Button) findViewById(R.id.btnSignUp);
-        signUP.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(v.getContext(), RegistratieActivity.class);
-                startActivity(intent);
-            }
-        });
-
-
         // READ permissions voor FACEBOOK gegevens op te laden
         loginFB = (LoginButton) findViewById(R.id.btnLoginFB);
         loginFB.setReadPermissions("public_profile");
-        loginFB.setReadPermissions("user_birthday");
         loginFB.setReadPermissions("user_friends");
         loginFB.setReadPermissions("email");
 
@@ -119,11 +111,14 @@ public class LoginActivity extends AppCompatActivity {
         loginFB.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
-                Log.i("onSuccesFACEBOOK", loginResult.getRecentlyGrantedPermissions().toString());
-                new SendPost(loginResult.getAccessToken().getToken()).execute();
                 Intent intent = new Intent(LoginActivity.this, ChallengeActivity.class);
-                saveNewUser();
-                startActivity(intent);
+                if(!AuthHelper.isUserLoggedIn(getApplicationContext())){
+                    new SendPost(loginResult.getAccessToken().getToken()).execute();
+                    saveNewUser();
+                    startActivity(intent);
+                }else{
+                    startActivity(intent);
+                }
             }
 
             @Override
@@ -138,41 +133,6 @@ public class LoginActivity extends AppCompatActivity {
         });
 
 
-    }
-
-    private void addAccount(String userMail) {
-        Account[] accountsByType = mAccountManager.getAccountsByType(be.nmct.howest.darem.auth.Contract.ACCOUNT_TYPE);
-        Account account;
-        if (accountsByType.length == 0) {
-            // nog geen account aanwezig
-            account = new Account(userMail, be.nmct.howest.darem.auth.Contract.ACCOUNT_TYPE);
-            mAccountManager.addAccountExplicitly(account, null, null);
-        } else if (!userMail.equals(accountsByType[0].name)) {
-            // er bestaat reeds een account met andere naam
-            mAccountManager.removeAccount(accountsByType[0], this, null, null);
-            account = new Account(userMail, be.nmct.howest.darem.auth.Contract.ACCOUNT_TYPE);
-            mAccountManager.addAccountExplicitly(account, null, null);
-        } else {
-            // account met de zelfde username terug gevonden
-            account = accountsByType[0];
-        }
-
-        Intent intent = new Intent();
-        intent.putExtra(AccountManager.KEY_ACCOUNT_NAME, userMail);
-        intent.putExtra(AccountManager.KEY_ACCOUNT_TYPE, be.nmct.howest.darem.auth.Contract.ACCOUNT_TYPE);
-
-        if (mAccountAuthenticatorResponse != null) {
-            Bundle bundle = intent.getExtras();
-            bundle.putString(AccountManager.KEY_ACCOUNT_NAME, userMail);
-            bundle.putString(AccountManager.KEY_ACCOUNT_TYPE, be.nmct.howest.darem.auth.Contract.ACCOUNT_TYPE);
-            mAccountAuthenticatorResponse.onResult(bundle);
-        }
-
-        setResult(RESULT_OK, intent);
-
-        mAccountManager.setAuthToken(account, "access_token", AccessToken.getCurrentAccessToken().getUserId());
-
-        finish();
     }
 
     public void saveNewUser() {
@@ -194,9 +154,9 @@ public class LoginActivity extends AppCompatActivity {
                 String userLastname = jObj.getJSONObject(0).getString("familyName");
                 String userMail = jObj.getJSONObject(0).getString("email");
                 String userImgurl = jObj.getJSONObject(0).getJSONObject("facebook").getString("photo");
+                String userdb = jObj.getJSONObject(0).getJSONObject("facebook").getString("databaseid");
 
-                addAccount(userMail);
-
+                addAccount(userMail, userdb);
 
                 if (userFirstname != null && userLastname != null && userMail != null) {
                     values.put(Contract.UserColumns.COLUMN_USER_VOORNAAM, userFirstname);
@@ -210,7 +170,6 @@ public class LoginActivity extends AppCompatActivity {
                 }
 
             }
-
 
         } catch (InterruptedException e) {
             e.printStackTrace();
@@ -292,6 +251,42 @@ public class LoginActivity extends AppCompatActivity {
             }
         }
 
+    }
+
+    private void addAccount(String userMail, String userDb) {
+        Account[] accountsByType = mAccountManager.getAccountsByType(be.nmct.howest.darem.auth.Contract.ACCOUNT_TYPE);
+        Account account;
+        if (accountsByType.length == 0) {
+            // nog geen account aanwezig
+            account = new Account(userMail, be.nmct.howest.darem.auth.Contract.ACCOUNT_TYPE);
+            mAccountManager.addAccountExplicitly(account, null, null);
+        } else if (!userMail.equals(accountsByType[0].name)) {
+            // er bestaat reeds een account met andere naam
+            mAccountManager.removeAccount(accountsByType[0], this, null, null);
+            account = new Account(userMail, be.nmct.howest.darem.auth.Contract.ACCOUNT_TYPE);
+            mAccountManager.addAccountExplicitly(account, null, null);
+        } else {
+            // account met de zelfde username terug gevonden
+            account = accountsByType[0];
+        }
+
+        Intent intent = new Intent();
+        intent.putExtra(AccountManager.KEY_ACCOUNT_NAME, userMail);
+        intent.putExtra(AccountManager.KEY_ACCOUNT_TYPE, be.nmct.howest.darem.auth.Contract.ACCOUNT_TYPE);
+
+        if (mAccountAuthenticatorResponse != null) {
+            Bundle bundle = intent.getExtras();
+            bundle.putString(AccountManager.KEY_ACCOUNT_NAME, userMail);
+            bundle.putString(AccountManager.KEY_ACCOUNT_TYPE, be.nmct.howest.darem.auth.Contract.ACCOUNT_TYPE);
+            mAccountAuthenticatorResponse.onResult(bundle);
+        }
+
+        setResult(RESULT_OK, intent);
+
+        mAccountManager.setAuthToken(account, "access_token", AccessToken.getCurrentAccessToken().getUserId());
+        mAccountManager.setAuthToken(account, "db_token", userDb);
+
+        finish();
     }
 
 }

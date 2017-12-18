@@ -16,6 +16,7 @@
     </group>
     <group>
         <item
+            android:id="@+id/logoutUser"
             android:actionViewClass="android.widget.Button"
             android:title="Log Out"/>
     </group>

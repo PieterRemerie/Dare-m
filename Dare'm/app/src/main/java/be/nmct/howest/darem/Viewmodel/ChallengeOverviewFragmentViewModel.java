@@ -10,6 +10,8 @@ import android.databinding.ObservableArrayList;
 import android.databinding.ObservableList;
 import android.os.Bundle;
 
+import com.android.databinding.library.baseAdapters.BR;
+
 import be.nmct.howest.darem.Model.Challenge;
 import be.nmct.howest.darem.database.ChallengesLoader;
 import be.nmct.howest.darem.database.Contract;
@@ -52,7 +54,8 @@ public class ChallengeOverviewFragmentViewModel extends BaseObservable implement
         }
 
         this.binding.setChallengelist(challengesList);
-        cursor.close();
+        notifyPropertyChanged(BR.challengelist);
+        //cursor.close();
     }
 
     @Override

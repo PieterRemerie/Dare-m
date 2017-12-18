@@ -4,27 +4,23 @@ import android.content.AsyncTaskLoader;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.net.Uri;
-import android.util.Log;
-
-import java.io.Console;
 
 /**
- * Created by Piete_000 on 29/10/2017.
+ * Created by katri on 15/12/2017.
  */
 
-public class ChallengesLoader extends AsyncTaskLoader<Cursor> {
+public class FriendLoader extends AsyncTaskLoader<Cursor>{
 
     private Cursor mData;
     private Context mContext;
-    public ChallengesLoader(Context context) {
+
+    public FriendLoader(Context context){
         super(context);
         mContext = context;
     }
 
-    @Override
-    protected void onStartLoading() {
-        if(mData != null){
+    protected  void onStartLoading() {
+        if(mData != null) {
             deliverResult(mData);
         }
         if(takeContentChanged() || mData == null){
@@ -34,20 +30,25 @@ public class ChallengesLoader extends AsyncTaskLoader<Cursor> {
 
     @Override
     public Cursor loadInBackground() {
-        String[] columns = new String[]{
-                Contract.ChallengesColumns._ID,
-                Contract.ChallengesColumns.COLUMN_CHALLENGE_CREATOR,
-                Contract.ChallengesColumns.COLUMN_CHALLENGE_NAAM,
-                Contract.ChallengesColumns.COLUMN_CHALLENGE_DESCRIPTION
-        };
-        mData = getContext().getContentResolver().query(be.nmct.howest.darem.provider.Contract.CHALLENGES_URI, columns, null, null, null);
-        mData.setNotificationUri(getContext().getContentResolver() ,be.nmct.howest.darem.provider.Contract.CHALLENGES_URI);
+        DatabaseHelper helper = DatabaseHelper.getINSTANCE(getContext());
+        SQLiteDatabase db = helper.getReadableDatabase();
+        mData = db.query(Contract.FriendsDB.TABLE_NAME,
+                new String[]{
+                        Contract.FriendsColumns._ID,
+                        Contract.FriendsColumns.COLUMN_FRIEND_FULLNAME,
+                        Contract.FriendsColumns.COLUMN_FRIEND_PHOTO
+                },
+                null,
+                null,
+                null,
+                null,
+                null
+        );
         mData.getCount();
         return mData;
     }
 
-    @Override
-    public void deliverResult(Cursor cursor) {
+    public void deliverResult(Cursor cursor){
         if(isReset()){
             if(cursor != null){
                 cursor.close();
@@ -62,9 +63,7 @@ public class ChallengesLoader extends AsyncTaskLoader<Cursor> {
         if(oldData != null && oldData != cursor && !oldData.isClosed()){
             oldData.close();
         }
-
     }
-
     @Override
     protected void onStopLoading() {
         cancelLoad();

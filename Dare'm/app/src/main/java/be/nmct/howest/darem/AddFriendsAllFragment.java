@@ -3,12 +3,16 @@ package be.nmct.howest.darem;
 import android.app.Fragment;
 import android.app.LoaderManager;
 import android.content.Loader;
+import android.database.ContentObserver;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Layout;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +24,8 @@ import com.squareup.picasso.Picasso;
 import be.nmct.howest.darem.Loader.AddedFriendsLoader;
 import be.nmct.howest.darem.Loader.Friends;
 import be.nmct.howest.darem.Transforms.CircleTransform;
+import be.nmct.howest.darem.database.Contract;
+import be.nmct.howest.darem.database.FriendLoader;
 
 /**
  * Created by katri on 29/10/2017.
@@ -27,8 +33,9 @@ import be.nmct.howest.darem.Transforms.CircleTransform;
 
 public class AddFriendsAllFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
-    private RecyclerView recyclerViewAddFriendsAll;
-    private AddFriendsAllRecycleViewAdapter addFriendsAllRecycleViewAdapter;
+    public RecyclerView recyclerViewAddFriendsAll;
+    public AddFriendsAllRecycleViewAdapter addFriendsAllRecycleViewAdapter;
+    private ContentObserver mObserver;
 
     public AddFriendsAllFragment(){
         //empty constructor
@@ -54,14 +61,39 @@ public class AddFriendsAllFragment extends Fragment implements LoaderManager.Loa
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+
+        //Luisteren met een  ContentObserver naar een contentprovider
+        mObserver = new ContentObserver(new Handler(Looper.getMainLooper())) {
+            public void onChange(boolean selfChange) {
+                Log.i("ContentObserverListener", "Content provider changed - FRIENDS");
+                getLoaderManager().restartLoader(0, null, AddFriendsAllFragment.this);
+            }
+        };
+
+        //niet vergeteren te registreren alsook mee te gevev naar wat hij specifiek moet luisteren
+        getContext().getContentResolver().registerContentObserver(be.nmct.howest.darem.provider.Contract.FRIENDS_URI, true, mObserver);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        getContext().getContentResolver().unregisterContentObserver(mObserver);
+    }
+
+    @Override
     public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
-        return new AddedFriendsLoader(this.getContext());
+       // return new AddedFriendsLoader(this.getContext());
+        return new FriendLoader(this.getContext());
     }
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         addFriendsAllRecycleViewAdapter = new AddFriendsAllRecycleViewAdapter(data);
+        //addFriendsAllRecycleViewAdapter.notifyDataSetChanged();
         recyclerViewAddFriendsAll.setAdapter(addFriendsAllRecycleViewAdapter);
+        addFriendsAllRecycleViewAdapter.notifyDataSetChanged();
     }
 
     @Override
@@ -88,8 +120,8 @@ public class AddFriendsAllFragment extends Fragment implements LoaderManager.Loa
 
             mCursorAddFriends.moveToPosition(position);
 
-            int colnr1 = mCursorAddFriends.getColumnIndex(Friends.Columns.COLUMN_NAME);
-            int colnr2 = mCursorAddFriends.getColumnIndex(Friends.Columns.COLUMN_PICTURE);
+            int colnr1 = mCursorAddFriends.getColumnIndex(Contract.FriendsColumns.COLUMN_FRIEND_FULLNAME);
+            int colnr2 = mCursorAddFriends.getColumnIndex(Contract.FriendsColumns.COLUMN_FRIEND_PHOTO);
 
             holder.textViewNaam.setText(mCursorAddFriends.getString(colnr1));
 
@@ -101,6 +133,9 @@ public class AddFriendsAllFragment extends Fragment implements LoaderManager.Loa
         public int getItemCount() {
             return mCursorAddFriends.getCount();
         }
+
+
+
     }
 
     public class AddFriendsAllViewHolder extends RecyclerView.ViewHolder  {
