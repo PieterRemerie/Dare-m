@@ -135,7 +135,7 @@ public class ChallengeActivity extends AppCompatActivity {
 
             }
         });
-        Navigation.setHeaderOfflineData(navigationView, view);
+
 
         if (savedInstanceState == null) {
             showChallengesOverviewFragment();
@@ -156,7 +156,7 @@ public class ChallengeActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-
+        Navigation.setHeaderOfflineData(navigationView, view);
         Toast.makeText(this.getBaseContext(), "welcome: " + AuthHelper.getUsername(this) + " AUTHTOKEN: " + AuthHelper.getAccessToken(this) + " DBToken: " + AuthHelper.getDbToken(this) , Toast.LENGTH_LONG).show();
     }
 

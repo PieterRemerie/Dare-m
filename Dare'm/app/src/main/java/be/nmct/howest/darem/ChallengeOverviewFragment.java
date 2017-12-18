@@ -97,7 +97,7 @@ public class ChallengeOverviewFragment extends Fragment{
 
         syncDataManual();
 
-        refreshChallanges();
+
 
         //Luisteren met een  ContentObserver naar een contentprovider
         mObserver = new ContentObserver(new Handler(Looper.getMainLooper())) {
@@ -109,6 +109,8 @@ public class ChallengeOverviewFragment extends Fragment{
 
         //niet vergeteren te registreren alsook mee te gevev naar wat hij specifiek moet luisteren
         getContext().getContentResolver().registerContentObserver(be.nmct.howest.darem.provider.Contract.CHALLENGES_URI, true, mObserver);
+
+        refreshChallanges();
     }
 
     @Override

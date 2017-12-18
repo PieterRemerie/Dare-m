@@ -22,13 +22,13 @@
         <ImageView
             android:id="@+id/imageView7"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:srcCompat="@mipmap/login"
-            android:scaleType = "centerCrop"
+            android:layout_height="match_parent"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:scaleType="centerCrop"
             android:scaleX="1.2"
             android:scaleY="1.2"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentStart="true" />
+            app:srcCompat="@mipmap/login" />
 
         <com.facebook.login.widget.LoginButton
             android:id="@+id/btnLoginFB"

@@ -104,11 +104,13 @@ public class InviteOverviewFragment extends Fragment implements LoaderManager.Lo
             int colnr2 = mCursor.getColumnIndex(Challenge.Columns.COLUMN_DESCRIPTION);
             int colnr3 = mCursor.getColumnIndex(Challenge.Columns._ID);
 
+
             holder.textViewChallengeNaam.setText(mCursor.getString(colnr1));
             holder.imageViewCategory.setImageResource(R.drawable.football);
-            holder.imageButtonAccepted.setImageResource(R.mipmap.checkmark_accepted);
-            holder.imageButtonDeclined.setImageResource(R.mipmap.checkmark_declined);
             holder.challengeId = mCursor.getString(colnr3);
+            holder.challengeName = mCursor.getString(colnr1);
+            holder.challengeDescription = mCursor.getString(colnr2);
+            holder.challengeCategory = "nog geen category";
         }
 
         @Override
@@ -121,93 +123,46 @@ public class InviteOverviewFragment extends Fragment implements LoaderManager.Lo
 
         public final ImageView imageViewCategory;
         public final TextView textViewChallengeNaam;
-        public final ImageButton imageButtonAccepted;
-        public final ImageButton imageButtonDeclined;
 
         public String challengeId;
+        public String challengeName;
+        public String challengeDescription;
+        public String challengeCategory;
 
         public InviteOverviewFragmentViewHolder(View view) {
             super(view);
             imageViewCategory = (ImageView)view.findViewById(R.id.categoryImage);
             textViewChallengeNaam = (TextView)view.findViewById(R.id.textViewChallenge);
-            imageButtonAccepted = (ImageButton)view.findViewById(R.id.btnAcceptInvite);
-            imageButtonDeclined = (ImageButton)view.findViewById(R.id.btnDeclineInvite);
+
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    new SendPost(challengeId).execute();
-                    //showInviteDetailFragment();
+                    //new SendPost(challengeId).execute();
+                    showInviteDetailFragment(challengeName, challengeDescription, challengeCategory, challengeId);
+
+
+
                 }
             });
         }
     }
 
-    private void showInviteDetailFragment(){
+    private void showInviteDetailFragment(String challengeName, String challengeDesc, String challengeCat, String challengeID){
+        Bundle bundle = new Bundle();
+        bundle.putString("challengeName", challengeName);
+        bundle.putString("challengeDesc", challengeDesc);
+        bundle.putString("challengeCat", challengeCat);
+        bundle.putString("challengeID", challengeID);
+
         FragmentManager fragmentManager = getFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         InviteDetailFragment inviteDetailFragment = new InviteDetailFragment();
+        inviteDetailFragment.setArguments(bundle);
         fragmentTransaction.replace(R.id.framelayout_in_invite_overview_activity, inviteDetailFragment);
         fragmentTransaction.commit();
 
     }
 
-    class SendPost extends AsyncTask<String, Void, String> {
 
-        String challengeId;
 
-        public SendPost(String challengeId) {
-            this.challengeId = challengeId;
-        }
-
-        @Override
-        protected String doInBackground(String... params) {
-            try {
-                postRequest();
-            } catch (IOException e) {
-                Log.i("dd", "doInBackground: fout");
-                e.printStackTrace();
-                return null;
-            }
-            return null;
-        }
-
-        private void postRequest() throws IOException {
-
-            try{
-                URL url = new URL("https://darem.herokuapp.com/users/challenge/response");
-                HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();
-                conn.setRequestMethod("POST");
-                conn.setRequestProperty("Content-Type", "application/json");
-                conn.setDoOutput(true);
-                conn.setDoInput(true);
-
-                //Write
-                JSONObject js = new JSONObject();
-                js.put("user", AuthHelper.getDbToken(getContext()));
-                js.put("challenge", challengeId);
-                js.put("response", "accept");
-
-                DataOutputStream os = new DataOutputStream(conn.getOutputStream());
-                os.writeBytes(js.toString());
-
-                os.flush();
-                os.close();
-
-                Log.i("STATUS", String.valueOf(conn.getResponseCode()));
-                Log.i("MSG" , conn.getResponseMessage());
-
-                conn.disconnect();
-                Log.i("ee", "SEND: DONE");
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
-            } catch (ProtocolException e) {
-                Log.i("ee", "ProtocolException: " + e.getMessage());
-            } catch (IOException e) {
-                Log.i("ee", "IOException: " + e.getMessage());
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
-
-    }
 }
