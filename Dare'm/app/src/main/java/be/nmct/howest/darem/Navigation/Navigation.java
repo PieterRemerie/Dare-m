@@ -90,6 +90,7 @@ public class Navigation {
 
         Cursor mData = db.query(Contract.UserDB.TABLE_NAME, projection, null, null, null, null, null);*/
         Cursor mData = view.getContext().getContentResolver().query(be.nmct.howest.darem.provider.Contract.USERS_URI, projection, null, null, null);
+
         mData.getCount();
         mData.moveToFirst();
 
