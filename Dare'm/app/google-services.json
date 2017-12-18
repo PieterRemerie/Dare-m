@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "674050585414",
+    "firebase_url": "https://gastleshowest2017-dc94f.firebaseio.com",
+    "project_id": "gastleshowest2017-dc94f",
+    "storage_bucket": "gastleshowest2017-dc94f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:674050585414:android:c8e253a000b899cc",
+        "android_client_info": {
+          "package_name": "be.nmct.howest.darem"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "674050585414-stkag8ek4ubb8p2a4l0qtpfqrqs41akk.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "be.nmct.howest.darem",
+            "certificate_hash": "803a83b5ca68f33a314496fa27df47728b9f9ea6"
+          }
+        },
+        {
+          "client_id": "674050585414-i0slrqo3ugp4tet7h3nfkr3r15elo508.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAh8f0HRaz1bVZC0RFrgRgo4GV3Nnmu7sk"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "674050585414-i0slrqo3ugp4tet7h3nfkr3r15elo508.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -22,6 +22,11 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.facebook.AccessToken;
+import com.firebase.client.Firebase;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.messaging.FirebaseMessaging;
+import com.google.firebase.messaging.FirebaseMessagingService;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -35,20 +40,26 @@ import java.net.ProtocolException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.net.ssl.HttpsURLConnection;
 
 import be.nmct.howest.darem.Model.Challenge;
 import be.nmct.howest.darem.Model.Login;
+import be.nmct.howest.darem.Model.Notification;
 import be.nmct.howest.darem.database.Contract;
 import be.nmct.howest.darem.database.SaveNewChallengeToDBTask;
 import be.nmct.howest.darem.databinding.FragmentCreateChallengeBinding;
+import be.nmct.howest.darem.firebase.MyFirebaseMessagingService;
 
 public class CreateChallengeFragment extends Fragment {
 
     private FragmentCreateChallengeBinding binding;
+    private MyFirebaseMessagingService myFirebaseMessagingService;
     private Challenge newChallenge = new Challenge();
     private ArrayList<String> friendsId = new ArrayList<String>();
+    private static final String TAG = "FirebaseMessageService";
     JSONArray jsonArray = new JSONArray();
     private Bundle bundle;
     public CreateChallengeFragment() {
@@ -130,7 +141,6 @@ public class CreateChallengeFragment extends Fragment {
             }
             return null;
         }
-
         private void postRequest() throws IOException {
 
             try{
@@ -159,6 +169,12 @@ public class CreateChallengeFragment extends Fragment {
                 Log.i("STATUS", String.valueOf(conn.getResponseCode()));
                 Log.i("MSG" , conn.getResponseMessage());
 
+                if(conn.getResponseCode() == 200){
+                    DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Notifications");
+                    reference.removeValue();
+                    Notification notification = new Notification(AccessToken.getCurrentAccessToken().getUserId(), newChallenge.getName());
+                    reference.setValue(notification);
+                }
                 conn.disconnect();
                 resetProduct();
                 Log.i("ee", "SEND: DONE");
@@ -173,6 +189,12 @@ public class CreateChallengeFragment extends Fragment {
             }
         }
 
+    }
+    private void sendNotification(){
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Notifications");
+        reference.removeValue();
+        Notification notification = new Notification(AccessToken.getCurrentAccessToken().getUserId(), "this is a message");
+        reference.setValue(notification);
     }
     public void showAddFriendToChallengeFragment(){
         FragmentManager fragmentManager = getFragmentManager();

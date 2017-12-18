@@ -16,7 +16,15 @@ import android.os.Build;
 import android.os.Bundle;
 
 import com.facebook.AccessToken;
+import com.firebase.client.Firebase;
 import com.getbase.floatingactionbutton.FloatingActionButton;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.squareup.picasso.Picasso;
 
 import android.support.annotation.NonNull;
@@ -40,10 +48,13 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 import be.nmct.howest.darem.Loader.HttpGetRequest;
 import be.nmct.howest.darem.Loader.HttpGetRequest;
+import be.nmct.howest.darem.Model.Notification;
 import be.nmct.howest.darem.Navigation.Navigation;
 import be.nmct.howest.darem.Transforms.CircleTransform;
 import be.nmct.howest.darem.auth.AuthHelper;
@@ -51,13 +62,19 @@ import be.nmct.howest.darem.database.Contract;
 import be.nmct.howest.darem.database.DatabaseHelper;
 import be.nmct.howest.darem.database.SaveNewChallengeToDBTask;
 import be.nmct.howest.darem.database.SaveNewUserToDBTask;
+import be.nmct.howest.darem.firebase.MyFirebaseInstanceIDService;
+
+import com.google.firebase.auth.FirebaseAuthException;
 
 
 public class ChallengeActivity extends AppCompatActivity {
 
+    private static final String TAG = "FirebaseMessageService";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        FirebaseMessaging.getInstance().subscribeToTopic(AccessToken.getCurrentAccessToken().getUserId());
 
         View view = getLayoutInflater().inflate(R.layout.activity_challenge, null);
 
@@ -99,7 +116,6 @@ public class ChallengeActivity extends AppCompatActivity {
             }
         });
         Navigation.setHeaderOfflineData(navigationView, view);
-
 
         if (savedInstanceState == null) {
             showChallengesOverviewFragment();
