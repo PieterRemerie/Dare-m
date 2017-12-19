@@ -1,75 +1,120 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
-    <android.support.design.widget.CoordinatorLayout
+    <RelativeLayout
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context="be.nmct.howest.darem.ChallengeInviteDetailFragment">
+        tools:context="be.nmct.howest.darem.ChallengeInviteDetailFragment"
+        android:layout_marginTop="50dp">
 
-        <LinearLayout
+        <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/card_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Challenge naam"
-                android:layout_gravity="center"
-                android:layout_weight="0.01"
-                android:textStyle="bold"
-                android:paddingTop="15dp"
-                android:id="@+id/textviewChallengeNaamInvitesDetail" />
+            android:layout_gravity="center"
+            android:layout_margin="15dp"
+            card_view:cardCornerRadius="4dp">
 
-            <ImageView
-                android:id="@+id/imageViewChallengeIconInvitesDetails"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@mipmap/ic_launcher"
-                android:layout_gravity="center"
-                android:layout_weight="0.05"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/textviewDescriptionInvitesDetail"
-                android:text="Lorem ipsum dolor sit amet."
-                android:layout_gravity="center"
-                android:layout_weight="0.05"/>
-            <HorizontalScrollView
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_weight="0.1"
-                android:id="@+id/HorizontalScrollViewFriends">
-                <LinearLayout
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/textviewChallengeNaamInvitesDetail"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="24dp"
+                    android:fontFamily="sans-serif"
+                    android:text="DM Challenge"
+                    android:textColor="#000000"
+                    android:textSize="36sp"
+                    android:textStyle="bold" />
+
+                <View
+                    android:id="@+id/SplitLine_hor1"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="horizontal"
-                    android:id="@+id/horizontalscrollview_linearlayout">
+                    android:layout_height="2dp"
+                    android:layout_marginTop="115dp"
+                    android:layout_toStartOf="@+id/imageView5"
+                    android:background="#000000"
+                    android:visibility="visible" />
 
-                </LinearLayout>
-            </HorizontalScrollView>
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.1"
-                android:orientation="horizontal"
-                android:layout_gravity="center"
-                android:padding="5dp"
-                >
-                <Button
-                    android:layout_width="wrap_content"
+                <ImageView
+                    android:id="@+id/imageView5"
+                    android:layout_width="75dp"
+                    android:layout_height="75dp"
+                    android:layout_below="@+id/textviewChallengeNaamInvitesDetail"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="9dp"
+                    android:src="@drawable/football" />
+
+                <View
+                    android:id="@+id/SplitLine_hor2"
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginTop="115dp"
+                    android:layout_toEndOf="@+id/imageView5"
+                    android:background="#000000"
+                    android:visibility="visible" />
+
+                <TextView
+                    android:id="@+id/txtDescription"
+                    android:layout_width="300dp"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:text="Accept"
-                    android:id="@+id/btnAcceptInviteDetail"/>
+                    android:layout_below="@+id/imageView5"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="14dp"
+                    android:text="In deze challenge moet je 10 keer pompen als het je lukt moet ik je trakteren"
+                    android:textAlignment="center"
+                    android:textColor="#000000" />
+
+                <HorizontalScrollView
+                    android:id="@+id/horizontalScrollView"
+                    android:layout_width="match_parent"
+                    android:layout_height="80dp"
+                    android:layout_alignParentStart="true"
+                    android:layout_below="@+id/txtDescription"
+                    android:layout_marginTop="20dp"
+                    android:background="#eaeaea">
+
+                    <LinearLayout
+                        android:id="@+id/LinearLayoutImage"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginBottom="15dp"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp"
+                        android:layout_marginTop="15dp"
+                        android:orientation="horizontal" />
+                </HorizontalScrollView>
+
                 <Button
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:text="Decline"
                     android:id="@+id/btnDeclineInviteDetail"
-                    />
-            </LinearLayout>
-        </LinearLayout>
+                    android:layout_width="165dp"
+                    android:layout_height="78dp"
+                    android:background="#eaeaea"
+                    android:backgroundTint="#eaeaea"
+                    android:text="Decline"
+                    android:textColor="#7c0000"
+                    android:textSize="30sp"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentStart="true" />
 
-    </android.support.design.widget.CoordinatorLayout>
+                <Button
+                    android:id="@+id/btnAcceptInviteDetail"
+                    android:layout_width="165dp"
+                    android:layout_height="78dp"
+                    android:background="#eaeaea"
+                    android:text="Accept"
+                    android:textColor="#167c00"
+                    android:textSize="30sp"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentEnd="true" />
+
+            </RelativeLayout>
+        </android.support.v7.widget.CardView>
+    </RelativeLayout>
 </layout>

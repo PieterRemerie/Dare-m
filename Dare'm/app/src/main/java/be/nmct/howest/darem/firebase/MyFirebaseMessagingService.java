@@ -3,10 +3,12 @@ package be.nmct.howest.darem.firebase;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.media.RingtoneManager;
 import android.net.Uri;
+import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
@@ -21,6 +23,7 @@ import java.util.Map;
 
 import be.nmct.howest.darem.InviteOverviewActivity;
 import be.nmct.howest.darem.R;
+import be.nmct.howest.darem.auth.AuthHelper;
 
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
     private static final String TAG = "FirebaseMessageService";
@@ -92,4 +95,5 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         notificationManager.notify(0, notificationBuilder.build());
 
     }
+
 }

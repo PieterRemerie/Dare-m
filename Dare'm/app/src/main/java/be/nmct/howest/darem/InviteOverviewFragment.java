@@ -139,9 +139,6 @@ public class InviteOverviewFragment extends Fragment implements LoaderManager.Lo
                 public void onClick(View v) {
                     //new SendPost(challengeId).execute();
                     showInviteDetailFragment(challengeName, challengeDescription, challengeCategory, challengeId);
-
-
-
                 }
             });
         }

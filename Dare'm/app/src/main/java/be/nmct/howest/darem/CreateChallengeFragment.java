@@ -2,6 +2,7 @@ package be.nmct.howest.darem;
 
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
@@ -106,9 +107,8 @@ public class CreateChallengeFragment extends Fragment {
     public void saveNewChallenge(){
         saveChallengeToDb();
         new SendPost().execute();
-        this.getActivity().finish();
-
     }
+
     private void saveChallengeToDb(){
         ContentValues values = new ContentValues();
         values.put(Contract.ChallengesColumns.COLUMN_CHALLENGE_NAAM, newChallenge.getName());
@@ -175,9 +175,13 @@ public class CreateChallengeFragment extends Fragment {
                     reference.removeValue();
                     Notification notification = new Notification(AccessToken.getCurrentAccessToken().getUserId(), newChallenge.getName());
                     reference.setValue(notification);
+
+                    syncDataManual();
+
                 }
                 conn.disconnect();
                 resetProduct();
+                getActivity().finish();
                 Log.i("ee", "SEND: DONE");
             } catch (MalformedURLException e) {
                 e.printStackTrace();
@@ -190,12 +194,15 @@ public class CreateChallengeFragment extends Fragment {
             }
         }
 
-    }
-    private void sendNotification(){
-        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Notifications");
-        reference.removeValue();
-        Notification notification = new Notification(AccessToken.getCurrentAccessToken().getUserId(), "this is a message");
-        reference.setValue(notification);
+        private void syncDataManual() {
+            Bundle settingsBundle = new Bundle();
+            settingsBundle.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);
+            settingsBundle.putBoolean(ContentResolver.SYNC_EXTRAS_EXPEDITED, true);
+
+            if (AuthHelper.getAccount(getContext())!= null) {
+                getContext().getContentResolver().requestSync(AuthHelper.getAccount(getContext()), be.nmct.howest.darem.provider.Contract.AUTHORITY, settingsBundle);
+            }
+        }
     }
     public void showAddFriendToChallengeFragment(){
         FragmentManager fragmentManager = getFragmentManager();

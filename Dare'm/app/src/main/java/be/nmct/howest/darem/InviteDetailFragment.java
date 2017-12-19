@@ -2,8 +2,11 @@ package be.nmct.howest.darem;
 
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.app.LoaderManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.Loader;
+import android.database.Cursor;
 import android.databinding.DataBindingUtil;
 import android.media.Image;
 import android.net.Uri;
@@ -19,7 +22,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -32,63 +38,109 @@ import java.net.URL;
 
 import javax.net.ssl.HttpsURLConnection;
 
+import be.nmct.howest.darem.Loader.Friends;
+import be.nmct.howest.darem.Loader.ParticipantsLoader;
+import be.nmct.howest.darem.Transforms.CircleTransform;
 import be.nmct.howest.darem.Viewmodel.ChallengeOverviewFragmentViewModel;
 import be.nmct.howest.darem.auth.AuthHelper;
 import be.nmct.howest.darem.databinding.FragmentInviteDetailBinding;
 
 
-public class InviteDetailFragment extends Fragment {
+public class InviteDetailFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>   {
     public InviteDetailFragment() {
         // Required empty public constructor
     }
 
+    LinearLayout horizontalScrollView;
+    View v;
     TextView ChallengeName;
     TextView ChallengeDescription;
     ImageView ChallengeCategory;
     Button btnAccept;
     Button btnDecline;
 
+    String challengeId;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
 
-        View InviteDetailFragmentView = inflater.inflate(R.layout.fragment_invite_detail, container, false);
+        v = inflater.inflate(R.layout.fragment_invite_detail, container, false);
 
-        ChallengeName = (TextView) InviteDetailFragmentView.findViewById(R.id.textviewChallengeNaamInvitesDetail);
-        ChallengeDescription = (TextView) InviteDetailFragmentView.findViewById(R.id.textviewDescriptionInvitesDetail);
-        ChallengeCategory = (ImageView) InviteDetailFragmentView.findViewById(R.id.imageViewChallengeIconInvitesDetails);
-        btnAccept = (Button) InviteDetailFragmentView.findViewById(R.id.btnAcceptInviteDetail);
-        btnDecline = (Button) InviteDetailFragmentView.findViewById(R.id.btnDeclineInviteDetail);
+        horizontalScrollView = (LinearLayout) v.findViewById(R.id.LinearLayoutImage);
+        ChallengeName = (TextView) v.findViewById(R.id.textviewChallengeNaamInvitesDetail);
+        ChallengeDescription = (TextView) v.findViewById(R.id.txtDescription);
+        ChallengeCategory = (ImageView) v.findViewById(R.id.imageView5);
+        btnAccept = (Button) v.findViewById(R.id.btnAcceptInviteDetail);
+        btnDecline = (Button) v.findViewById(R.id.btnDeclineInviteDetail);
 
-        String challengeName = getArguments().getString("challengeName");
-        String challengeDesc = getArguments().getString("challengeDesc");
-        String challengeCat = getArguments().getString("challengeCat");
-        final String challengeId = getArguments().getString("challengeID");
+        if (getArguments() != null) {
+            String challengeName = getArguments().getString("challengeName");
+            String challengeDesc = getArguments().getString("challengeDesc");
+            String challengeCat = getArguments().getString("challengeCat");
+            challengeId = getArguments().getString("challengeID");
 
-        ChallengeName.setText(challengeName);
-        ChallengeDescription.setText(challengeDesc);
+            ChallengeName.setText(challengeName);
+            ChallengeDescription.setText(challengeDesc);
+
+            getLoaderManager().initLoader(0, null, this);
+        }
 
         btnAccept.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                new SendPost(challengeId, "accept").execute();
             }
-
-
         });
 
         btnDecline.setOnClickListener((new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 new SendPost(challengeId, "decline").execute();
-
             }
         }));
 
-        return InviteDetailFragmentView;
+        return v;
 
 
+    }
+
+    @Override
+    public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
+        Log.i("challengeDDDD", challengeId);
+        return new ParticipantsLoader(this.getContext(), challengeId);
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        Showparticipants(data);
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+
+    }
+
+    private void Showparticipants(Cursor data) {
+        data.moveToFirst();
+
+        int colnr1 = data.getColumnIndex(Friends.Columns._ID);
+        int colnr2 = data.getColumnIndex(Friends.Columns.COLUMN_NAME);
+        int colnr3 = data.getColumnIndex(Friends.Columns.COLUMN_PICTURE);
+
+        for (int i = 0; i < data.getCount() ; i++) {
+            ImageView iv = new ImageView(getContext());
+            Picasso.with(v.getContext()).load(data.getString(colnr3)).transform(new CircleTransform()).into(iv);
+            horizontalScrollView.addView(iv);
+            int width = 150;
+            int height = 150;
+            LinearLayout.LayoutParams parms = new LinearLayout.LayoutParams(width,height);
+            iv.setLayoutParams(parms);
+            final ViewGroup.MarginLayoutParams lpt =(ViewGroup.MarginLayoutParams) iv.getLayoutParams();
+            lpt.setMargins( 10,lpt.topMargin, 10,lpt.bottomMargin);
+            iv.setLayoutParams(lpt);
+            data.moveToNext();
+        }
     }
 
     class SendPost extends AsyncTask<String, Void, String> {
