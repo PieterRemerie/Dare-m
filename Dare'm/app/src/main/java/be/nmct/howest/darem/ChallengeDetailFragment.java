@@ -91,6 +91,7 @@ public class ChallengeDetailFragment extends Fragment implements LoaderManager.L
 
 
     private void Showparticipants(Cursor data) {
+        horizontalScrollView.removeAllViews();
         data.moveToFirst();
 
         int colnr1 = data.getColumnIndex(Friends.Columns._ID);

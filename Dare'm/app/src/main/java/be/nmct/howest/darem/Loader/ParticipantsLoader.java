@@ -18,6 +18,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 import be.nmct.howest.darem.auth.AuthHelper;
+import be.nmct.howest.darem.json.jsonDownloader;
 
 /**
  * Created by michv on 18/12/2017.
@@ -72,7 +73,7 @@ public class ParticipantsLoader extends AsyncTaskLoader<Cursor> {
             final MatrixCursor cursor = new MatrixCursor(mColumnNames);
 
 
-            String jsonData = downloadJSON();
+            String jsonData = jsonDownloader.jsonChallenge(this.getContext(), challengeId);
 
             try {
 
@@ -99,41 +100,5 @@ public class ParticipantsLoader extends AsyncTaskLoader<Cursor> {
         }
     }
 
-    private String downloadJSON() {
-        String REQUEST_METHOD = "GET";
-        int READ_TIMEOUT = 15000;
-        int CONNECTION_TIMEOUT = 15000;
 
-        String stringUrl = "https://darem.herokuapp.com/challenge/" + challengeId;
-        String result;
-        String inputLine;
-
-        try{
-            URL myUrl = new URL(stringUrl);
-            HttpURLConnection connection = (HttpURLConnection) myUrl.openConnection();
-            connection.setRequestMethod(REQUEST_METHOD);
-            connection.setReadTimeout(READ_TIMEOUT);
-            connection.setConnectTimeout(CONNECTION_TIMEOUT);
-
-            connection.connect();
-            InputStreamReader streamReader = new InputStreamReader(connection.getInputStream());
-            BufferedReader reader = new BufferedReader(streamReader);
-            StringBuilder stringBuilder = new StringBuilder();
-            while ((inputLine = reader.readLine()) != null) {
-                stringBuilder.append(inputLine);
-            }
-            reader.close();
-            streamReader.close();
-            result = stringBuilder.toString();
-
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-            result = null;
-        } catch (IOException e) {
-            e.printStackTrace();
-            result = null;
-        }
-
-        return result;
-    }
 }

@@ -3,6 +3,7 @@ package be.nmct.howest.darem;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.app.LoaderManager;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.Loader;
@@ -122,6 +123,7 @@ public class InviteDetailFragment extends Fragment implements LoaderManager.Load
     }
 
     private void Showparticipants(Cursor data) {
+        horizontalScrollView.removeAllViews();
         data.moveToFirst();
 
         int colnr1 = data.getColumnIndex(Friends.Columns._ID);
@@ -179,7 +181,7 @@ public class InviteDetailFragment extends Fragment implements LoaderManager.Load
                 JSONObject js = new JSONObject();
                 js.put("user", AuthHelper.getDbToken(getContext()));
                 js.put("challenge", challengeId);
-                js.put("response", "accept");
+                js.put("response", answer);
 
                 DataOutputStream os = new DataOutputStream(conn.getOutputStream());
                 os.writeBytes(js.toString());
@@ -190,6 +192,9 @@ public class InviteDetailFragment extends Fragment implements LoaderManager.Load
                 Log.i("STATUS", String.valueOf(conn.getResponseCode()));
                 Log.i("MSG", conn.getResponseMessage());
 
+                if(conn.getResponseCode() == 200){
+                    syncDataManual();
+                }
                 conn.disconnect();
                 Log.i("ee", "SEND: DONE");
 
@@ -206,6 +211,16 @@ public class InviteDetailFragment extends Fragment implements LoaderManager.Load
             }
         }
 
+    }
+
+    private void syncDataManual() {
+        Bundle settingsBundle = new Bundle();
+        settingsBundle.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);
+        settingsBundle.putBoolean(ContentResolver.SYNC_EXTRAS_EXPEDITED, true);
+
+        if (AuthHelper.getAccount(getContext())!= null) {
+            getContext().getContentResolver().requestSync(AuthHelper.getAccount(getContext()), be.nmct.howest.darem.provider.Contract.AUTHORITY, settingsBundle);
+        }
     }
 
 
