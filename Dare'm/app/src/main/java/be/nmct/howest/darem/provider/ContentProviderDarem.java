@@ -61,6 +61,7 @@ public class ContentProviderDarem extends ContentProvider {
         DAREM_PROJECTION_MAP.put(be.nmct.howest.darem.database.Contract.ChallengesColumns.COLUMN_CHALLENGE_CREATOR, be.nmct.howest.darem.database.Contract.ChallengesColumns.COLUMN_CHALLENGE_CREATOR);
         DAREM_PROJECTION_MAP.put(be.nmct.howest.darem.database.Contract.ChallengesColumns.COLUMN_CHALLENGE_NAAM, be.nmct.howest.darem.database.Contract.ChallengesColumns.COLUMN_CHALLENGE_NAAM);
         DAREM_PROJECTION_MAP.put(be.nmct.howest.darem.database.Contract.ChallengesColumns.COLUMN_CHALLENGE_DESCRIPTION, be.nmct.howest.darem.database.Contract.ChallengesColumns.COLUMN_CHALLENGE_DESCRIPTION);
+        DAREM_PROJECTION_MAP.put(be.nmct.howest.darem.database.Contract.ChallengesColumns.COLUMN_CHALLENGE_DB, be.nmct.howest.darem.database.Contract.ChallengesColumns.COLUMN_CHALLENGE_DB);
 
         //inladen Users
         DAREM_PROJECTION_MAP.put(be.nmct.howest.darem.database.Contract.UserColumns._ID, be.nmct.howest.darem.database.Contract.UserColumns._ID);

@@ -17,6 +17,7 @@ public class Contract {
         public static final String COLUMN_CHALLENGE_DESCRIPTION = "challengeDescription";
         public static final String COLUMN_CHALLENGE_USERS = "challengeFriends";
         public static final String COLUMN_CHALLENGE_CREATOR = "challengeCreator";
+        public static final String COLUMN_CHALLENGE_DB = "challengeDB";
     }
 
     public static abstract class ChallengesDB implements ChallengesColumns {
@@ -24,7 +25,8 @@ public class Contract {
                 + TABLE_NAME + "(" + _ID + " integer primary key autoincrement, "
                 + COLUMN_CHALLENGE_CREATOR + " integer not null, "
                 + COLUMN_CHALLENGE_NAAM + " text not null, "
-                + COLUMN_CHALLENGE_DESCRIPTION + " text not null "
+                + COLUMN_CHALLENGE_DESCRIPTION + " text not null, "
+                + COLUMN_CHALLENGE_DB + " text not null "
                 + ");";
         public static final String DELETE_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME;
     }

@@ -36,7 +36,6 @@ public class ParticipantsLoader extends AsyncTaskLoader<Cursor> {
     }
     @Override
     protected void onStartLoading() {
-        Log.i("challengeDDDD", challengeId);
         if (mCursor != null) {
             deliverResult(mCursor);
 
