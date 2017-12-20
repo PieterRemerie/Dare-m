@@ -17,16 +17,23 @@ public class Challenge extends BaseObservable implements Parcelable {
     private String description;
     private String category;
     private String friends;
-
-    private String dbId;
+    private String databaseId;
 
     public Challenge(){}
-    public Challenge(String name, String description, String category, String friends, String dbId) {
+    public Challenge(String name, String description, String category, String friends, String databaseId) {
         this.name = name;
         this.description = description;
         this.category = category;
         this.friends = friends;
-        this.dbId = dbId;
+        this.databaseId = databaseId;
+    }
+
+    public String getDatabaseId() {
+        return databaseId;
+    }
+
+    public void setDatabaseId(String databaseId) {
+        this.databaseId = databaseId;
     }
 
     @Bindable
@@ -69,21 +76,12 @@ public class Challenge extends BaseObservable implements Parcelable {
         notifyPropertyChanged(BR.friends);
     }
 
-    public String getDbId() {
-        return dbId;
-    }
-
-    public void setDbId(String dbId) {
-        this.dbId = dbId;
-    }
-
-
     protected Challenge(Parcel in) {
         name = in.readString();
         description = in.readString();
         category = in.readString();
         friends = in.readString();
-        dbId = in.readString();
+        databaseId = in.readString();
     }
 
     @Override
@@ -97,7 +95,7 @@ public class Challenge extends BaseObservable implements Parcelable {
         dest.writeString(description);
         dest.writeString(category);
         dest.writeString(friends);
-        dest.writeString(dbId);
+        dest.writeString(databaseId);
     }
 
     @SuppressWarnings("unused")
