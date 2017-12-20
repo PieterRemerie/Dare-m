@@ -45,11 +45,13 @@ public class ChallengeOverviewFragmentViewModel extends BaseObservable implement
         while(cursor.moveToNext()){
             String[] columns = new String[]{
                     Contract.ChallengesColumns.COLUMN_CHALLENGE_NAAM,
-                    Contract.ChallengesColumns.COLUMN_CHALLENGE_DESCRIPTION
+                    Contract.ChallengesColumns.COLUMN_CHALLENGE_DESCRIPTION,
+                    Contract.ChallengesColumns.COLUMN_CHALLENGE_DB
             };
             Challenge challenge = new Challenge();
             challenge.setName(cursor.getString(cursor.getColumnIndex(Contract.ChallengesColumns.COLUMN_CHALLENGE_NAAM)));
             challenge.setDescription(cursor.getString(cursor.getColumnIndex(Contract.ChallengesColumns.COLUMN_CHALLENGE_DESCRIPTION)));
+            challenge.setDatabaseId(cursor.getString(cursor.getColumnIndex(Contract.ChallengesColumns.COLUMN_CHALLENGE_DB)));
             challengesList.add(challenge);
         }
 

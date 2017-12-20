@@ -81,7 +81,7 @@ public class ChallengeDetailFragment extends Fragment implements LoaderManager.L
 
     @Override
     public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
-        return new ParticipantsLoader(this.getContext(), challenge.getDbId());
+        return new ParticipantsLoader(this.getContext(), challenge.getDatabaseId());
     }
 
     @Override
