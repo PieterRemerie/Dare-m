@@ -44,25 +44,26 @@
         </service>
         <service android:name=".firebase.MyFirebaseMessagingService">
             <intent-filter>
-                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
+
         <activity android:name=".RegistratieActivity" />
         <activity
             android:name=".ChallengeActivity"
             android:label="@string/title_activity_challenge"
-            android:theme="@style/AppTheme"
-            android:launchMode="singleTask"/>
-        <activity android:name=".InviteOverviewActivity"
-                  android:launchMode="singleTask"/>
+            android:launchMode="singleTask"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".InviteOverviewActivity"
+            android:launchMode="singleTask" />
         <activity android:name=".AcceptChallengeActivity" />
         <activity android:name=".ProfileActivity" />
         <activity android:name=".AddFriendsActivity" />
         <activity
             android:name=".CreateChallengeActivity"
             android:label="@string/title_activity_create_challenge"
-            android:theme="@style/AppTheme">
-        </activity>
+            android:theme="@style/AppTheme"></activity>
 
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
@@ -91,15 +92,19 @@
             android:exported="false" />
 
         <service
-            android:name="be.nmct.howest.darem.sync.SyncService"
+            android:name=".sync.SyncService"
             android:exported="true"
             android:process=":sync">
             <intent-filter>
-                <action android:name="android.content.SyncAdapter"/>
+                <action android:name="android.content.SyncAdapter" />
             </intent-filter>
-            <meta-data android:name="android.content.SyncAdapter"
+
+            <meta-data
+                android:name="android.content.SyncAdapter"
                 android:resource="@xml/syncadapter" />
         </service>
+
+        <activity android:name=".ChatActivity"></activity>
     </application>
 
 </manifest>

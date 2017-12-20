@@ -55,4 +55,11 @@
         android:visibility="visible"
         android:layout_alignParentEnd="true"
         android:layout_toEndOf="@+id/imageView5" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="chat"
+        android:layout_alignParentBottom="true"
+        android:id="@+id/btn_chat_test"/>
 </RelativeLayout>

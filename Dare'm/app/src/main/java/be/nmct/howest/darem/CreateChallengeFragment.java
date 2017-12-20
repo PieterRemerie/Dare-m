@@ -171,10 +171,7 @@ public class CreateChallengeFragment extends Fragment {
                 Log.i("MSG" , conn.getResponseMessage());
 
                 if(conn.getResponseCode() == 200){
-                    DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Notifications");
-                    reference.removeValue();
-                    Notification notification = new Notification(AccessToken.getCurrentAccessToken().getUserId(), newChallenge.getName());
-                    reference.setValue(notification);
+                    sendNotification();
                 }
                 conn.disconnect();
                 resetProduct();
@@ -194,7 +191,7 @@ public class CreateChallengeFragment extends Fragment {
     private void sendNotification(){
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Notifications");
         reference.removeValue();
-        Notification notification = new Notification(AccessToken.getCurrentAccessToken().getUserId(), "this is a message");
+        Notification notification = new Notification("10212082552953938", "this is a message");
         reference.setValue(notification);
     }
     public void showAddFriendToChallengeFragment(){
