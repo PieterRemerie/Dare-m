@@ -75,16 +75,6 @@ public class ChallengeOverviewFragment extends Fragment{
         return binding.getRoot();
     }
 
-    private void syncDataManual() {
-        Bundle settingsBundle = new Bundle();
-        settingsBundle.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);
-        settingsBundle.putBoolean(ContentResolver.SYNC_EXTRAS_EXPEDITED, true);
-
-        if (AuthHelper.getAccount(getContext())!= null) {
-            getContext().getContentResolver().requestSync(AuthHelper.getAccount(getContext()), be.nmct.howest.darem.provider.Contract.AUTHORITY, settingsBundle);
-        }
-    }
-
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -94,10 +84,6 @@ public class ChallengeOverviewFragment extends Fragment{
     @Override
     public void onResume() {
         super.onResume();
-
-        syncDataManual();
-
-
 
         //Luisteren met een  ContentObserver naar een contentprovider
         mObserver = new ContentObserver(new Handler(Looper.getMainLooper())) {

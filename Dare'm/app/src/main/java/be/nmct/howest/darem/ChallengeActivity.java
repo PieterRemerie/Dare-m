@@ -156,6 +156,7 @@ public class ChallengeActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+        syncDataManual();
         Navigation.setHeaderOfflineData(navigationView, view);
         Toast.makeText(this.getBaseContext(), "welcome: " + AuthHelper.getUsername(this) + " AUTHTOKEN: " + AuthHelper.getAccessToken(this) + " DBToken: " + AuthHelper.getDbToken(this) , Toast.LENGTH_LONG).show();
     }
@@ -188,5 +189,15 @@ public class ChallengeActivity extends AppCompatActivity {
         ContentProviderOperation contentProviderOperationDelete = ContentProviderOperation.newDelete(be.nmct.howest.darem.provider.Contract.USERS_URI).build();
         operationList.add(contentProviderOperationDelete);
         contentResolver.applyBatch(be.nmct.howest.darem.provider.Contract.AUTHORITY, operationList);
+    }
+
+    private void syncDataManual() {
+        Bundle settingsBundle = new Bundle();
+        settingsBundle.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);
+        settingsBundle.putBoolean(ContentResolver.SYNC_EXTRAS_EXPEDITED, true);
+
+        if (AuthHelper.getAccount(getBaseContext())!= null) {
+            getBaseContext().getContentResolver().requestSync(AuthHelper.getAccount(getBaseContext()), be.nmct.howest.darem.provider.Contract.AUTHORITY, settingsBundle);
+        }
     }
 }
