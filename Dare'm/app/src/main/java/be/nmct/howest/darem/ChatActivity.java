@@ -21,6 +21,10 @@ import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -38,7 +42,7 @@ public class ChatActivity extends AppCompatActivity {
     EditText messageArea;
     ScrollView scrollView;
     Firebase reference1, reference2, reference3, reference4;
-    ArrayList<Integer> friends;
+    ArrayList<String> friends;
     Challenge challenge;
 
 
@@ -47,7 +51,8 @@ public class ChatActivity extends AppCompatActivity {
     boolean myMessage = true;
     private List<ChatBubble> chatBubbles;
     private ArrayAdapter<ChatBubble> adapter;
-
+    private JSONArray object = null;
+    HashMap<String, String> mapje = new HashMap<String, String>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,18 +75,17 @@ public class ChatActivity extends AppCompatActivity {
         if(savedInstanceState == null){
             Bundle bundle = getIntent().getExtras();
             challenge = bundle.getParcelable("challenge");
-            //friends = bundle.getIntegerArrayList("ID");
+            mapje = (HashMap<String, String>)bundle.getSerializable("friends");
+
 
         }
         Firebase.setAndroidContext(this);
         reference1 = new Firebase("https://gastleshowest2017-dc94f.firebaseio.com/messages/" + challenge.getName() +"/_friends" );
         //reference2 = new Firebase("https://gastleshowest2017-dc94f.firebaseio.com/messages/"+ challenge.getName() +"friends_" + AccessToken.getCurrentAccessToken().getUserId() );
-        /*reference3 = new Firebase("https://gastleshowest2017-dc94f.firebaseio.com/chat/" + challenge.getName() + "/users/");
-        reference4 = new Firebase("https://gastleshowest2017-dc94f.firebaseio.com/chat/"+ challenge.getName() + "messages/");*/
+        reference3 = new Firebase("https://gastleshowest2017-dc94f.firebaseio.com/chat/" + challenge.getName() + "/users/");
+        reference4 = new Firebase("https://gastleshowest2017-dc94f.firebaseio.com/chat/"+ challenge.getName() + "/messages/");
 
-        /*for(int i = 0; i < friends.size(); i++){
-            reference3.push().setValue(friends.get(i));
-        }*/
+        //reference3.push().setValue(map);
 
         btnSend.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -91,33 +95,23 @@ public class ChatActivity extends AppCompatActivity {
                     Map<String, String> map = new HashMap<String, String>();
                     map.put("message", messageText);
                     map.put("user", AccessToken.getCurrentAccessToken().getUserId());
-                    reference1.push().setValue(map);
-                    //reference2.push().setValue(map);
-
-                    /*ChatBubble chatBubble = new ChatBubble(messageText, myMessage);
-                    chatBubbles.add(chatBubble);
-                    adapter.notifyDataSetChanged();
-                    messageArea.setText("");
-                    if(myMessage){
-                        myMessage = false;
-                    }else{
-                        myMessage = true;
-                    }*/
+                    reference4.push().setValue(map);
                 }
             }
         });
-        reference1.addChildEventListener(new ChildEventListener() {
+        reference4.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 Map map = dataSnapshot.getValue(Map.class);
                 String message = map.get("message").toString();
                 String userName = map.get("user").toString();
+                String naam = mapje.get(userName);
                 if(AccessToken.getCurrentAccessToken().getUserId().equals(userName)){
                     addMessageBox(message, userName, 1);
 
 
                 }else{
-                    addMessageBox(message, userName, 2);
+                    addMessageBox(message, naam, 2);
                 }
             }
 
