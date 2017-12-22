@@ -37,8 +37,8 @@ public class ChatActivity extends AppCompatActivity {
     ImageView sendButton;
     EditText messageArea;
     ScrollView scrollView;
-    Firebase reference1, reference2;
-    ArrayList<String> friends;
+    Firebase reference1, reference2, reference3, reference4;
+    ArrayList<Integer> friends;
     Challenge challenge;
 
 
@@ -70,13 +70,18 @@ public class ChatActivity extends AppCompatActivity {
         if(savedInstanceState == null){
             Bundle bundle = getIntent().getExtras();
             challenge = bundle.getParcelable("challenge");
-        }else{
-            friends = (ArrayList<String>) savedInstanceState.getSerializable("friends");
+            //friends = bundle.getIntegerArrayList("ID");
+
         }
         Firebase.setAndroidContext(this);
-        reference1 = new Firebase("https://gastleshowest2017-dc94f.firebaseio.com/messages/" + challenge.getName() +"/"+ AccessToken.getCurrentAccessToken().getUserId() + "_friends" );
-        reference2 = new Firebase("https://gastleshowest2017-dc94f.firebaseio.com/messages/"+ challenge.getName() +"friends_" + AccessToken.getCurrentAccessToken().getUserId() );
+        reference1 = new Firebase("https://gastleshowest2017-dc94f.firebaseio.com/messages/" + challenge.getName() +"/_friends" );
+        //reference2 = new Firebase("https://gastleshowest2017-dc94f.firebaseio.com/messages/"+ challenge.getName() +"friends_" + AccessToken.getCurrentAccessToken().getUserId() );
+        /*reference3 = new Firebase("https://gastleshowest2017-dc94f.firebaseio.com/chat/" + challenge.getName() + "/users/");
+        reference4 = new Firebase("https://gastleshowest2017-dc94f.firebaseio.com/chat/"+ challenge.getName() + "messages/");*/
 
+        /*for(int i = 0; i < friends.size(); i++){
+            reference3.push().setValue(friends.get(i));
+        }*/
 
         btnSend.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -87,7 +92,7 @@ public class ChatActivity extends AppCompatActivity {
                     map.put("message", messageText);
                     map.put("user", AccessToken.getCurrentAccessToken().getUserId());
                     reference1.push().setValue(map);
-                    reference2.push().setValue(map);
+                    //reference2.push().setValue(map);
 
                     /*ChatBubble chatBubble = new ChatBubble(messageText, myMessage);
                     chatBubbles.add(chatBubble);
@@ -108,18 +113,11 @@ public class ChatActivity extends AppCompatActivity {
                 String message = map.get("message").toString();
                 String userName = map.get("user").toString();
                 if(AccessToken.getCurrentAccessToken().getUserId().equals(userName)){
-                    //addMessageBox("You:-\n" + message, 1);
-                    ChatBubble chatBubble = new ChatBubble(message,userName, 1);
-                    chatBubbles.add(chatBubble);
-                    adapter.notifyDataSetChanged();
-                    messageArea.setText("");
+                    addMessageBox(message, userName, 1);
 
 
                 }else{
-                    ChatBubble chatBubble = new ChatBubble(message,"friend", 2);
-                    chatBubbles.add(chatBubble);
-                    adapter.notifyDataSetChanged();
-                    messageArea.setText("");
+                    addMessageBox(message, userName, 2);
                 }
             }
 
@@ -147,22 +145,10 @@ public class ChatActivity extends AppCompatActivity {
 
     }
 
-    public void addMessageBox(String message, int type){
-        TextView textView = new TextView(ChatActivity.this);
-        textView.setText(message);
-        LinearLayout.LayoutParams lp2 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        lp2.weight = 1.0f;
-
-        if(type == 1) {
-            lp2.gravity = Gravity.LEFT;
-            //textView.setBackgroundResource(R.drawable.bubble);
-        }
-        else{
-            lp2.gravity = Gravity.RIGHT;
-            //textView.setBackgroundResource(R.drawable.bubble_out);
-        }
-        textView.setLayoutParams(lp2);
-        linearLayout.addView(textView);
-        scrollView.fullScroll(View.FOCUS_DOWN);
+    public void addMessageBox(String message,String name, int type){
+        ChatBubble chatBubble = new ChatBubble(message,name, type);
+        chatBubbles.add(chatBubble);
+        adapter.notifyDataSetChanged();
+        messageArea.setText("");
     }
 }

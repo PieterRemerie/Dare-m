@@ -80,7 +80,7 @@ public class ChallengeDetailFragment extends Fragment implements LoaderManager.L
             public void onClick(View view) {
                 Intent intent = new Intent(v.getContext(), ChatActivity.class);
                 intent.putExtra("challenge", challenge);
-                /*intent.putExtra("ID", friendsId);*/
+                //intent.putExtra("ID", friendsId);
                 startActivity(intent);
             }
         });
@@ -131,8 +131,8 @@ public class ChallengeDetailFragment extends Fragment implements LoaderManager.L
             ImageView iv = new ImageView(getContext());
             Picasso.with(v.getContext()).load(data.getString(colnr3)).transform(new CircleTransform()).into(iv);
             horizontalScrollView.addView(iv);
-            /*friends.add(data.getString(colnr2));
-            friendsId.add(data.getInt(colnr1));*/
+            //friends.add(data.getString(colnr2));
+            //friendsId.add(data.getInt(colnr1));
             int width = 150;
             int height = 150;
             LinearLayout.LayoutParams parms = new LinearLayout.LayoutParams(width,height);
