@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context="be.nmct.howest.darem.ChatActivity">
-    <!--<RelativeLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/container"
@@ -21,14 +21,13 @@
             android:layout_toLeftOf="@+id/btn_chat_send"
             android:layout_weight="0.7"
             android:hint="input message"/>
-        <Button
+        <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@id/btn_chat_send"
             android:layout_alignParentBottom="true"
             android:layout_alignParentRight="true"
-            android:text="Send"
-            />
+            android:src="@drawable/ic_menu_send" />
         <ListView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -44,25 +43,11 @@
             android:divider="@null">
 
         </ListView>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@id/meLbl"
-            android:layout_gravity="left|center_vertical"
-            android:text="User 1"
-            android:textSize="20dp"/>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/friendLabel"
-            android:layout_alignParentRight="true"
-            android:text="user 2"
-            android:textSize="20dp"/>
-    </RelativeLayout>-->
+    </RelativeLayout>
 
 
 
-    <ScrollView
+    <!--<ScrollView
         android:layout_width="match_parent"
         android:layout_weight="20"
         android:layout_height="wrap_content"
@@ -85,5 +70,5 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="bottom"
-        android:layout_marginTop="5dp"/>
+        android:layout_marginTop="5dp"/>-->
 </LinearLayout>

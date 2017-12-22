@@ -194,11 +194,12 @@ public class CreateChallengeFragment extends Fragment {
         }
 
     }
-    private void sendNotification(){
+    private void sendNotification() {
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Notifications");
         reference.removeValue();
         Notification notification = new Notification("10212082552953938", "this is a message");
         reference.setValue(notification);
+    }
         private void syncDataManual() {
             Bundle settingsBundle = new Bundle();
             settingsBundle.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);
@@ -208,8 +209,6 @@ public class CreateChallengeFragment extends Fragment {
                 getContext().getContentResolver().requestSync(AuthHelper.getAccount(getContext()), be.nmct.howest.darem.provider.Contract.AUTHORITY, settingsBundle);
             }
         }
->>>>>>> fbbbfb943f064e3686ecfcd89b1104896ff943dc
-    }
     public void showAddFriendToChallengeFragment(){
         FragmentManager fragmentManager = getFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();

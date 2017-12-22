@@ -29,6 +29,8 @@ import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
+
 import be.nmct.howest.darem.Loader.Friends;
 import be.nmct.howest.darem.Loader.ParticipantsLoader;
 import be.nmct.howest.darem.Model.Challenge;
@@ -42,6 +44,8 @@ public class ChallengeDetailFragment extends Fragment implements LoaderManager.L
     TextView textViewTitle;
     TextView textViewDescription;
     Challenge challenge;
+    ArrayList<String> friends;
+    ArrayList<Integer> friendsId;
     Button button;
 
     public static ChallengeDetailFragment newInstance() {
@@ -69,12 +73,14 @@ public class ChallengeDetailFragment extends Fragment implements LoaderManager.L
         textViewTitle.setText(challenge.getName());
         textViewDescription.setText(challenge.getDescription());
 
-        button = (Button) v.findViewById(R.id.btn_chat_test);
+        button = (Button) v.findViewById(R.id.button2);
 
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(view.getContext(), ChatActivity.class);
+                Intent intent = new Intent(v.getContext(), ChatActivity.class);
+                intent.putExtra("challenge", challenge);
+                /*intent.putExtra("ID", friendsId);*/
                 startActivity(intent);
             }
         });
@@ -125,6 +131,8 @@ public class ChallengeDetailFragment extends Fragment implements LoaderManager.L
             ImageView iv = new ImageView(getContext());
             Picasso.with(v.getContext()).load(data.getString(colnr3)).transform(new CircleTransform()).into(iv);
             horizontalScrollView.addView(iv);
+            /*friends.add(data.getString(colnr2));
+            friendsId.add(data.getInt(colnr1));*/
             int width = 150;
             int height = 150;
             LinearLayout.LayoutParams parms = new LinearLayout.LayoutParams(width,height);
