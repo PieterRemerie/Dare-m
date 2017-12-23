@@ -5,6 +5,8 @@ import android.databinding.BaseObservable;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.util.Date;
+
 import be.nmct.howest.darem.BR;
 
 
@@ -15,15 +17,19 @@ import be.nmct.howest.darem.BR;
 public class Challenge extends BaseObservable implements Parcelable {
     private String name;
     private String description;
+    private String date;
     private String category;
     private String friends;
+    private int categoryId;
 
     public Challenge(){}
-    public Challenge(String name, String description, String category, String friends) {
+    public Challenge(String name, String description, String category, String friends, String date, int categoryId) {
         this.name = name;
         this.description = description;
         this.category = category;
         this.friends = friends;
+        this.date = date;
+        this.categoryId = categoryId;
     }
 
     @Bindable
@@ -66,11 +72,29 @@ public class Challenge extends BaseObservable implements Parcelable {
         notifyPropertyChanged(BR.friends);
     }
 
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
+
     protected Challenge(Parcel in) {
         name = in.readString();
         description = in.readString();
         category = in.readString();
         friends = in.readString();
+        date = in.readString();
+    }
+
+    public int getCategoryId() {
+        return categoryId;
+    }
+
+    public void setCategoryId(int categoryId) {
+        this.categoryId = categoryId;
     }
 
     @Override
@@ -84,6 +108,8 @@ public class Challenge extends BaseObservable implements Parcelable {
         dest.writeString(description);
         dest.writeString(category);
         dest.writeString(friends);
+        dest.writeString(date);
+        dest.writeInt(categoryId);
     }
 
     @SuppressWarnings("unused")
@@ -98,4 +124,6 @@ public class Challenge extends BaseObservable implements Parcelable {
             return new Challenge[size];
         }
     };
+
+
 }

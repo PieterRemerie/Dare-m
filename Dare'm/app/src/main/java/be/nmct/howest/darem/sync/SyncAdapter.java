@@ -93,11 +93,15 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 
                 newChallenge.setName(obj.getString("name"));
                 newChallenge.setDescription(obj.getString("description"));
+                newChallenge.setCategory(obj.getString("category"));
 
                 ContentValues values = new ContentValues();
                 values.put(be.nmct.howest.darem.database.Contract.ChallengesColumns.COLUMN_CHALLENGE_NAAM, newChallenge.getName());
                 values.put(be.nmct.howest.darem.database.Contract.ChallengesColumns.COLUMN_CHALLENGE_DESCRIPTION, newChallenge.getDescription());
                 values.put(be.nmct.howest.darem.database.Contract.ChallengesColumns.COLUMN_CHALLENGE_CREATOR, AuthHelper.getAccessToken(getContext()));
+                values.put(be.nmct.howest.darem.database.Contract.ChallengesColumns.COLUMN_CHALLENGE_CATEGORY, newChallenge.getCategory());
+                values.put(be.nmct.howest.darem.database.Contract.ChallengesColumns.COLUMN_CHALLENGE_DATE, "momenteel leeg");
+
                 executeAsyncTask(new SaveNewChallengeToDBTask(getContext()), values);
             }
         } catch (Exception e) {
