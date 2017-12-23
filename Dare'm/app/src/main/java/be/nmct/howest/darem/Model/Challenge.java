@@ -5,6 +5,8 @@ import android.databinding.BaseObservable;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.util.Date;
+
 import be.nmct.howest.darem.BR;
 
 
@@ -15,17 +17,23 @@ import be.nmct.howest.darem.BR;
 public class Challenge extends BaseObservable implements Parcelable {
     private String name;
     private String description;
+    private String date;
     private String category;
     private String friends;
+    private int categoryId;
     private String databaseId;
 
+
     public Challenge(){}
-    public Challenge(String name, String description, String category, String friends, String databaseId) {
+    public Challenge(String name, String description, String category, String friends, String date, int categoryId, String databaseId) {
+
         this.name = name;
         this.description = description;
         this.category = category;
         this.friends = friends;
         this.databaseId = databaseId;
+        this.date = date;
+        this.categoryId = categoryId;
     }
 
     public String getDatabaseId() {
@@ -76,12 +84,31 @@ public class Challenge extends BaseObservable implements Parcelable {
         notifyPropertyChanged(BR.friends);
     }
 
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
+
     protected Challenge(Parcel in) {
         name = in.readString();
         description = in.readString();
         category = in.readString();
         friends = in.readString();
         databaseId = in.readString();
+        date = in.readString();
+    }
+
+    public int getCategoryId() {
+        return categoryId;
+    }
+
+    public void setCategoryId(int categoryId) {
+        this.categoryId = categoryId;
+
     }
 
     @Override
@@ -96,6 +123,8 @@ public class Challenge extends BaseObservable implements Parcelable {
         dest.writeString(category);
         dest.writeString(friends);
         dest.writeString(databaseId);
+        dest.writeString(date);
+        dest.writeInt(categoryId);
     }
 
     @SuppressWarnings("unused")
@@ -110,4 +139,6 @@ public class Challenge extends BaseObservable implements Parcelable {
             return new Challenge[size];
         }
     };
+
+
 }

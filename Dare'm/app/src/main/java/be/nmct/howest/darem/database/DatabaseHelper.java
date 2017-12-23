@@ -63,6 +63,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL(Contract.UserDB.CREATE_TABLE);
         db.execSQL(Contract.UserChallengeColumns.CREATE_TABLE);
         db.execSQL(Contract.FriendsDB.CREATE_TABLE);
+        db.execSQL(Contract.CategoryDB.CREATE_TABLE);
 
     }
 }

@@ -29,6 +29,8 @@ public class ContentProviderDarem extends ContentProvider {
     private static final int USERS_ID = 4;
     private static final int FRIENDS = 5;
     private static final int FRIENDS_ID = 6;
+    private static final int CATEGORIES = 7;
+    private static final int CATEGORIES_ID = 8;
 
     private static final UriMatcher uriMatcher;
     private static HashMap<String, String> DAREM_PROJECTION_MAP;
@@ -47,6 +49,10 @@ public class ContentProviderDarem extends ContentProvider {
         //Friends
         uriMatcher.addURI(Contract.AUTHORITY, "friends", FRIENDS);
         uriMatcher.addURI(Contract.AUTHORITY, "friends/#", FRIENDS_ID);
+
+        //Categories
+        uriMatcher.addURI(Contract.AUTHORITY, "categories", CATEGORIES);
+        uriMatcher.addURI(Contract.AUTHORITY, "categories/#", CATEGORIES_ID);
     }
 
 
@@ -62,6 +68,9 @@ public class ContentProviderDarem extends ContentProvider {
         DAREM_PROJECTION_MAP.put(be.nmct.howest.darem.database.Contract.ChallengesColumns.COLUMN_CHALLENGE_NAAM, be.nmct.howest.darem.database.Contract.ChallengesColumns.COLUMN_CHALLENGE_NAAM);
         DAREM_PROJECTION_MAP.put(be.nmct.howest.darem.database.Contract.ChallengesColumns.COLUMN_CHALLENGE_DESCRIPTION, be.nmct.howest.darem.database.Contract.ChallengesColumns.COLUMN_CHALLENGE_DESCRIPTION);
         DAREM_PROJECTION_MAP.put(be.nmct.howest.darem.database.Contract.ChallengesColumns.COLUMN_CHALLENGE_DB, be.nmct.howest.darem.database.Contract.ChallengesColumns.COLUMN_CHALLENGE_DB);
+        DAREM_PROJECTION_MAP.put(be.nmct.howest.darem.database.Contract.ChallengesColumns.COLUMN_CHALLENGE_CATEGORY, be.nmct.howest.darem.database.Contract.ChallengesColumns.COLUMN_CHALLENGE_CATEGORY);
+        DAREM_PROJECTION_MAP.put(be.nmct.howest.darem.database.Contract.ChallengesColumns.COLUMN_CHALLENGE_DATE, be.nmct.howest.darem.database.Contract.ChallengesColumns.COLUMN_CHALLENGE_DATE);
+
 
         //inladen Users
         DAREM_PROJECTION_MAP.put(be.nmct.howest.darem.database.Contract.UserColumns._ID, be.nmct.howest.darem.database.Contract.UserColumns._ID);
@@ -75,6 +84,11 @@ public class ContentProviderDarem extends ContentProvider {
         DAREM_PROJECTION_MAP.put(be.nmct.howest.darem.database.Contract.FriendsColumns._ID, be.nmct.howest.darem.database.Contract.FriendsColumns._ID);
         DAREM_PROJECTION_MAP.put(be.nmct.howest.darem.database.Contract.FriendsColumns.COLUMN_FRIEND_FULLNAME, be.nmct.howest.darem.database.Contract.FriendsColumns.COLUMN_FRIEND_FULLNAME);
         DAREM_PROJECTION_MAP.put(be.nmct.howest.darem.database.Contract.FriendsColumns.COLUMN_FRIEND_PHOTO, be.nmct.howest.darem.database.Contract.FriendsColumns.COLUMN_FRIEND_PHOTO);
+
+        //inladen Categories
+        DAREM_PROJECTION_MAP.put(be.nmct.howest.darem.database.Contract.CategoryColumns._ID, be.nmct.howest.darem.database.Contract.CategoryColumns._ID);
+        DAREM_PROJECTION_MAP.put(be.nmct.howest.darem.database.Contract.CategoryColumns.COLUMN_CATEGORY_NAME, be.nmct.howest.darem.database.Contract.CategoryColumns.COLUMN_CATEGORY_NAME);
+        DAREM_PROJECTION_MAP.put(be.nmct.howest.darem.database.Contract.CategoryColumns.COLUMN_CATEGORY_IMG, be.nmct.howest.darem.database.Contract.CategoryColumns.COLUMN_CATEGORY_IMG);
         return true;
     }
 
@@ -124,6 +138,19 @@ public class ContentProviderDarem extends ContentProvider {
                 selectionArgs = DatabaseUtils.appendSelectionArgs(selectionArgs, new String[]{"" + friendsid});
 
                 break;
+            case CATEGORIES:
+                queryBuilder.setTables(be.nmct.howest.darem.database.Contract.CategoryDB.TABLE_NAME);
+                queryBuilder.setProjectionMap(DAREM_PROJECTION_MAP);
+                break;
+            case CATEGORIES_ID:
+                queryBuilder.setTables(be.nmct.howest.darem.database.Contract.CategoryDB.TABLE_NAME);
+                queryBuilder.setProjectionMap(DAREM_PROJECTION_MAP);
+
+                String categoriesid = uri.getPathSegments().get(Contract.CATEGORIE_ID_PATH_POSITION);
+                DatabaseUtils.concatenateWhere(selection, "( " + be.nmct.howest.darem.database.Contract.CategoryColumns._ID + " = ?" + ")"); //strict genomen haakjes niet nodig
+                selectionArgs = DatabaseUtils.appendSelectionArgs(selectionArgs, new String[]{"" + categoriesid});
+
+                break;
             default:
                 throw new IllegalArgumentException("Unknown URI " + uri);
         }
@@ -162,6 +189,10 @@ public class ContentProviderDarem extends ContentProvider {
                 return Contract.FRIEND_CONTENT_TYPE;
             case FRIENDS_ID:
                 return Contract.FRIEND_ITEM_CONTENT_TYPE;
+            case CATEGORIES:
+                return Contract.CATEGORIE_CONTENT_TYPE;
+            case CATEGORIES_ID:
+                return Contract.CATEGORIE_CONTENT_TYPE;
             default:
                 throw new IllegalArgumentException("Unknown URI " + uri);
         }
@@ -197,6 +228,15 @@ public class ContentProviderDarem extends ContentProvider {
                 newRowId = db.insert(be.nmct.howest.darem.database.Contract.FriendsDB.TABLE_NAME, null, values);
                 if(newRowId > 0){
                     Uri daremItemUri = ContentUris.withAppendedId(Contract.FRIENDS_ITEM_URI, newRowId);
+                    //eventuele observers verwittigen
+                    getContext().getContentResolver().notifyChange(daremItemUri, null);
+                    return daremItemUri;
+                }
+                break;
+            case CATEGORIES:
+                newRowId = db.insert(be.nmct.howest.darem.database.Contract.CategoryDB.TABLE_NAME, null, values);
+                if(newRowId > 0){
+                    Uri daremItemUri = ContentUris.withAppendedId(Contract.CATEGORIES_ITEM_URI, newRowId);
                     //eventuele observers verwittigen
                     getContext().getContentResolver().notifyChange(daremItemUri, null);
                     return daremItemUri;
@@ -273,6 +313,27 @@ public class ContentProviderDarem extends ContentProvider {
 
                 count = db.delete(
                         be.nmct.howest.darem.database.Contract.FriendsDB.TABLE_NAME,
+                        finalWhere,
+                        selectionArgs
+                );
+                break;
+            case CATEGORIES:
+                count = db.delete(
+                        be.nmct.howest.darem.database.Contract.CategoryDB.TABLE_NAME,
+                        selection,
+                        selectionArgs
+                );
+                break;
+            case CATEGORIES_ID:
+                String categorieid = uri.getPathSegments().get(1);
+                finalWhere = "Id = " + categorieid;
+
+                if (selection != null) {
+                    finalWhere = DatabaseUtils.concatenateWhere(finalWhere, selection);
+                }
+
+                count = db.delete(
+                        be.nmct.howest.darem.database.Contract.CategoryDB.TABLE_NAME,
                         finalWhere,
                         selectionArgs
                 );
@@ -357,6 +418,29 @@ public class ContentProviderDarem extends ContentProvider {
 
                 count = db.update(
                         be.nmct.howest.darem.database.Contract.FriendsDB.TABLE_NAME,
+                        values,
+                        finalWhere,
+                        selectionArgs
+                );
+                break;
+            case CATEGORIES:
+                count = db.update(
+                        be.nmct.howest.darem.database.Contract.CategoryDB.TABLE_NAME,
+                        values,
+                        selection,
+                        selectionArgs
+                );
+                break;
+            case CATEGORIES_ID:
+                String categorieid = uri.getPathSegments().get(1);
+                finalWhere = "Id = " + categorieid;
+
+                if (selection != null) {
+                    finalWhere = DatabaseUtils.concatenateWhere(finalWhere, selection);
+                }
+
+                count = db.update(
+                        be.nmct.howest.darem.database.Contract.CategoryDB.TABLE_NAME,
                         values,
                         finalWhere,
                         selectionArgs

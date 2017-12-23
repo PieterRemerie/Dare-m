@@ -36,6 +36,7 @@ public class AddFriendToChallengeFragment extends Fragment {
     ArrayList<String> photos = new ArrayList<String>();
     ArrayList<String> friendId = new ArrayList<String>();
     ArrayList<String> friendsIdChallenge = new ArrayList<String>();
+    private Bundle bundle ;
 
     public AddFriendToChallengeFragment() {
         // Required empty public constructor
@@ -52,6 +53,7 @@ public class AddFriendToChallengeFragment extends Fragment {
         String url = "https://darem.herokuapp.com/userprofile?authToken=" + AccessToken.getCurrentAccessToken().getUserId();
         String result = null;
         HttpGetRequest getRequest = new HttpGetRequest();
+    bundle = getArguments();
         try{
             result = getRequest.execute(url).get();
 
@@ -103,6 +105,15 @@ public class AddFriendToChallengeFragment extends Fragment {
         FragmentManager fragmentManager = getFragmentManager();
         Bundle args = new Bundle();
         args.putStringArrayList("key", friendsIdChallenge);
+        if(bundle.getString("challengeName" )!= null){
+            args.putString("challengeName",bundle.getString("challengeName" ));
+        }
+        if(bundle.getString("challengeDescr" )!= null){
+            args.putString("challengeDescr",bundle.getString("challengeDescr" ));
+        }
+        if(bundle.getString("challengeDate" )!= null){
+            args.putString("challengeDate",bundle.getString("challengeDate" ));
+        }
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         CreateChallengeFragment createChallengeFragment = new CreateChallengeFragment();
         createChallengeFragment.setArguments(args);
