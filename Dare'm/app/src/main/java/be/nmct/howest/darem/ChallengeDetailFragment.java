@@ -103,6 +103,11 @@ public class ChallengeDetailFragment extends Fragment implements LoaderManager.L
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
         getLoaderManager().initLoader(0, null, this);
     }
 
@@ -113,7 +118,7 @@ public class ChallengeDetailFragment extends Fragment implements LoaderManager.L
 
     @Override
     public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
-        return new ParticipantsLoader(this.getContext(), "5a37765acd376b001433bf16");
+        return new ParticipantsLoader(this.getContext(), challenge.getDatabaseId());
     }
 
     @Override
