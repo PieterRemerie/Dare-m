@@ -125,7 +125,11 @@
                 android:layout_marginEnd="14dp"
                 android:layout_alignParentBottom="true"
                 android:layout_alignParentEnd="true"
-                android:layout_marginBottom="12dp" />
+                android:layout_marginBottom="12dp"
+                app:fab_addButtonColorNormal="#9e0101"
+                app:fab_colorPressed="#9e0001"
+                android:src="@drawable/add_challenge_vector"
+                />
 
         </RelativeLayout>
 
