@@ -114,6 +114,7 @@ public class CreateChallengeFragment extends Fragment {
         values.put(Contract.ChallengesColumns.COLUMN_CHALLENGE_NAAM, newChallenge.getName());
         values.put(Contract.ChallengesColumns.COLUMN_CHALLENGE_DESCRIPTION, newChallenge.getDescription());
         values.put(Contract.ChallengesColumns.COLUMN_CHALLENGE_CREATOR, AuthHelper.getAccessToken(getContext()));
+        values.put(Contract.ChallengesColumns.COLUMN_CHALLENGE_DB, "");
         executeAsyncTask(new SaveNewChallengeToDBTask(getContext()), values);
     }
     private void resetProduct(){
