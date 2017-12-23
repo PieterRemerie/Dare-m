@@ -43,18 +43,12 @@ public class MessageAdapter extends ArrayAdapter<ChatBubble> {
         int viewType = getItemViewType(position);
 
         if (ChatBubble.getType() == 1) {
-            layoutResource = R.layout.left_chat_bubble;
+            convertView = inflater.inflate(R.layout.right_chat_bubble, parent, false);
         } else {
-            layoutResource = R.layout.right_chat_bubble;
+            convertView = inflater.inflate(R.layout.left_chat_bubble, parent, false);
         }
 
-        if (convertView != null) {
-            holder = (ViewHolder) convertView.getTag();
-        } else {
-            convertView = inflater.inflate(layoutResource, parent, false);
-            holder = new ViewHolder(convertView);
-            convertView.setTag(holder);
-        }
+        holder = new ViewHolder(convertView);
 
         //set message content
         holder.msg.setText(ChatBubble.getContent());

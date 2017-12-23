@@ -107,9 +107,7 @@ public class ChatActivity extends AppCompatActivity {
                 String userName = map.get("user").toString();
                 String naam = mapje.get(userName);
                 if(AccessToken.getCurrentAccessToken().getUserId().equals(userName)){
-                    addMessageBox(message, userName, 1);
-
-
+                    addMessageBox(message, "You", 1);
                 }else{
                     addMessageBox(message, naam, 2);
                 }
