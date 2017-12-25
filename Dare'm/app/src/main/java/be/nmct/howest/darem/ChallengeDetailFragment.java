@@ -96,10 +96,6 @@ public class ChallengeDetailFragment extends Fragment implements LoaderManager.L
         return v;
     }
 
-    private void AddUsersToChatDb(){
-        String url = "https://gastleshowest2017-dc94f.firebaseio.com/users.json";
-    }
-
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
