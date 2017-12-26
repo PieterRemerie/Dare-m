@@ -9,18 +9,24 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.databinding.DataBindingUtil;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.telecom.Call;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
+import com.facebook.HttpMethod;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 
@@ -28,9 +34,12 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedWriter;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
@@ -45,6 +54,7 @@ import be.nmct.howest.darem.database.CategoriesData;
 import be.nmct.howest.darem.database.Contract;
 import be.nmct.howest.darem.database.DatabaseHelper;
 import be.nmct.howest.darem.database.SaveCategoriesToDBTask;
+import be.nmct.howest.darem.database.SaveNewChallengeToDBTask;
 import be.nmct.howest.darem.database.SaveNewUserToDBTask;
 import be.nmct.howest.darem.databinding.ActivityLoginBinding;
 
@@ -54,7 +64,6 @@ public class LoginActivity extends AppCompatActivity {
     CallbackManager callbackManager;
     LoginButton loginFB;
     JSONObject profileInformation;
-    Context context = LoginActivity.this;
 
     private AccountManager mAccountManager;
     private AccountAuthenticatorResponse mAccountAuthenticatorResponse;
@@ -111,8 +120,6 @@ public class LoginActivity extends AppCompatActivity {
                 if(!AuthHelper.isUserLoggedIn(getApplicationContext())){
                     new SendPost(loginResult.getAccessToken().getToken()).execute();
                     saveNewUser();
-
-
                     startActivity(intent);
                 }else{
                     startActivity(intent);
@@ -136,7 +143,7 @@ public class LoginActivity extends AppCompatActivity {
     private void saveCategories() {
 
         Cursor mData;
-        DatabaseHelper helper = DatabaseHelper.getINSTANCE(context);
+        DatabaseHelper helper = DatabaseHelper.getINSTANCE(getApplicationContext());
         SQLiteDatabase db = helper.getReadableDatabase();
         mData = db.query(Contract.CategoryDB.TABLE_NAME,
                 new String[]{
@@ -155,7 +162,7 @@ public class LoginActivity extends AppCompatActivity {
                 Log.i("VALUES", value.toString());
 
                 try {
-                    new SaveCategoriesToDBTask(context).execute(value).get();
+                    new SaveCategoriesToDBTask(getApplicationContext()).execute(value).get();
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 } catch (ExecutionException e) {
@@ -197,12 +204,9 @@ public class LoginActivity extends AppCompatActivity {
                     values.put(Contract.UserColumns.COLUMN_USER_EMAIL, userMail);
                     values.put(Contract.UserColumns.COLUMN_USER_PHOTO, userImgurl);
 
-
+                    Context context = LoginActivity.this;
 
                     executeAsyncTask(new SaveNewUserToDBTask(context), values);
-                    //new CategoriesData(context).save();
-
-
                 }
 
             }
