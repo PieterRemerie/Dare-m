@@ -13,30 +13,47 @@
         android:id="@+id/container"
         android:orientation="vertical"
         android:padding="20dp">
-        <EditText
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/msg_type"
             android:layout_alignParentBottom="true"
-            android:layout_toLeftOf="@+id/btn_chat_send"
-            android:layout_weight="0.7"
-            android:hint="input message"/>
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@id/btn_chat_send"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentRight="true"
-            android:src="@drawable/ic_menu_send" />
+            android:id="@+id/chatinput">
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/btnCamera"
+                android:src="@drawable/ic_menu_camera"
+                android:layout_gravity="center"
+                />
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/btnImage"
+                android:src="@drawable/ic_menu_gallery"
+                android:layout_gravity="center"
+                />
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/msg_type"
+                android:layout_weight="0.7"
+                android:hint="input message"/>
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/btn_chat_send"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_menu_send" />
+        </LinearLayout>
+
         <ListView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/list_msg"
             android:layout_alignParentLeft="false"
             android:layout_alignParentTop="false"
-            android:layout_below="@+id/meLbl"
             android:layout_marginBottom="20dp"
-            android:layout_above="@id/msg_type"
+            android:layout_above="@id/chatinput"
             android:layout_marginTop="10dp"
             android:listSelector="@android:color/transparent"
             android:transcriptMode="alwaysScroll"
