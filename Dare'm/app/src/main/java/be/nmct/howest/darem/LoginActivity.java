@@ -6,6 +6,7 @@ import android.accounts.AccountManager;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.databinding.DataBindingUtil;
 import android.net.Uri;
@@ -49,8 +50,10 @@ import javax.net.ssl.HttpsURLConnection;
 import be.nmct.howest.darem.Loader.HttpGetRequest;
 import be.nmct.howest.darem.Model.Login;
 import be.nmct.howest.darem.auth.AuthHelper;
+import be.nmct.howest.darem.database.CategoriesData;
 import be.nmct.howest.darem.database.Contract;
 import be.nmct.howest.darem.database.DatabaseHelper;
+import be.nmct.howest.darem.database.SaveCategoriesToDBTask;
 import be.nmct.howest.darem.database.SaveNewChallengeToDBTask;
 import be.nmct.howest.darem.database.SaveNewUserToDBTask;
 import be.nmct.howest.darem.databinding.ActivityLoginBinding;
@@ -107,6 +110,8 @@ public class LoginActivity extends AppCompatActivity {
         loginFB.setReadPermissions("user_friends");
         loginFB.setReadPermissions("email");
 
+        saveCategories();
+
 
         loginFB.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
@@ -132,6 +137,41 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
+
+    }
+
+    private void saveCategories() {
+
+        Cursor mData;
+        DatabaseHelper helper = DatabaseHelper.getINSTANCE(getApplicationContext());
+        SQLiteDatabase db = helper.getReadableDatabase();
+        mData = db.query(Contract.CategoryDB.TABLE_NAME,
+                new String[]{
+                        Contract.CategoryColumns._ID}, null, null, null, null, null);
+        mData.getCount();
+
+        if(mData.getCount() <=0){
+            String[] cats = CategoriesData.categories;
+            String[] imgs = CategoriesData.images;
+
+            ContentValues value = new ContentValues();
+
+            for(int i = 0; i < cats.length ; i++){
+                value.put(Contract.CategoryColumns.COLUMN_CATEGORY_NAME, cats[i]);
+                value.put(Contract.CategoryColumns.COLUMN_CATEGORY_IMG, imgs[i]);
+                Log.i("VALUES", value.toString());
+
+                try {
+                    new SaveCategoriesToDBTask(getApplicationContext()).execute(value).get();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                } catch (ExecutionException e) {
+                    e.printStackTrace();
+                }
+
+            }
+
+        }
 
     }
 

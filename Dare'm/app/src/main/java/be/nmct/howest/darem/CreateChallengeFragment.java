@@ -50,6 +50,7 @@ import be.nmct.howest.darem.Model.Challenge;
 import be.nmct.howest.darem.Model.Login;
 import be.nmct.howest.darem.Model.Notification;
 import be.nmct.howest.darem.auth.AuthHelper;
+import be.nmct.howest.darem.database.CategoriesData;
 import be.nmct.howest.darem.database.Contract;
 import be.nmct.howest.darem.database.SaveNewChallengeToDBTask;
 import be.nmct.howest.darem.databinding.FragmentCreateChallengeBinding;
@@ -61,42 +62,80 @@ public class CreateChallengeFragment extends Fragment {
     private MyFirebaseMessagingService myFirebaseMessagingService;
     private Challenge newChallenge = new Challenge();
     private ArrayList<String> friendsId = new ArrayList<String>();
+    private int categoryId;
     private static final String TAG = "FirebaseMessageService";
     JSONArray jsonArray = new JSONArray();
     private Bundle bundle;
+    private Bundle innerBundle = new Bundle();
+
     public CreateChallengeFragment() {
         // Required empty public constructor
     }
+
     public static CreateChallengeFragment newInstance(String param1, String param2) {
         CreateChallengeFragment fragment = new CreateChallengeFragment();
         return fragment;
     }
-
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+    }
     @Override
     public void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        binding = DataBindingUtil.inflate(inflater,R.layout.fragment_create_challenge, container, false);
+
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_create_challenge, container, false);
         View v = binding.getRoot();
-        binding.setTest(this);
-        binding.setChallenge(newChallenge);
         bundle = getArguments();
-        if(bundle != null){
-            friendsId = bundle.getStringArrayList("key");
+        if (bundle != null) {
+            if (bundle.getStringArrayList("key") != null) {
+                friendsId = bundle.getStringArrayList("key");
+                Log.i("CREATE_CHALLENGE", "CHALLENGE FRIENDS TOEGEVOEGD");
+
+            }
+            if (bundle.getInt("categoryId") != 0) {
+                categoryId = bundle.getInt("categoryId");
+                Log.i("CREATE_CHALLENGE", CategoriesData.categories[categoryId]);
+                newChallenge.setCategoryId(categoryId);
+                newChallenge.setCategory(CategoriesData.categories[categoryId]);
+            }
+            if(bundle.getString("challengeName") != null){
+                newChallenge.setName(bundle.getString("challengeName"));
+            }
+            if(bundle.getString("challengeDescr") != null){
+                newChallenge.setDescription(bundle.getString("challengeDescr"));
+            }
+            if(bundle.getString("challengeDate") != null){
+                newChallenge.setDate(bundle.getString("challengeDate"));
+            }
+
             //friendsId.add(Integer.parseInt(AccessToken.getCurrentAccessToken().getUserId()));
         }
-        if(savedInstanceState != null){
+
+        binding.setTest(this);
+        binding.setChallenge(newChallenge);
+
+        if (savedInstanceState != null) {
             newChallenge.setName(savedInstanceState.getString("challengeNaam"));
             newChallenge.setDescription(savedInstanceState.getString("challengeDescr"));
+            newChallenge.setDate(savedInstanceState.getString("challendeDate"));
+
         }
         return v;
     }
+
     @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
+    public void onDestroyView() {
+        super.onDestroyView();
+        /*if(!newChallenge.getName().isEmpty()){
+            Log.i("BLAAAAAAAAA", "dit is niet leeg  " + newChallenge.getName());
+            bundle.putString("Blaa", newChallenge.getName());
+        }*/
     }
 
     @Override
@@ -104,21 +143,30 @@ public class CreateChallengeFragment extends Fragment {
         super.onDetach();
     }
 
-    public void saveNewChallenge(){
+    public void saveNewChallenge() {
         saveChallengeToDb();
         new SendPost().execute();
     }
 
-    private void saveChallengeToDb(){
+
+    private void saveChallengeToDb() {
+
         ContentValues values = new ContentValues();
         values.put(Contract.ChallengesColumns.COLUMN_CHALLENGE_NAAM, newChallenge.getName());
         values.put(Contract.ChallengesColumns.COLUMN_CHALLENGE_DESCRIPTION, newChallenge.getDescription());
         values.put(Contract.ChallengesColumns.COLUMN_CHALLENGE_CREATOR, AuthHelper.getAccessToken(getContext()));
+        values.put(Contract.ChallengesColumns.COLUMN_CHALLENGE_DB, "");
+        values.put(Contract.ChallengesColumns.COLUMN_CHALLENGE_CATEGORY,CategoriesData.categories[categoryId] );
+        values.put(Contract.ChallengesColumns.COLUMN_CHALLENGE_DATE, "voorlopig leeg");
+
         executeAsyncTask(new SaveNewChallengeToDBTask(getContext()), values);
     }
-    private void resetProduct(){
+
+    private void resetProduct() {
         newChallenge.setName("");
         newChallenge.setDescription("");
+        newChallenge.setCategoryId(0);
+        newChallenge.setCategory("");
     }
 
     static private <T> void executeAsyncTask(AsyncTask<T, ?, ?> task, T... params) {
@@ -129,7 +177,7 @@ public class CreateChallengeFragment extends Fragment {
         }
     }
 
-    class SendPost extends AsyncTask<String, Void, String>{
+    class SendPost extends AsyncTask<String, Void, String> {
 
         @Override
         protected String doInBackground(String... params) {
@@ -142,9 +190,10 @@ public class CreateChallengeFragment extends Fragment {
             }
             return null;
         }
+
         private void postRequest() throws IOException {
 
-            try{
+            try {
                 URL url = new URL("https://darem.herokuapp.com/challenge/add");
                 HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();
                 conn.setRequestMethod("POST");
@@ -157,7 +206,7 @@ public class CreateChallengeFragment extends Fragment {
                 js.put("name", newChallenge.getName());
                 js.put("description", newChallenge.getDescription());
                 js.put("users", new JSONArray(friendsId));
-                js.put("category", "");
+                js.put("category", newChallenge.getCategoryId());
                 js.put("creatorId", AccessToken.getCurrentAccessToken().getUserId());
                 js.put("isCompleted", "false");
 
@@ -168,9 +217,10 @@ public class CreateChallengeFragment extends Fragment {
                 os.close();
 
                 Log.i("STATUS", String.valueOf(conn.getResponseCode()));
-                Log.i("MSG" , conn.getResponseMessage());
+                Log.i("MSG", conn.getResponseMessage());
 
-                if(conn.getResponseCode() == 200){
+
+                if (conn.getResponseCode() == 200) {
                     DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Notifications");
                     reference.removeValue();
                     Notification notification = new Notification(AccessToken.getCurrentAccessToken().getUserId(), newChallenge.getName());
@@ -194,11 +244,13 @@ public class CreateChallengeFragment extends Fragment {
         }
 
     }
-    private void sendNotification(){
+
+    private void sendNotification() {
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Notifications");
         reference.removeValue();
         Notification notification = new Notification("10212082552953938", "this is a message");
         reference.setValue(notification);
+    }
         private void syncDataManual() {
             Bundle settingsBundle = new Bundle();
             settingsBundle.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);
@@ -208,20 +260,49 @@ public class CreateChallengeFragment extends Fragment {
                 getContext().getContentResolver().requestSync(AuthHelper.getAccount(getContext()), be.nmct.howest.darem.provider.Contract.AUTHORITY, settingsBundle);
             }
         }
-    }
     public void showAddFriendToChallengeFragment(){
+
+        addItemsToBundle();
+
         FragmentManager fragmentManager = getFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         AddFriendToChallengeFragment addFriendToChallengeFragment = new AddFriendToChallengeFragment();
+        addFriendToChallengeFragment.setArguments(innerBundle);
         fragmentTransaction.replace(R.id.framelayout_in_create_challenge_activity, addFriendToChallengeFragment);
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
     }
+
+    public void showAddCategoryToChallengeFragment() {
+
+        addItemsToBundle();
+        FragmentManager fragmentManager = getFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        AddCategoryToChallengeFragment addCategoryToChallengeFragment = new AddCategoryToChallengeFragment();
+        addCategoryToChallengeFragment.setArguments(innerBundle);
+        fragmentTransaction.replace(R.id.framelayout_in_create_challenge_activity, addCategoryToChallengeFragment);
+        fragmentTransaction.commit();
+
+    }
+
+    public void addItemsToBundle(){
+        if(newChallenge.getName() !=null){
+            innerBundle.putString("challengeName", newChallenge.getName());
+        }
+        if(newChallenge.getDescription() !=null){
+            innerBundle.putString("challengeDescr", newChallenge.getDescription());
+        }
+        if(newChallenge.getDate() != null){
+            innerBundle.putString("challengeDate", newChallenge.getDescription());
+        }
+    }
+
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putString("challengeNaam", newChallenge.getName());
         outState.putString("challengeDescr", newChallenge.getDescription());
+        outState.putString("challendeDate", newChallenge.getDate());
     }
 }

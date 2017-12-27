@@ -10,10 +10,11 @@
         android:layout_height="wrap_content"
         android:hint="Input message"
         android:id="@+id/msg_type"/>
-    <Button
+    <ImageView
         android:layout_width="0dp"
         android:layout_weight="0.3"
         android:layout_height="wrap_content"
         android:id="@+id/btn_chat_send"
+        android:src="@drawable/ic_menu_send"
         android:text="Send"/>
 </LinearLayout>

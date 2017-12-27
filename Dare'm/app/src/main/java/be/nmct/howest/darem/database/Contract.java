@@ -17,6 +17,10 @@ public class Contract {
         public static final String COLUMN_CHALLENGE_DESCRIPTION = "challengeDescription";
         public static final String COLUMN_CHALLENGE_USERS = "challengeFriends";
         public static final String COLUMN_CHALLENGE_CREATOR = "challengeCreator";
+        public static final String COLUMN_CHALLENGE_DB = "challengeDB";
+        public static final String COLUMN_CHALLENGE_CATEGORY ="challengeCategory";
+        public static final String COLUMN_CHALLENGE_DATE = "challengeDate";
+
     }
 
     public static abstract class ChallengesDB implements ChallengesColumns {
@@ -24,7 +28,10 @@ public class Contract {
                 + TABLE_NAME + "(" + _ID + " integer primary key autoincrement, "
                 + COLUMN_CHALLENGE_CREATOR + " integer not null, "
                 + COLUMN_CHALLENGE_NAAM + " text not null, "
-                + COLUMN_CHALLENGE_DESCRIPTION + " text not null "
+                + COLUMN_CHALLENGE_DESCRIPTION + " text not null, "
+                + COLUMN_CHALLENGE_DB + " text not null, "
+                + COLUMN_CHALLENGE_CATEGORY + " text not null, "
+                + COLUMN_CHALLENGE_DATE + " text"
                 + ");";
         public static final String DELETE_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME;
     }
@@ -85,6 +92,24 @@ public class Contract {
                 +  ");";
 
         public static final String DELETE_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME;
+    }
+
+    public interface CategoryColumns extends BaseColumns {
+        public static final String TABLE_NAME = "Categories";
+        public static final String COLUMN_CATEGORY_NAME = "categorie";
+        public static final String COLUMN_CATEGORY_IMG = "img";
+    }
+
+    public static abstract class CategoryDB implements CategoryColumns{
+        public static final String CREATE_TABLE = "create table "
+                + TABLE_NAME + "(" + _ID + " integer primary key autoincrement, "
+                + COLUMN_CATEGORY_NAME + " text not null, "
+                + COLUMN_CATEGORY_IMG + " text not null"
+                +  ");";
+
+        public static final String DELETE_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME;
+
+
     }
 
 }

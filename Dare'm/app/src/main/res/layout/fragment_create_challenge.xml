@@ -39,7 +39,7 @@
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="11dp"
                 android:ems="10"
-                android:text="@={Challenge.name}" />
+                android:text="@={Challenge.name}"/>
 
             <TextView
                 android:id="@+id/textView4"
@@ -51,29 +51,45 @@
                 android:text="Description"
                 android:textStyle="bold" />
 
-            <Button
-                android:id="@+id/btnAddFriendsToUser"
-                android:layout_width="225dp"
+            <TextView
+                android:id="@+id/textView10"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:layout_centerHorizontal="true"
-                android:layout_marginBottom="125dp"
-                android:background="@color/colorPrimary"
-                android:text="Add Friends"
-                android:textColor="@android:color/white"
-                android:onClick="@{() -> test.showAddFriendToChallengeFragment()}"/>
+                android:layout_alignStart="@+id/txtDescription"
+                android:layout_below="@+id/txtDescription"
+                android:layout_marginTop="14dp"
+                android:text="Date"
+                android:textStyle="bold" />
 
             <Button
-                android:id="@+id/btnCreate"
-                android:layout_width="225dp"
+                android:id="@+id/btnAddFriendsToUser"
+                android:layout_width="150dp"
                 android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:layout_centerHorizontal="true"
-                android:layout_marginBottom="41dp"
                 android:background="@color/colorPrimary"
-                android:text="Dare'm"
+                android:onClick="@{() -> test.showAddFriendToChallengeFragment()}"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp"
+                android:text="Add Friends"
                 android:textColor="@android:color/white"
-                android:onClick="@{() -> test.saveNewChallenge()}"/>
+                android:layout_marginTop="76dp"
+                android:layout_alignTop="@+id/btnCategory"
+                android:layout_alignStart="@+id/btnCategory"
+                android:layout_alignEnd="@+id/btnCategory" />
+
+            <Button
+                android:id="@+id/btnCategory"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="17dp"
+                android:background="@color/colorPrimary"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp"
+                android:text="Choose category"
+                android:textColor="@android:color/white"
+                android:layout_below="@+id/txtDate"
+                android:layout_alignStart="@+id/txtDate"
+                android:layout_alignEnd="@+id/txtDate"
+                android:onClick="@{()-> test.showAddCategoryToChallengeFragment()}"/>
 
             <EditText
                 android:id="@+id/txtDescription"
@@ -86,6 +102,36 @@
                 android:inputType="textPersonName"
                 android:text="@={Challenge.description}"/>
 
+            <EditText
+                android:id="@+id/txtDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignStart="@+id/txtDescription"
+                android:layout_below="@+id/txtDescription"
+                android:layout_marginTop="45dp"
+                android:ems="10"
+                android:inputType="date"
+                android:text="@={Challenge.date}"
+                android:layout_alignEnd="@+id/txtDescription" />
+
+
+
+            <com.getbase.floatingactionbutton.FloatingActionButton
+                android:id="@+id/fab_createChal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|right"
+                android:onClick="@{() -> test.saveNewChallenge()}"
+                android:layout_marginEnd="14dp"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentEnd="true"
+                android:layout_marginBottom="12dp"
+                app:fab_addButtonColorNormal="#9e0101"
+                app:fab_colorPressed="#9e0001"
+                android:src="@drawable/add_challenge_vector"
+                />
+
         </RelativeLayout>
+
 
 </layout>

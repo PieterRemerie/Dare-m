@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <android.support.v7.widget.CardView
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="2dp"
+        android:layout_gravity="center">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/addCategoryImage"
+                android:layout_width="65dp"
+                android:layout_height="65dp"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_gravity="center"
+                android:layout_marginStart="21dp"
+                android:contentDescription="@string/categoryimage"
+                android:src="@drawable/football" />
+
+            <TextView
+                android:id="@+id/txtAddCategoryName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:layout_gravity="center"
+                android:text="Naam van category" />
+
+            <Button
+                android:id="@+id/btnAddCategory"
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_gravity="center"
+                android:background="@android:color/white"
+                android:contentDescription="@string/categoryimage"
+                android:src="@android:drawable/ic_menu_add"
+                android:text=">"
+                android:textSize="28sp" />
+        </RelativeLayout>
+    </android.support.v7.widget.CardView>
+</layout>

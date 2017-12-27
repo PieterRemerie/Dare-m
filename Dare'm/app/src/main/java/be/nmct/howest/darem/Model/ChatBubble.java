@@ -6,18 +6,23 @@ package be.nmct.howest.darem.Model;
 
 public class ChatBubble {
     private String content;
-    private boolean myMessage;
+    private String name;
+    private Integer type;
 
-    public ChatBubble(String content, boolean myMessage){
+    public ChatBubble(String content,String name, Integer type){
         this.content = content;
-        this.myMessage = myMessage;
+        this.name = name;
+        this.type = type;
     }
 
     public String getContent(){
         return content;
     }
+    public String getName(){
+        return name;
+    }
 
-    public boolean myMessage(){
-        return myMessage;
+    public Integer getType(){
+        return type;
     }
 }

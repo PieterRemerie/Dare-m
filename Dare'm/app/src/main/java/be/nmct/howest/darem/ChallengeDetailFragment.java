@@ -29,9 +29,19 @@ import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
 import com.squareup.picasso.Picasso;
 
+
 import be.nmct.howest.darem.Loader.Friends;
 import be.nmct.howest.darem.Loader.ParticipantsLoader;
->>>>>>> fbbbfb943f064e3686ecfcd89b1104896ff943dc
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
+import be.nmct.howest.darem.Loader.Friends;
+import be.nmct.howest.darem.Loader.ParticipantsLoader;
 import be.nmct.howest.darem.Model.Challenge;
 import be.nmct.howest.darem.Transforms.CircleTransform;
 import be.nmct.howest.darem.database.Contract;
@@ -43,6 +53,10 @@ public class ChallengeDetailFragment extends Fragment implements LoaderManager.L
     TextView textViewTitle;
     TextView textViewDescription;
     Challenge challenge;
+    private ArrayList<String> friends = new ArrayList<String>();
+    private ArrayList<String> friendsId = new ArrayList<String>();
+    private JSONArray jsonArray = new JSONArray();
+    HashMap<String, String> map = new HashMap<String, String>();
     Button button;
 
     public static ChallengeDetailFragment newInstance() {
@@ -70,12 +84,14 @@ public class ChallengeDetailFragment extends Fragment implements LoaderManager.L
         textViewTitle.setText(challenge.getName());
         textViewDescription.setText(challenge.getDescription());
 
-        button = (Button) v.findViewById(R.id.btn_chat_test);
+        button = (Button) v.findViewById(R.id.button2);
 
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(view.getContext(), ChatActivity.class);
+                Intent intent = new Intent(v.getContext(), ChatActivity.class);
+                intent.putExtra("challenge", challenge);
+                intent.putExtra("friends", map);
                 startActivity(intent);
             }
         });
@@ -83,13 +99,14 @@ public class ChallengeDetailFragment extends Fragment implements LoaderManager.L
         return v;
     }
 
-    private void AddUsersToChatDb(){
-        String url = "https://gastleshowest2017-dc94f.firebaseio.com/users.json";
-    }
-
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
         getLoaderManager().initLoader(0, null, this);
     }
 
@@ -100,12 +117,16 @@ public class ChallengeDetailFragment extends Fragment implements LoaderManager.L
 
     @Override
     public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
-        return new ParticipantsLoader(this.getContext(), "5a37765acd376b001433bf16");
+        return new ParticipantsLoader(this.getContext(), challenge.getDatabaseId());
     }
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        Showparticipants(data);
+        try {
+            Showparticipants(data);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -114,7 +135,7 @@ public class ChallengeDetailFragment extends Fragment implements LoaderManager.L
     }
 
 
-    private void Showparticipants(Cursor data) {
+    private void Showparticipants(Cursor data) throws JSONException {
         horizontalScrollView.removeAllViews();
         data.moveToFirst();
 
@@ -126,6 +147,10 @@ public class ChallengeDetailFragment extends Fragment implements LoaderManager.L
             ImageView iv = new ImageView(getContext());
             Picasso.with(v.getContext()).load(data.getString(colnr3)).transform(new CircleTransform()).into(iv);
             horizontalScrollView.addView(iv);
+            //friends.add(data.getString(colnr2));
+            String id = data.getString(colnr1);
+            String name = data.getString(colnr2);
+            map.put(id, name);
             int width = 150;
             int height = 150;
             LinearLayout.LayoutParams parms = new LinearLayout.LayoutParams(width,height);

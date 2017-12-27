@@ -38,7 +38,10 @@ public class ChallengesLoader extends AsyncTaskLoader<Cursor> {
                 Contract.ChallengesColumns._ID,
                 Contract.ChallengesColumns.COLUMN_CHALLENGE_CREATOR,
                 Contract.ChallengesColumns.COLUMN_CHALLENGE_NAAM,
-                Contract.ChallengesColumns.COLUMN_CHALLENGE_DESCRIPTION
+                Contract.ChallengesColumns.COLUMN_CHALLENGE_DESCRIPTION,
+                Contract.ChallengesColumns.COLUMN_CHALLENGE_DB,
+                Contract.ChallengesColumns.COLUMN_CHALLENGE_CATEGORY,
+                Contract.ChallengesColumns.COLUMN_CHALLENGE_DATE
         };
         mData = getContext().getContentResolver().query(be.nmct.howest.darem.provider.Contract.CHALLENGES_URI, columns, null, null, null);
         mData.setNotificationUri(getContext().getContentResolver() ,be.nmct.howest.darem.provider.Contract.CHALLENGES_URI);

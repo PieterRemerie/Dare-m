@@ -70,8 +70,6 @@ public class ChallengeOverviewFragment extends Fragment{
         challengeOverviewFragmentViewModel = new ChallengeOverviewFragmentViewModel(binding, getContext());
         getActivity().setTitle("OVERVIEW");
 
-
-
         return binding.getRoot();
     }
 
