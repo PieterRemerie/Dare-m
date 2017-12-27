@@ -92,6 +92,10 @@ public class CreateChallengeFragment extends Fragment {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_create_challenge, container, false);
         View v = binding.getRoot();
         bundle = getArguments();
+
+        newChallenge.setCategory("Choose category");
+        newChallenge.setDate("Pick the end date");
+
         if (bundle != null) {
             if (bundle.getStringArrayList("key") != null) {
                 friendsId = bundle.getStringArrayList("key");
@@ -110,9 +114,9 @@ public class CreateChallengeFragment extends Fragment {
             if(bundle.getString("challengeDescr") != null){
                 newChallenge.setDescription(bundle.getString("challengeDescr"));
             }
-            if(bundle.getString("challengeDate") != null){
+            /*if(bundle.getString("challengeDate") != null){
                 newChallenge.setDate(bundle.getString("challengeDate"));
-            }
+            }*/
 
             //friendsId.add(Integer.parseInt(AccessToken.getCurrentAccessToken().getUserId()));
         }
@@ -281,7 +285,7 @@ public class CreateChallengeFragment extends Fragment {
         AddCategoryToChallengeFragment addCategoryToChallengeFragment = new AddCategoryToChallengeFragment();
         addCategoryToChallengeFragment.setArguments(innerBundle);
         fragmentTransaction.replace(R.id.framelayout_in_create_challenge_activity, addCategoryToChallengeFragment);
-        fragmentTransaction.commit();
+        fragmentTransaction.addToBackStack(null).commit();
 
     }
 
@@ -292,9 +296,9 @@ public class CreateChallengeFragment extends Fragment {
         if(newChallenge.getDescription() !=null){
             innerBundle.putString("challengeDescr", newChallenge.getDescription());
         }
-        if(newChallenge.getDate() != null){
+        /*if(newChallenge.getDate() != null){
             innerBundle.putString("challengeDate", newChallenge.getDescription());
-        }
+        }*/
     }
 
 
