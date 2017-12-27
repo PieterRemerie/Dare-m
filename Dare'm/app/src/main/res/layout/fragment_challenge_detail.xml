@@ -32,7 +32,7 @@
                 android:textStyle="bold" />
 
             <ImageView
-                android:id="@+id/imageView5"
+                android:id="@+id/imgCategoryDetail"
                 android:layout_width="75dp"
                 android:layout_height="75dp"
                 android:layout_below="@+id/txtTitle"
@@ -44,7 +44,7 @@
                 android:id="@+id/txtDescription"
                 android:layout_width="300dp"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/imageView5"
+                android:layout_below="@+id/imgCategoryDetail"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="18dp"
                 android:text="In deze challenge moet je 10 keer pompen als het je lukt moet ik je trakteren"
@@ -56,7 +56,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="2dp"
                 android:layout_marginTop="115dp"
-                android:layout_toStartOf="@+id/imageView5"
+                android:layout_toStartOf="@+id/imgCategoryDetail"
                 android:background="#000000"
                 android:visibility="visible" />
 
@@ -66,7 +66,7 @@
                 android:layout_height="2dp"
                 android:layout_alignParentEnd="true"
                 android:layout_marginTop="115dp"
-                android:layout_toEndOf="@+id/imageView5"
+                android:layout_toEndOf="@+id/imgCategoryDetail"
                 android:background="#000000"
                 android:visibility="visible" />
 

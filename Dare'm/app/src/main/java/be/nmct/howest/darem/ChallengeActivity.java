@@ -14,6 +14,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.OperationApplicationException;
 import android.database.Cursor;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -79,6 +81,8 @@ import static be.nmct.howest.darem.provider.Contract.AUTHORITY;
 public class ChallengeActivity extends AppCompatActivity {
 
     private static final String TAG = "FirebaseMessageService";
+    boolean connected = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -102,7 +106,7 @@ public class ChallengeActivity extends AppCompatActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
 
                 Intent intent = new Intent();
-                switch (item.getItemId()){
+                switch (item.getItemId()) {
                     case R.id.yourchallengesDrawer:
                         intent = new Intent(getApplicationContext(), ChallengeActivity.class);
                         startActivity(intent);
@@ -157,8 +161,14 @@ public class ChallengeActivity extends AppCompatActivity {
             }
         });
         syncDataManual();
-        Navigation.setHeaderOfflineData(navigationView, view);
-        Toast.makeText(this.getBaseContext(), "welcome: " + AuthHelper.getUsername(this) + " AUTHTOKEN: " + AuthHelper.getAccessToken(this) + " DBToken: " + AuthHelper.getDbToken(this) , Toast.LENGTH_LONG).show();
+        checkInternet();
+        if (connected) {
+            Navigation.setHeader(navigationView, view);
+        } else {
+            Navigation.setHeaderOfflineData(navigationView, view);
+        }
+
+        Toast.makeText(this.getBaseContext(), "welcome: " + AuthHelper.getUsername(this) + " AUTHTOKEN: " + AuthHelper.getAccessToken(this) + " DBToken: " + AuthHelper.getDbToken(this), Toast.LENGTH_LONG).show();
     }
 
     @Override
@@ -196,8 +206,19 @@ public class ChallengeActivity extends AppCompatActivity {
         settingsBundle.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);
         settingsBundle.putBoolean(ContentResolver.SYNC_EXTRAS_EXPEDITED, true);
 
-        if (AuthHelper.getAccount(getBaseContext())!= null) {
+        if (AuthHelper.getAccount(getBaseContext()) != null) {
             getBaseContext().getContentResolver().requestSync(AuthHelper.getAccount(getBaseContext()), be.nmct.howest.darem.provider.Contract.AUTHORITY, settingsBundle);
         }
     }
+
+    private void checkInternet() {
+        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        if (connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState() == NetworkInfo.State.CONNECTED ||
+                connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState() == NetworkInfo.State.CONNECTED) {
+            //we are connected to a network
+            connected = true;
+        } else
+            connected = false;
+    }
+
 }

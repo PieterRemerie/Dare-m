@@ -114,6 +114,9 @@ public class CreateChallengeFragment extends Fragment {
             if(bundle.getString("challengeDescr") != null){
                 newChallenge.setDescription(bundle.getString("challengeDescr"));
             }
+            if(bundle.getString("challengeDate") != null){
+                newChallenge.setDate(bundle.getString("challengeDate"));
+            }
             /*if(bundle.getString("challengeDate") != null){
                 newChallenge.setDate(bundle.getString("challengeDate"));
             }*/
@@ -136,10 +139,6 @@ public class CreateChallengeFragment extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        /*if(!newChallenge.getName().isEmpty()){
-            Log.i("BLAAAAAAAAA", "dit is niet leeg  " + newChallenge.getName());
-            bundle.putString("Blaa", newChallenge.getName());
-        }*/
     }
 
     @Override
@@ -161,7 +160,7 @@ public class CreateChallengeFragment extends Fragment {
         values.put(Contract.ChallengesColumns.COLUMN_CHALLENGE_CREATOR, AuthHelper.getAccessToken(getContext()));
         values.put(Contract.ChallengesColumns.COLUMN_CHALLENGE_DB, "");
         values.put(Contract.ChallengesColumns.COLUMN_CHALLENGE_CATEGORY,CategoriesData.categories[categoryId] );
-        values.put(Contract.ChallengesColumns.COLUMN_CHALLENGE_DATE, "voorlopig leeg");
+        values.put(Contract.ChallengesColumns.COLUMN_CHALLENGE_DATE, newChallenge.getDate());
 
         executeAsyncTask(new SaveNewChallengeToDBTask(getContext()), values);
     }
@@ -170,7 +169,8 @@ public class CreateChallengeFragment extends Fragment {
         newChallenge.setName("");
         newChallenge.setDescription("");
         newChallenge.setCategoryId(0);
-        newChallenge.setCategory("");
+        newChallenge.setCategory("Choose category");
+        newChallenge.setDate("Pick the end date");
     }
 
     static private <T> void executeAsyncTask(AsyncTask<T, ?, ?> task, T... params) {
@@ -210,7 +210,7 @@ public class CreateChallengeFragment extends Fragment {
                 js.put("name", newChallenge.getName());
                 js.put("description", newChallenge.getDescription());
                 js.put("users", new JSONArray(friendsId));
-                js.put("category", newChallenge.getCategoryId());
+                js.put("category", newChallenge.getCategory());
                 js.put("creatorId", AccessToken.getCurrentAccessToken().getUserId());
                 js.put("isCompleted", "false");
 
@@ -287,6 +287,16 @@ public class CreateChallengeFragment extends Fragment {
         fragmentTransaction.replace(R.id.framelayout_in_create_challenge_activity, addCategoryToChallengeFragment);
         fragmentTransaction.addToBackStack(null).commit();
 
+    }
+
+    public void showAddDateToChallengeFragment(){
+        addItemsToBundle();
+        FragmentManager fragmentManager = getFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        AddDateToChallengeFragment addDateToChallengeFragment = new AddDateToChallengeFragment();
+        addDateToChallengeFragment.setArguments(innerBundle);
+        fragmentTransaction.replace(R.id.framelayout_in_create_challenge_activity, addDateToChallengeFragment);
+        fragmentTransaction.addToBackStack(null).commit();
     }
 
     public void addItemsToBundle(){

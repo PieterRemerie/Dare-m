@@ -6,9 +6,11 @@ import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
 import android.icu.util.Freezable;
+import android.media.Image;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,6 +43,7 @@ import be.nmct.howest.darem.Loader.Friends;
 import be.nmct.howest.darem.Loader.ParticipantsLoader;
 import be.nmct.howest.darem.Model.Challenge;
 import be.nmct.howest.darem.Transforms.CircleTransform;
+import be.nmct.howest.darem.database.CategoriesData;
 import be.nmct.howest.darem.database.Contract;
 
 public class ChallengeDetailFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>  {
@@ -50,6 +53,7 @@ public class ChallengeDetailFragment extends Fragment implements LoaderManager.L
     TextView textViewTitle;
     TextView textViewDescription;
     Challenge challenge;
+    ImageView imgCategory;
     private ArrayList<String> friends = new ArrayList<String>();
     private ArrayList<String> friendsId = new ArrayList<String>();
     private JSONArray jsonArray = new JSONArray();
@@ -77,9 +81,26 @@ public class ChallengeDetailFragment extends Fragment implements LoaderManager.L
         horizontalScrollView = (LinearLayout) v.findViewById(R.id.LinearLayoutImage);
         textViewTitle = (TextView) v.findViewById(R.id.txtTitle);
         textViewDescription = (TextView) v.findViewById(R.id.txtDescription);
+        imgCategory = (ImageView) v.findViewById(R.id.imgCategoryDetail);
 
         textViewTitle.setText(challenge.getName());
         textViewDescription.setText(challenge.getDescription());
+
+        Log.i("Category", challenge.getCategoryId() + "  " + challenge.getCategory());
+
+        int result = -1;
+        for(int i = 0; i < CategoriesData.categories.length ; i++){
+            if(CategoriesData.categories[i].contains(challenge.getCategory())){
+                result = i;
+            }
+        }
+
+        if(result != -1){
+            imgCategory.setImageResource(CategoriesData.imgIds[result]);
+            Log.i("Category", challenge.getCategoryId() + "  " + challenge.getCategory());
+        }
+
+        Log.i("RESULT", String.valueOf(result));
 
         button = (Button) v.findViewById(R.id.button2);
 

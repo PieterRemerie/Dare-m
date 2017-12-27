@@ -65,11 +65,11 @@
                 android:id="@+id/textView11"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignStart="@+id/btnCategory"
-                android:layout_below="@+id/btnCategory"
-                android:layout_marginTop="33dp"
                 android:text="Friends"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:layout_above="@+id/btnAddFriends"
+                android:layout_alignStart="@+id/btnAddFriendsToUser"
+                android:layout_marginBottom="22dp" />
 
             <TextView
                 android:id="@+id/textView12"
@@ -89,7 +89,7 @@
                 android:text="Add Friends"
                 android:textSize="12sp"
                 android:layout_above="@+id/fab_createChal"
-                android:layout_alignStart="@+id/textView11" />
+                android:layout_alignStart="@+id/btnCategory" />
 
             <EditText
                 android:id="@+id/btnCategory"
@@ -101,9 +101,9 @@
                 android:cursorVisible="false"
                 android:focusable="false"
                 android:focusableInTouchMode="false"
+                android:layout_marginTop="16dp"
                 android:layout_below="@+id/textView12"
-                android:layout_alignStart="@+id/textView12"
-                android:layout_marginTop="25dp" />
+                android:layout_alignStart="@+id/textView12" />
 
 
             <EditText
@@ -122,8 +122,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="19dp"
                 android:ems="10"
-                android:onClick=""
-                android:text="Pick the end date"
+                android:onClick="@{() -> test.showAddDateToChallengeFragment()}"
+                android:text="@={Challenge.date}"
                 android:textSize="12sp"
                 android:cursorVisible="false"
                 android:focusable="false"
@@ -157,6 +157,7 @@
 
             <ImageButton
                 android:id="@+id/imageButton"
+                android:onClick="@{() -> test.showAddDateToChallengeFragment()}"
                 android:layout_width="35dp"
                 android:layout_height="35dp"
                 android:layout_alignEnd="@+id/txtDate"
@@ -170,16 +171,18 @@
                 android:id="@+id/fab_createChal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="bottom|right"
-                android:onClick="@{() -> test.saveNewChallenge()}"
-                android:layout_marginEnd="14dp"
                 android:layout_alignParentBottom="true"
                 android:layout_alignParentEnd="true"
+                android:layout_gravity="bottom|right"
                 android:layout_marginBottom="12dp"
-                app:fab_addButtonColorNormal="#9e0101"
-                app:fab_colorPressed="#9e0001"
+                android:layout_marginEnd="14dp"
+                android:background="?attr/colorPrimaryDark"
+                android:onClick="@{() -> test.saveNewChallenge()}"
                 android:src="@drawable/add_challenge_vector"
-                />
+                app:fab_colorPressed="#9e0101"
+                app:fab_addButtonColorNormal="#9e0101"
+                app:fab_colorNormal="#9e0101"
+               />
 
         </RelativeLayout>
 

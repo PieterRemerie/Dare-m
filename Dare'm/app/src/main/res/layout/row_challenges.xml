@@ -28,7 +28,8 @@
                 android:layout_centerVertical="true"
                 android:layout_gravity="center"
                 android:padding="5dp"
-                app:srcCompat="@drawable/football" />
+                android:src="@{challenge.categoryId}"
+                />
 
             <TextView
                 android:id="@+id/textViewChallenge"
@@ -52,7 +53,7 @@
                 android:layout_below="@+id/textViewChallenge"
                 android:layout_marginTop="10dp"
                 android:padding="5dp"
-                android:text="@{challenge.description}" />
+                android:text="@{challenge.categoryId}" />
 
             <ImageView
                 android:id="@+id/imageView6"

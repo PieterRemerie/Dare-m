@@ -14,4 +14,9 @@
         <item name="android:colorAccent">@color/colorPrimaryDark</item>
         <item name="android:statusBarColor">#000000</item>
     </style>
+    <style name="datepicker" parent="Theme.AppCompat.Light.Dialog">
+        <item name="colorPrimary">#f0c90404</item>
+        <item name="colorPrimaryDark">#9e0101</item>
+        <item name="colorAccent">#a04646</item>
+    </style>
 </resources>
