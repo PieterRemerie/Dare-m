@@ -219,6 +219,7 @@ public class CreateChallengeFragment extends Fragment {
                 Log.i("STATUS", String.valueOf(conn.getResponseCode()));
                 Log.i("MSG", conn.getResponseMessage());
 
+
                 if (conn.getResponseCode() == 200) {
                     DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Notifications");
                     reference.removeValue();
@@ -250,7 +251,6 @@ public class CreateChallengeFragment extends Fragment {
         Notification notification = new Notification("10212082552953938", "this is a message");
         reference.setValue(notification);
     }
-
         private void syncDataManual() {
             Bundle settingsBundle = new Bundle();
             settingsBundle.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);

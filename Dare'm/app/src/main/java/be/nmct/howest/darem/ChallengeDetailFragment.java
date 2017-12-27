@@ -29,6 +29,9 @@ import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
 import com.squareup.picasso.Picasso;
 
+
+import be.nmct.howest.darem.Loader.Friends;
+import be.nmct.howest.darem.Loader.ParticipantsLoader;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
