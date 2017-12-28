@@ -114,6 +114,9 @@ public class AddFriendToChallengeFragment extends Fragment {
         if(bundle.getString("challengeDate" )!= null){
             args.putString("challengeDate",bundle.getString("challengeDate" ));
         }
+        if(bundle.getInt("categoryId" )!= 0){
+            args.putInt("categoryId", bundle.getInt("categoryId" ));
+        }
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         CreateChallengeFragment createChallengeFragment = new CreateChallengeFragment();
         createChallengeFragment.setArguments(args);
