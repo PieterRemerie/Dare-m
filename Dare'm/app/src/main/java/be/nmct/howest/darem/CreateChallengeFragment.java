@@ -306,9 +306,12 @@ public class CreateChallengeFragment extends Fragment {
         if(newChallenge.getDescription() !=null){
             innerBundle.putString("challengeDescr", newChallenge.getDescription());
         }
-        /*if(newChallenge.getDate() != null){
-            innerBundle.putString("challengeDate", newChallenge.getDescription());
-        }*/
+        if(!newChallenge.getDate().equals("Pick the end date")){
+            innerBundle.putString("challengeDate", newChallenge.getDate());
+        }
+        if(!newChallenge.getCategory().equals("Choose category")){
+            innerBundle.putInt("categoryId", newChallenge.getCategoryId());
+        }
     }
 
 
