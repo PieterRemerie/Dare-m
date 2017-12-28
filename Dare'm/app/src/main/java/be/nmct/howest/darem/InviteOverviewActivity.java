@@ -67,7 +67,16 @@ public class InviteOverviewActivity extends AppCompatActivity {
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         InviteOverviewFragment inviteOverviewFragment = new InviteOverviewFragment();
         fragmentTransaction.replace(R.id.framelayout_in_invite_overview_activity, inviteOverviewFragment);
-        fragmentTransaction.commit();
+        fragmentTransaction.addToBackStack(null).commit();
 
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (getFragmentManager().getBackStackEntryCount() == 0) {
+            this.finish();
+        } else {
+            getFragmentManager().popBackStack();
+        }
     }
 }

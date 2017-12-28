@@ -44,6 +44,8 @@ import be.nmct.howest.darem.Loader.Challenge;
 import be.nmct.howest.darem.Loader.Friends;
 import be.nmct.howest.darem.Loader.InviteChallenge;
 import be.nmct.howest.darem.auth.AuthHelper;
+import be.nmct.howest.darem.database.CategoriesData;
+import be.nmct.howest.darem.database.Contract;
 
 
 public class InviteOverviewFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
@@ -103,10 +105,12 @@ public class InviteOverviewFragment extends Fragment implements LoaderManager.Lo
             int colnr1 = mCursor.getColumnIndex(Challenge.Columns.COLUMN_NAME);
             int colnr2 = mCursor.getColumnIndex(Challenge.Columns.COLUMN_DESCRIPTION);
             int colnr3 = mCursor.getColumnIndex(Challenge.Columns._ID);
+            int colnr4 = mCursor.getColumnIndex(Challenge.Columns.COLUMN_CATEGORY);
 
+            int i = checkCategory(mCursor.getString(colnr4));
 
             holder.textViewChallengeNaam.setText(mCursor.getString(colnr1));
-            holder.imageViewCategory.setImageResource(R.drawable.football);
+            holder.imageViewCategory.setImageResource(CategoriesData.imgIds[i]);
             holder.challengeId = mCursor.getString(colnr3);
             holder.challengeName = mCursor.getString(colnr1);
             holder.challengeDescription = mCursor.getString(colnr2);
@@ -116,6 +120,16 @@ public class InviteOverviewFragment extends Fragment implements LoaderManager.Lo
         @Override
         public int getItemCount() {
             return mCursor.getCount();
+        }
+
+        public int checkCategory (String cat){
+            int result = 0;
+            for(int i = 0 ; i < CategoriesData.categories.length ; i++){
+                if(CategoriesData.categories[i].contains(cat)){
+                    result = i;
+                }
+            }
+            return result;
         }
     }
 
@@ -155,11 +169,9 @@ public class InviteOverviewFragment extends Fragment implements LoaderManager.Lo
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         InviteDetailFragment inviteDetailFragment = new InviteDetailFragment();
         inviteDetailFragment.setArguments(bundle);
+        fragmentTransaction.remove(this);
         fragmentTransaction.replace(R.id.framelayout_in_invite_overview_activity, inviteDetailFragment);
-        fragmentTransaction.commit();
-
+        fragmentTransaction.addToBackStack(null).commit();
     }
-
-
 
 }

@@ -59,7 +59,8 @@ public class InviteChallenge extends AsyncTaskLoader<Cursor> {
             String[] mColumnNames = new String[]{
                     Challenge.Columns._ID,
                     Challenge.Columns.COLUMN_NAME,
-                    Challenge.Columns.COLUMN_DESCRIPTION
+                    Challenge.Columns.COLUMN_DESCRIPTION,
+                    Challenge.Columns.COLUMN_CATEGORY
             };
 
             final MatrixCursor cursor = new MatrixCursor(mColumnNames);
@@ -79,6 +80,7 @@ public class InviteChallenge extends AsyncTaskLoader<Cursor> {
                         row.add(obj.getString("_id"));
                         row.add(obj.getString("name"));
                         row.add(obj.getString("description"));
+                        row.add(obj.getString("category"));
                     }
                 }
 

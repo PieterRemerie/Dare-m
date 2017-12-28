@@ -193,7 +193,7 @@ public class ChallengeActivity extends AppCompatActivity {
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         ChallengeOverviewFragment challengesOverviewFragment = new ChallengeOverviewFragment();
         fragmentTransaction.replace(R.id.framelayout_in_challengeactivity, challengesOverviewFragment);
-        fragmentTransaction.commit();
+        fragmentTransaction.addToBackStack("showChallengesOverviewFragment").commit();
     }
 
     private void DeletePreviousDBUser() throws RemoteException, OperationApplicationException {
