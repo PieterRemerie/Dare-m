@@ -87,6 +87,9 @@
                 android:layout_height="wrap_content"
                 android:onClick="@{() -> test.showAddFriendToChallengeFragment()}"
                 android:text="Add Friends"
+                android:cursorVisible="false"
+                android:focusable="false"
+                android:focusableInTouchMode="false"
                 android:textSize="12sp"
                 android:layout_above="@+id/fab_createChal"
                 android:layout_alignStart="@+id/btnCategory" />
