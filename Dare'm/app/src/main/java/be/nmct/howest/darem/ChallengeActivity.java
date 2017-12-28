@@ -14,6 +14,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.OperationApplicationException;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
@@ -67,8 +68,10 @@ import be.nmct.howest.darem.Model.Notification;
 import be.nmct.howest.darem.Navigation.Navigation;
 import be.nmct.howest.darem.Transforms.CircleTransform;
 import be.nmct.howest.darem.auth.AuthHelper;
+import be.nmct.howest.darem.database.CategoriesData;
 import be.nmct.howest.darem.database.Contract;
 import be.nmct.howest.darem.database.DatabaseHelper;
+import be.nmct.howest.darem.database.SaveCategoriesToDBTask;
 import be.nmct.howest.darem.database.SaveNewChallengeToDBTask;
 import be.nmct.howest.darem.database.SaveNewUserToDBTask;
 import be.nmct.howest.darem.firebase.MyFirebaseInstanceIDService;
@@ -87,6 +90,7 @@ public class ChallengeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        saveCategories();
         FirebaseMessaging.getInstance().subscribeToTopic(AccessToken.getCurrentAccessToken().getUserId());
 
         View view = getLayoutInflater().inflate(R.layout.activity_challenge, null);
@@ -144,6 +148,7 @@ public class ChallengeActivity extends AppCompatActivity {
         if (savedInstanceState == null) {
             showChallengesOverviewFragment();
         }
+        syncDataManual();
         final FloatingActionButton fabChallenges = (FloatingActionButton) findViewById(R.id.fab_addChallenge);
         fabChallenges.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -160,7 +165,6 @@ public class ChallengeActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-        syncDataManual();
         checkInternet();
         if (connected) {
             Navigation.setHeader(navigationView, view);
@@ -221,4 +225,35 @@ public class ChallengeActivity extends AppCompatActivity {
             connected = false;
     }
 
+    private void saveCategories() {
+
+        Cursor mData;
+        DatabaseHelper helper = DatabaseHelper.getINSTANCE(getApplicationContext());
+        SQLiteDatabase db = helper.getReadableDatabase();
+        mData = db.query(Contract.CategoryDB.TABLE_NAME,
+                new String[]{
+                        Contract.CategoryColumns._ID}, null, null, null, null, null);
+        mData.getCount();
+
+        if(mData.getCount() <=0){
+            String[] cats = CategoriesData.categories;
+            String[] imgs = CategoriesData.images;
+
+            ContentValues value = new ContentValues();
+
+            for(int i = 0; i < cats.length ; i++){
+                value.put(Contract.CategoryColumns.COLUMN_CATEGORY_NAME, cats[i]);
+                value.put(Contract.CategoryColumns.COLUMN_CATEGORY_IMG, imgs[i]);
+                Log.i("VALUES", value.toString());
+
+                try {
+                    new SaveCategoriesToDBTask(getApplicationContext()).execute(value).get();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                } catch (ExecutionException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
 }

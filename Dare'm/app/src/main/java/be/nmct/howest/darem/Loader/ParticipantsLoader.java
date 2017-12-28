@@ -64,9 +64,10 @@ public class ParticipantsLoader extends AsyncTaskLoader<Cursor> {
             if (mCursor != null) return;
 
             String[] mColumnNames = new String[]{
-                    Friends.Columns._ID,
-                    Friends.Columns.COLUMN_NAME,
-                    Friends.Columns.COLUMN_PICTURE
+                    ParticipantsContract.Columns._ID,
+                    ParticipantsContract.Columns.COLUMN_NAME,
+                    ParticipantsContract.Columns.COLUMN_PICTURE,
+                    ParticipantsContract.Columns.COLUMN_COMPLETED
             };
 
             final MatrixCursor cursor = new MatrixCursor(mColumnNames);
@@ -78,16 +79,31 @@ public class ParticipantsLoader extends AsyncTaskLoader<Cursor> {
 
                 if (jsonData != null) {
                     MatrixCursor.RowBuilder row;
+
+                    String id = new JSONArray(jsonData).getJSONObject(0).getString("_id");
+
                     JSONArray jsonArr = new JSONArray(jsonData).getJSONObject(0).getJSONArray("usersArray");
 
 
                     for (int i = 0; i < jsonArr.length(); i++) {
+                        JSONArray array = jsonArr.getJSONObject(i).getJSONArray("acceptedChallenges");
                         JSONObject obj = jsonArr.getJSONObject(i).getJSONObject("facebook");
 
                         row = cursor.newRow();
                         row.add(obj.getString("id"));
                         row.add(obj.getString("name"));
                         row.add(obj.getString("photo"));
+
+                        for(int n = 0; n < array.length(); n++)
+                        {
+                            JSONObject object = array.getJSONObject(n);
+
+                            String challenge = object.getString("_id");
+                            if(challenge.equals(id)){
+                                row.add(object.getString("isCompleted"));
+                            }
+                        }
+                        String s = "";
                     }
                 }
 

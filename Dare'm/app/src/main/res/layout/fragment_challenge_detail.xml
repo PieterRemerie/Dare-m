@@ -90,14 +90,27 @@
 
             <Button
                 android:id="@+id/button2"
-                android:layout_width="wrap_content"
+                android:layout_width="170dp"
                 android:layout_height="wrap_content"
+                android:layout_alignEnd="@+id/SplitLine_hor2"
                 android:layout_alignParentBottom="true"
-                android:layout_alignParentEnd="true"
                 android:layout_alignParentStart="true"
                 android:background="#8c0017"
                 android:fontFamily="monospace"
                 android:text="Chat"
+                android:textColor="@android:color/white"
+                android:textSize="18sp" />
+
+            <Button
+                android:id="@+id/btnCompleted"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_above="@+id/button2"
+                android:layout_alignEnd="@+id/SplitLine_hor2"
+                android:layout_marginBottom="13dp"
+                android:background="#179301"
+                android:fontFamily="monospace"
+                android:text="COMPLETED"
                 android:textColor="@android:color/white"
                 android:textSize="18sp" />
 

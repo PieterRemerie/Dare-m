@@ -212,7 +212,7 @@ public class CreateChallengeFragment extends Fragment {
                 js.put("users", new JSONArray(friendsId));
                 js.put("category", newChallenge.getCategory());
                 js.put("creatorId", AccessToken.getCurrentAccessToken().getUserId());
-                js.put("isCompleted", "false");
+                js.put("isCompleted", 0);
 
                 DataOutputStream os = new DataOutputStream(conn.getOutputStream());
                 os.writeBytes(js.toString());

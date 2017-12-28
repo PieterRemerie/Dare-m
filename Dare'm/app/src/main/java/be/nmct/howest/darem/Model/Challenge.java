@@ -22,6 +22,7 @@ public class Challenge extends BaseObservable implements Parcelable {
     private String friends;
     private int categoryId;
     private String databaseId;
+    private Boolean completed;
 
 
     public Challenge(){}
@@ -141,4 +142,11 @@ public class Challenge extends BaseObservable implements Parcelable {
     };
 
 
+    public Boolean getCompleted() {
+        return completed;
+    }
+
+    public void setCompleted(Boolean completed) {
+        this.completed = completed;
+    }
 }

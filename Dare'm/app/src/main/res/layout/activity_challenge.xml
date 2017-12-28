@@ -64,23 +64,23 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|end"
             android:layout_margin="@dimen/fab_margin"
-            app:fab_addButtonColorNormal="#9e0101"
+            app:fab_addButtonColorNormal="#9e2929"
             app:fab_colorPressed="#9e0001">
             <com.getbase.floatingactionbutton.FloatingActionButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/fab_addChallenge"
                 app:fab_colorPressed="#a04646"
-                app:fab_addButtonColorNormal="#a04646"
-                app:fab_colorNormal="#a04646"
+                app:fab_addButtonColorNormal="#9e2929"
+                app:fab_colorNormal="#9e2929"
                 android:src="@drawable/add_challenge_vector" />
             <com.getbase.floatingactionbutton.FloatingActionButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/fab_addFriends"
                 app:fab_colorPressed="#a04646"
-                app:fab_addButtonColorNormal="#a04646"
-                app:fab_colorNormal="#a04646"
+                app:fab_addButtonColorNormal="#9e2929"
+                app:fab_colorNormal="#9e2929"
                 android:src="@drawable/add_friends_vector" />
         </com.getbase.floatingactionbutton.FloatingActionsMenu>
     </android.support.design.widget.CoordinatorLayout>
