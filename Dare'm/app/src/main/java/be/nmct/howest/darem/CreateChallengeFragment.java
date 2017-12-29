@@ -40,6 +40,8 @@ import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
 import java.sql.Time;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -216,7 +218,12 @@ public class CreateChallengeFragment extends Fragment {
                 js.put("category", newChallenge.getCategory());
                 js.put("creatorId", AccessToken.getCurrentAccessToken().getUserId());
                 js.put("isCompleted", 0);
-                js.put("endDate", newChallenge.getDate());
+
+                SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+                Date mDate = sdf.parse(newChallenge.getDate());
+                long timeInMilliseconds = mDate.getTime();
+
+                js.put("endDate", timeInMilliseconds);
 
 
                 DataOutputStream os = new DataOutputStream(conn.getOutputStream());
@@ -247,6 +254,8 @@ public class CreateChallengeFragment extends Fragment {
             } catch (IOException e) {
                 Log.i("ee", "IOException: " + e.getMessage());
             } catch (JSONException e) {
+                e.printStackTrace();
+            } catch (ParseException e) {
                 e.printStackTrace();
             }
         }

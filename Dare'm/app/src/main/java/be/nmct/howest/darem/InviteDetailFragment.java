@@ -46,6 +46,7 @@ import be.nmct.howest.darem.Viewmodel.ChallengeOverviewFragmentViewModel;
 import be.nmct.howest.darem.auth.AuthHelper;
 import be.nmct.howest.darem.database.CategoriesData;
 import be.nmct.howest.darem.databinding.FragmentInviteDetailBinding;
+import be.nmct.howest.darem.sync.SyncManual;
 
 
 public class InviteDetailFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>   {
@@ -199,7 +200,7 @@ public class InviteDetailFragment extends Fragment implements LoaderManager.Load
                 Log.i("MSG", conn.getResponseMessage());
 
                 if(conn.getResponseCode() == 200){
-                    syncDataManual();
+                    SyncManual.syncDataManual(getContext());
                 }
                 conn.disconnect();
                 Log.i("ee", "SEND: DONE");
@@ -218,16 +219,4 @@ public class InviteDetailFragment extends Fragment implements LoaderManager.Load
         }
 
     }
-
-    private void syncDataManual() {
-        Bundle settingsBundle = new Bundle();
-        settingsBundle.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);
-        settingsBundle.putBoolean(ContentResolver.SYNC_EXTRAS_EXPEDITED, true);
-
-        if (AuthHelper.getAccount(getContext())!= null) {
-            getContext().getContentResolver().requestSync(AuthHelper.getAccount(getContext()), be.nmct.howest.darem.provider.Contract.AUTHORITY, settingsBundle);
-        }
-    }
-
-
 }

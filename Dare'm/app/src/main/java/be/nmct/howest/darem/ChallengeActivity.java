@@ -77,6 +77,7 @@ import be.nmct.howest.darem.database.SaveCategoriesToDBTask;
 import be.nmct.howest.darem.database.SaveNewChallengeToDBTask;
 import be.nmct.howest.darem.database.SaveNewUserToDBTask;
 import be.nmct.howest.darem.firebase.MyFirebaseInstanceIDService;
+import be.nmct.howest.darem.sync.SyncManual;
 
 import com.google.firebase.auth.FirebaseAuthException;
 
@@ -150,7 +151,9 @@ public class ChallengeActivity extends AppCompatActivity {
         if (savedInstanceState == null) {
             showChallengesOverviewFragment();
         }
-        syncDataManual();
+
+        SyncManual.syncDataManual(getApplicationContext());
+
         final FloatingActionButton fabChallenges = (FloatingActionButton) findViewById(R.id.fab_addChallenge);
         fabChallenges.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -195,17 +198,7 @@ public class ChallengeActivity extends AppCompatActivity {
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         ChallengeOverviewFragment challengesOverviewFragment = new ChallengeOverviewFragment();
         fragmentTransaction.replace(R.id.framelayout_in_challengeactivity, challengesOverviewFragment);
-        fragmentTransaction.addToBackStack("showChallengesOverviewFragment").commit();
-    }
-
-    private void syncDataManual() {
-        Bundle settingsBundle = new Bundle();
-        settingsBundle.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);
-        settingsBundle.putBoolean(ContentResolver.SYNC_EXTRAS_EXPEDITED, true);
-
-        if (AuthHelper.getAccount(getBaseContext()) != null) {
-            getBaseContext().getContentResolver().requestSync(AuthHelper.getAccount(getBaseContext()), be.nmct.howest.darem.provider.Contract.AUTHORITY, settingsBundle);
-        }
+        fragmentTransaction.commit();
     }
 
     private void checkInternet() {

@@ -47,6 +47,7 @@ import be.nmct.howest.darem.database.ChallengesLoader;
 import be.nmct.howest.darem.database.Contract;
 import be.nmct.howest.darem.databinding.FragmentChallengeOverviewBinding;
 import be.nmct.howest.darem.databinding.RowChallengesBinding;
+import be.nmct.howest.darem.sync.SyncManual;
 
 import static be.nmct.howest.darem.provider.Contract.AUTHORITY;
 
@@ -69,6 +70,8 @@ public class ChallengeOverviewFragment extends Fragment{
         binding.recyclerviewChallenges.setLayoutManager(new LinearLayoutManager(this.getActivity()));
         challengeOverviewFragmentViewModel = new ChallengeOverviewFragmentViewModel(binding, getContext());
         getActivity().setTitle("OVERVIEW");
+
+        SyncManual.syncDataManual(getContext());
 
         return binding.getRoot();
     }
