@@ -71,7 +71,7 @@ public class ChallengeOverviewFragment extends Fragment{
         challengeOverviewFragmentViewModel = new ChallengeOverviewFragmentViewModel(binding, getContext());
         getActivity().setTitle("OVERVIEW");
 
-        SyncManual.syncDataManual(getContext());
+        //SyncManual.syncDataManual(getContext());
 
         return binding.getRoot();
     }

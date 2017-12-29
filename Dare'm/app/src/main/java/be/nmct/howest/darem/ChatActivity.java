@@ -1,14 +1,20 @@
 package be.nmct.howest.darem;
 
+import android.*;
+import android.Manifest;
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.Image;
 import android.net.Uri;
+import android.os.Build;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -57,6 +63,7 @@ import java.util.Objects;
 import be.nmct.howest.darem.Adapter.MessageAdapter;
 import be.nmct.howest.darem.Model.Challenge;
 import be.nmct.howest.darem.Model.ChatBubble;
+import be.nmct.howest.darem.auth.AuthHelper;
 
 public class ChatActivity extends AppCompatActivity {
 
@@ -115,15 +122,8 @@ public class ChatActivity extends AppCompatActivity {
             Bundle bundle = getIntent().getExtras();
             challenge = bundle.getParcelable("challenge");
             mapje = (HashMap<String, String>)bundle.getSerializable("friends");
-
-
         }
-        Firebase.setAndroidContext(this);
 
-        mStorage = FirebaseStorage.getInstance().getReference();
-        reference1 = new Firebase("https://gastleshowest2017-dc94f.firebaseio.com/messages/" + challenge.getName() +"/_friends" );
-        reference3 = new Firebase("https://gastleshowest2017-dc94f.firebaseio.com/chat/" + challenge.getName() + "/users/");
-        reference4 = new Firebase("https://gastleshowest2017-dc94f.firebaseio.com/chat/"+ challenge.getName() + "/messages/");
         btnSend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -136,6 +136,36 @@ public class ChatActivity extends AppCompatActivity {
                 }
             }
         });
+
+
+
+        btnImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                isReadStoragePermissionGranted();
+            }
+        });
+        btnCamera.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                isWriteStoragePermissionGranted();
+            }
+        });
+
+
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Firebase.setAndroidContext(this);
+
+        mStorage = FirebaseStorage.getInstance().getReference();
+        reference1 = new Firebase("https://gastleshowest2017-dc94f.firebaseio.com/messages/" + challenge.getDatabaseId() +"/_friends" );
+        reference3 = new Firebase("https://gastleshowest2017-dc94f.firebaseio.com/chat/" + challenge.getDatabaseId() + "/users/");
+        reference4 = new Firebase("https://gastleshowest2017-dc94f.firebaseio.com/chat/"+ challenge.getDatabaseId() + "/messages/");
+
         reference4.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
@@ -190,24 +220,68 @@ public class ChatActivity extends AppCompatActivity {
 
             }
         });
+    }
 
-        btnImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+    public  boolean isReadStoragePermissionGranted() {
+        if (Build.VERSION.SDK_INT >= 23) {
+            if (checkSelfPermission(android.Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+                Log.v("","Permission is granted1");
                 Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                 startActivityForResult(intent, GALLERY_INTENT);
+                return true;
+            } else {
+                Log.v("","Permission is revoked1");
+                ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.READ_EXTERNAL_STORAGE}, 3);
+                return false;
             }
-        });
-        btnCamera.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        }
+        else { //permission is automatically granted on sdk<23 upon installation
+            Log.v("","Permission is granted1");
+            return true;
+        }
+    }
+
+    public  boolean isWriteStoragePermissionGranted() {
+        if (Build.VERSION.SDK_INT >= 23) {
+            if (checkSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+                Log.v("","Permission is granted2");
                 Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                 startActivityForResult(intent, CAMERA_INTENT);
+                return true;
+            } else {
+                Log.v("","Permission is revoked2");
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 2);
+                return false;
             }
-        });
+        }
+        else { //permission is automatically granted on sdk<23 upon installation
+            Log.v("","Permission is granted2");
+            return true;
+        }
+    }
 
-
-
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode) {
+            case 2:
+                Log.d("", "External storage2");
+                if(grantResults[0]== PackageManager.PERMISSION_GRANTED){
+                    Log.v("","Permission: "+permissions[0]+ "was "+ grantResults[0]);
+                    //resume tasks needing this permission
+                    Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                    startActivityForResult(intent, CAMERA_INTENT);
+                }
+                break;
+            case 3:
+                Log.d("", "External storage1");
+                if(grantResults[0]== PackageManager.PERMISSION_GRANTED){
+                    Log.v("","Permission: "+permissions[0]+ "was "+ grantResults[0]);
+                    Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                    startActivityForResult(intent, GALLERY_INTENT);
+                }
+                break;
+        }
     }
 
     @Override
@@ -239,13 +313,11 @@ public class ChatActivity extends AppCompatActivity {
         messageArea.setText("");
     }
     private void UploadImage(Intent data) throws IOException {
-
-
         Uri uri = data.getData();
-        filepath = mStorage.child(challenge.getName()).child(AccessToken.getCurrentAccessToken().getUserId() + System.currentTimeMillis());
+        filepath = mStorage.child(challenge.getName()).child(AuthHelper.getAccessToken(getApplicationContext()) + System.currentTimeMillis());
         Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 25, bytes);
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 15, bytes);
         byte[] compressed = bytes.toByteArray();
         UploadTask uploadTask = filepath.putBytes(compressed);
         uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
@@ -260,5 +332,17 @@ public class ChatActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelable("challenge", challenge);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        challenge = savedInstanceState.getParcelable("challenge");
     }
 }

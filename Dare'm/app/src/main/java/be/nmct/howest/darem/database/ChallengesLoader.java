@@ -9,6 +9,8 @@ import android.util.Log;
 
 import java.io.Console;
 
+import be.nmct.howest.darem.Loader.Challenge;
+
 /**
  * Created by Piete_000 on 29/10/2017.
  */
@@ -43,7 +45,7 @@ public class ChallengesLoader extends AsyncTaskLoader<Cursor> {
                 Contract.ChallengesColumns.COLUMN_CHALLENGE_CATEGORY,
                 Contract.ChallengesColumns.COLUMN_CHALLENGE_DATE
         };
-        mData = getContext().getContentResolver().query(be.nmct.howest.darem.provider.Contract.CHALLENGES_URI, columns, null, null, null);
+        mData = getContext().getContentResolver().query(be.nmct.howest.darem.provider.Contract.CHALLENGES_URI, columns, null, null, "ASC");
         mData.setNotificationUri(getContext().getContentResolver() ,be.nmct.howest.darem.provider.Contract.CHALLENGES_URI);
         mData.getCount();
         return mData;
