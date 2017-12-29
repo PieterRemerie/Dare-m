@@ -14,6 +14,14 @@
         <item name="android:colorAccent">@color/colorPrimaryDark</item>
         <item name="android:statusBarColor">#000000</item>
     </style>
+
+    <style name="AppTheme2" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">false</item>
+        <item name="android:windowFullscreen">false</item>
+        <item name="android:colorAccent">@color/colorPrimaryDark</item>
+        <item name="android:statusBarColor">#000000</item>
+    </style>
     <style name="datepicker" parent="Theme.AppCompat.Light.Dialog">
         <item name="colorPrimary">#f0c90404</item>
         <item name="colorPrimaryDark">#9e0101</item>

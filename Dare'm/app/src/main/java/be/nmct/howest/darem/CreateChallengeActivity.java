@@ -14,6 +14,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.WindowManager;
 
 import be.nmct.howest.darem.Navigation.Navigation;
 
@@ -24,6 +25,8 @@ public class CreateChallengeActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_challenge);
+
+        setTitle("Create challenge");
 
         if(savedInstanceState == null){
             showCreateChallengeFragment();
@@ -79,6 +82,6 @@ public class CreateChallengeActivity extends AppCompatActivity
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         CreateChallengeFragment createChallengeFragment = new CreateChallengeFragment();
         fragmentTransaction.replace(R.id.framelayout_in_create_challenge_activity, createChallengeFragment);
-        fragmentTransaction.addToBackStack(null).commit();
+        fragmentTransaction.commit();
     }
 }

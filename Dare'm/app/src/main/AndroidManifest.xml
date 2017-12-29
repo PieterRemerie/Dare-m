@@ -63,8 +63,7 @@
         <activity android:name=".AddFriendsActivity" />
         <activity
             android:name=".CreateChallengeActivity"
-            android:label="@string/title_activity_create_challenge"
-            android:theme="@style/AppTheme"></activity>
+            android:label="@string/title_activity_create_challenge"></activity>
 
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"

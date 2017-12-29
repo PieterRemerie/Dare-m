@@ -76,6 +76,8 @@ public class InviteOverviewActivity extends AppCompatActivity {
             }
         });
 
+        setTitle("Invites");
+
         Navigation.setHeaderOfflineData(navigationView, view);
 
         if(savedInstanceState == null){

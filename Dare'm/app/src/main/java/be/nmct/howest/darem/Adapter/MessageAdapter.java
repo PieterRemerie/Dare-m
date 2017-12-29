@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Matrix;
 import android.net.Uri;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
@@ -78,7 +80,7 @@ public class MessageAdapter extends ArrayAdapter<ChatBubble> {
                 @Override
                 public void onSuccess(byte[] bytes) {
                     bitmap = BitmapFactory.decodeByteArray(bytes,0,bytes.length);
-                    holder.image.setImageBitmap(Bitmap.createScaledBitmap(bitmap, 350,350,true));
+                    holder.image.setImageBitmap(RotateBitmap(Bitmap.createScaledBitmap(bitmap, 350,350,true), 90));
                     bitmap.recycle();
                     holder.name.setText(ChatBubble.getName());
 
@@ -91,6 +93,12 @@ public class MessageAdapter extends ArrayAdapter<ChatBubble> {
         return convertView;
     }
 
+    public static Bitmap RotateBitmap(Bitmap source, float angle)
+    {
+        Matrix matrix = new Matrix();
+        matrix.postRotate(angle);
+        return Bitmap.createBitmap(source, 0, 0, source.getWidth(), source.getHeight(), matrix, true);
+    }
 
     @Override
     public int getViewTypeCount() {

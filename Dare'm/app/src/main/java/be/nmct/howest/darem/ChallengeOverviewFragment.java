@@ -69,7 +69,7 @@ public class ChallengeOverviewFragment extends Fragment{
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_challenge_overview, container, false);
         binding.recyclerviewChallenges.setLayoutManager(new LinearLayoutManager(this.getActivity()));
         challengeOverviewFragmentViewModel = new ChallengeOverviewFragmentViewModel(binding, getContext());
-        getActivity().setTitle("OVERVIEW");
+        getActivity().setTitle("Overview");
 
         //SyncManual.syncDataManual(getContext());
 

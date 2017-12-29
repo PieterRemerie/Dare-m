@@ -73,6 +73,8 @@ public class InviteDetailFragment extends Fragment implements LoaderManager.Load
 
         v = inflater.inflate(R.layout.fragment_invite_detail, container, false);
 
+        getActivity().setTitle("Detail");
+
         horizontalScrollView = (LinearLayout) v.findViewById(R.id.LinearLayoutImage);
         ChallengeName = (TextView) v.findViewById(R.id.textviewChallengeNaamInvitesDetail);
         ChallengeDescription = (TextView) v.findViewById(R.id.txtDescription);
@@ -94,7 +96,7 @@ public class InviteDetailFragment extends Fragment implements LoaderManager.Load
             ChallengeName.setText(challengeName);
             ChallengeDescription.setText(challengeDesc);
 
-            String dateString = DateFormat.format("dd/MM:yyyy", Long.parseLong(getArguments().getString("challengeDate"))).toString();
+            String dateString = DateFormat.format("dd/MM/yyyy", Long.parseLong(getArguments().getString("challengeDate"))).toString();
             textViewDate.setText("Ends on: " +  dateString);
 
 

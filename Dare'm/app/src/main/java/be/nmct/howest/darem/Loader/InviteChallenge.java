@@ -16,6 +16,8 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Calendar;
+import java.util.Date;
 
 import be.nmct.howest.darem.auth.AuthHelper;
 
@@ -69,7 +71,6 @@ public class InviteChallenge extends AsyncTaskLoader<Cursor> {
             String jsonData = downloadJSON();
 
             try {
-
                 if (jsonData != null) {
                     MatrixCursor.RowBuilder row;
                     JSONArray json = new JSONArray(jsonData).getJSONObject(0).getJSONArray("challengesArray");
@@ -77,15 +78,16 @@ public class InviteChallenge extends AsyncTaskLoader<Cursor> {
                     for (int i = 0; i <  json.length(); i++) {
                         JSONObject obj = json.getJSONObject(i);
 
-                        row = cursor.newRow();
-                        row.add(obj.getString("_id"));
-                        row.add(obj.getString("name"));
-                        row.add(obj.getString("description"));
-                        row.add(obj.getString("category"));
-                        row.add(obj.getString("endDate"));
+                        if(currentTimeEndOfDay() < Long.parseLong(obj.getString("endDate"))){
+                            row = cursor.newRow();
+                            row.add(obj.getString("_id"));
+                            row.add(obj.getString("name"));
+                            row.add(obj.getString("description"));
+                            row.add(obj.getString("category"));
+                            row.add(obj.getString("endDate"));
+                        }
                     }
                 }
-
             } catch (JSONException e) {
                 e.printStackTrace();
                 Log.i("ERROR", e.getMessage());
@@ -96,6 +98,15 @@ public class InviteChallenge extends AsyncTaskLoader<Cursor> {
 
         }
 
+    }
+
+
+    private static long currentTimeEndOfDay(){
+        Date date = new Date();
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        long timeToMilliseconds = calendar.getTimeInMillis();
+        return timeToMilliseconds;
     }
 
     private String downloadJSON() {

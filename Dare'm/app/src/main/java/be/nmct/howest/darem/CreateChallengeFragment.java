@@ -223,9 +223,14 @@ public class CreateChallengeFragment extends Fragment {
 
                 SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
                 Date mDate = sdf.parse(newChallenge.getDate());
-                long timeInMilliseconds = mDate.getTime();
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTime(mDate);
+                calendar.set(Calendar.HOUR_OF_DAY, 23);
+                calendar.set(Calendar.MINUTE, 59);
+                calendar.set(Calendar.SECOND, 59);
+                long timeToMilliseconds = calendar.getTimeInMillis();
 
-                js.put("endDate", timeInMilliseconds);
+                js.put("endDate", timeToMilliseconds);
 
 
                 DataOutputStream os = new DataOutputStream(conn.getOutputStream());

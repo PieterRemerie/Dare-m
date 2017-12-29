@@ -99,7 +99,7 @@ public class ChallengeDetailFragment extends Fragment implements LoaderManager.L
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         v = (View) inflater.inflate(R.layout.fragment_challenge_detail, container, false);
-        getActivity().setTitle("DETAIL");
+        getActivity().setTitle("Detail");
 
         horizontalScrollView = (LinearLayout) v.findViewById(R.id.LinearLayoutImage);
         textViewTitle = (TextView) v.findViewById(R.id.txtTitle);
@@ -110,7 +110,7 @@ public class ChallengeDetailFragment extends Fragment implements LoaderManager.L
         textViewTitle.setText(challenge.getName());
         textViewDescription.setText(challenge.getDescription());
 
-        String dateString = DateFormat.format("dd/MM:yyyy", Long.parseLong(challenge.getDate())).toString();
+        String dateString = DateFormat.format("dd/MM/yyyy", Long.parseLong(challenge.getDate())).toString();
         textViewDate.setText("Ends on: " +  dateString);
 
         Log.i("Category", challenge.getCategoryId() + "  " + challenge.getCategory());
