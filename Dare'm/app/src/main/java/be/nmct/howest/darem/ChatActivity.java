@@ -2,6 +2,7 @@ package be.nmct.howest.darem;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.Image;
@@ -51,6 +52,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import be.nmct.howest.darem.Adapter.MessageAdapter;
 import be.nmct.howest.darem.Model.Challenge;
@@ -73,6 +75,10 @@ public class ChatActivity extends AppCompatActivity {
     private static final int GALLERY_INTENT = 1;
     private static final int CAMERA_INTENT = 2;
     private ProgressDialog progressDialog;
+    private StorageReference filepath;
+    private FirebaseStorage storage;
+    private Uri downloadUri;
+
     //Bitmap bitmap;
 
     private ListView listView;
@@ -116,12 +122,8 @@ public class ChatActivity extends AppCompatActivity {
 
         mStorage = FirebaseStorage.getInstance().getReference();
         reference1 = new Firebase("https://gastleshowest2017-dc94f.firebaseio.com/messages/" + challenge.getName() +"/_friends" );
-        //reference2 = new Firebase("https://gastleshowest2017-dc94f.firebaseio.com/messages/"+ challenge.getName() +"friends_" + AccessToken.getCurrentAccessToken().getUserId() );
         reference3 = new Firebase("https://gastleshowest2017-dc94f.firebaseio.com/chat/" + challenge.getName() + "/users/");
         reference4 = new Firebase("https://gastleshowest2017-dc94f.firebaseio.com/chat/"+ challenge.getName() + "/messages/");
-
-        //reference3.push().setValue(map);
-
         btnSend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -138,14 +140,34 @@ public class ChatActivity extends AppCompatActivity {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 Map map = dataSnapshot.getValue(Map.class);
-                String message = map.get("message").toString();
+                String message = "";
+                String image = "";
+                if(map.get("message") != null){
+                    message = map.get("message").toString();
+                }
                 String userName = map.get("user").toString();
                 String naam = mapje.get(userName);
-                if(AccessToken.getCurrentAccessToken().getUserId().equals(userName)){
-                    addMessageBox(message, "YOU", 1);
-                }else{
-                    addMessageBox(message, naam, 2);
+                if(map.get("image") != null){
+                    image = map.get("image").toString();
                 }
+
+                if(Objects.equals(image, "")){
+                    if(AccessToken.getCurrentAccessToken().getUserId().equals(userName)){
+                        addMessageBox(message, "YOU", 1);
+                    }else{
+                        addMessageBox(message, naam, 2);
+                    }
+                }else if(Objects.equals(message, "")){
+                    if(AccessToken.getCurrentAccessToken().getUserId().equals(AccessToken.getCurrentAccessToken().getUserId())){
+                        addMessageBox(image, "YOU", 3);
+                        progressDialog.dismiss();
+
+                    }else{
+                        addMessageBox(image, naam, 4);
+
+                    }
+                }
+
             }
 
             @Override
@@ -168,7 +190,6 @@ public class ChatActivity extends AppCompatActivity {
 
             }
         });
-
 
         btnImage.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -221,7 +242,7 @@ public class ChatActivity extends AppCompatActivity {
 
 
         Uri uri = data.getData();
-        StorageReference filepath = mStorage.child("photos").child(AccessToken.getCurrentAccessToken().getUserId() + System.currentTimeMillis());
+        filepath = mStorage.child(challenge.getName()).child(AccessToken.getCurrentAccessToken().getUserId() + System.currentTimeMillis());
         Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.JPEG, 25, bytes);
@@ -230,16 +251,13 @@ public class ChatActivity extends AppCompatActivity {
         uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                String naam = mapje.get(AccessToken.getCurrentAccessToken().getUserId());
-                Uri downloadUri = taskSnapshot.getDownloadUrl();
-                if(AccessToken.getCurrentAccessToken().getUserId().equals(AccessToken.getCurrentAccessToken().getUserId())){
-                    addMessageBox(downloadUri.toString(), "YOU", 3);
-                    progressDialog.dismiss();
+                downloadUri = taskSnapshot.getDownloadUrl();
+                Map<String, String> map = new HashMap<String, String>();
+                map.put("image", downloadUri.toString());
+                map.put("user", AccessToken.getCurrentAccessToken().getUserId());
+                reference4.push().setValue(map);
+                progressDialog.dismiss();
 
-                }else{
-                    addMessageBox(downloadUri.toString(), naam, 4);
-
-                }
             }
         });
     }
