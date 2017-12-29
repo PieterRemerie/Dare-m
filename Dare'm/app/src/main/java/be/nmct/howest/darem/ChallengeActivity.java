@@ -94,7 +94,7 @@ public class ChallengeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         saveCategories();
-        FirebaseMessaging.getInstance().subscribeToTopic(AccessToken.getCurrentAccessToken().getUserId());
+        FirebaseMessaging.getInstance().subscribeToTopic(AuthHelper.getDbToken(getApplicationContext()));
 
         View view = getLayoutInflater().inflate(R.layout.activity_challenge, null);
 
