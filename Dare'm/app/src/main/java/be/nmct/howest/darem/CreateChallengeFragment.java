@@ -242,7 +242,7 @@ public class CreateChallengeFragment extends Fragment {
                     DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Notifications");
                     reference.removeValue();
                     for(Integer i = 0; i < friendsId.size(); i++){
-                        Notification notification = new Notification(friendsId.get(i), newChallenge.getName(), friendsNames.get(i));
+                        Notification notification = new Notification(friendsId.get(i), newChallenge.getName(), "");
                         reference.setValue(notification);
                     }
 
