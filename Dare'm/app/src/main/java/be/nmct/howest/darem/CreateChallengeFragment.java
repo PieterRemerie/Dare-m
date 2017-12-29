@@ -246,7 +246,6 @@ public class CreateChallengeFragment extends Fragment {
                         reference.setValue(notification);
                     }
 
-
                     syncDataManual();
                 }
                 conn.disconnect();

@@ -1,18 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <android.support.v7.widget.CardView
+    <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
         android:id="@+id/card_view"
         android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:layout_marginTop="115dp"
-        android:background="#000000"
-        android:visibility="visible" />
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:layout_margin="15dp"
+        card_view:cardCornerRadius="4dp">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -38,7 +37,7 @@
                 android:layout_height="75dp"
                 android:layout_below="@+id/txtTitle"
                 android:layout_centerHorizontal="true"
-                android:layout_marginTop="12dp"
+                android:layout_marginTop="17dp"
                 app:srcCompat="@drawable/football" />
 
             <TextView
@@ -47,32 +46,30 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/imgCategoryDetail"
                 android:layout_centerHorizontal="true"
-                android:layout_marginTop="15dp"
                 android:text="In deze challenge moet je 10 keer pompen als het je lukt moet ik je trakteren"
                 android:textAlignment="center"
                 android:textColor="#000000" />
 
             <View
                 android:id="@+id/SplitLine_hor1"
-                android:layout_width="match_parent"
+                android:layout_width="130dp"
                 android:layout_height="2dp"
-                android:layout_marginTop="115dp"
-                android:layout_toStartOf="@+id/imgCategoryDetail"
+                android:layout_marginTop="118dp"
+                android:layout_toStartOf="@+id/imageView5"
                 android:background="#000000"
                 android:visibility="visible" />
 
             <View
                 android:id="@+id/SplitLine_hor2"
-                android:layout_width="match_parent"
+                android:layout_width="130dp"
                 android:layout_height="2dp"
                 android:layout_alignParentEnd="true"
-                android:layout_marginTop="115dp"
-                android:layout_toEndOf="@+id/imgCategoryDetail"
+                android:layout_marginTop="118dp"
+                android:layout_toEndOf="@+id/imageView5"
                 android:background="#000000"
                 android:visibility="visible" />
 
             <HorizontalScrollView
-                android:id="@+id/horizontalScrollView2"
                 android:layout_width="match_parent"
                 android:layout_height="80dp"
                 android:layout_below="@+id/txtDescription"
@@ -124,5 +121,8 @@
                 android:layout_centerHorizontal="true"
                 android:layout_marginBottom="11dp"
                 android:text="Ends on: 13/01/2018" />
+
         </RelativeLayout>
+    </android.support.v7.widget.CardView>
+
 </RelativeLayout>
