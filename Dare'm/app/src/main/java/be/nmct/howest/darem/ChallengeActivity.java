@@ -57,6 +57,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.ArrayList;
@@ -129,7 +131,7 @@ public class ChallengeActivity extends AppCompatActivity {
                             FacebookSdk.sdkInitialize(getApplicationContext());
                             LoginManager.getInstance().logOut();
                             AccessToken.setCurrentAccessToken(null);
-                            DeletePreviousDBUser();
+                            DatabaseHelper.DeletePreviousDBUser(getApplicationContext());
                             intent = new Intent(getApplicationContext(), LoginActivity.class);
                             startActivity(intent);
                         } catch (Exception e) {
@@ -194,15 +196,6 @@ public class ChallengeActivity extends AppCompatActivity {
         ChallengeOverviewFragment challengesOverviewFragment = new ChallengeOverviewFragment();
         fragmentTransaction.replace(R.id.framelayout_in_challengeactivity, challengesOverviewFragment);
         fragmentTransaction.addToBackStack("showChallengesOverviewFragment").commit();
-    }
-
-    private void DeletePreviousDBUser() throws RemoteException, OperationApplicationException {
-        ContentResolver contentResolver = getBaseContext().getContentResolver();
-        ArrayList<ContentProviderOperation> operationList = new ArrayList<>();
-        //bestaande producten lokaal verwijderen
-        ContentProviderOperation contentProviderOperationDelete = ContentProviderOperation.newDelete(be.nmct.howest.darem.provider.Contract.USERS_URI).build();
-        operationList.add(contentProviderOperationDelete);
-        contentResolver.applyBatch(be.nmct.howest.darem.provider.Contract.AUTHORITY, operationList);
     }
 
     private void syncDataManual() {

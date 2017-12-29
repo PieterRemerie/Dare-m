@@ -58,18 +58,18 @@
                 android:layout_alignStart="@+id/txtDescription"
                 android:layout_below="@+id/txtDescription"
                 android:layout_marginTop="14dp"
-                android:text="Date"
+                android:text="Finish Date"
                 android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/textView11"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_alignStart="@+id/btnCategory"
+                android:layout_below="@+id/btnCategory"
+                android:layout_marginTop="11dp"
                 android:text="Friends"
-                android:textStyle="bold"
-                android:layout_above="@+id/btnAddFriends"
-                android:layout_alignStart="@+id/btnAddFriendsToUser"
-                android:layout_marginBottom="22dp" />
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/textView12"
@@ -85,14 +85,15 @@
                 android:id="@+id/btnAddFriendsToUser"
                 android:layout_width="280dp"
                 android:layout_height="wrap_content"
-                android:onClick="@{() -> test.showAddFriendToChallengeFragment()}"
-                android:text="Add Friends"
+                android:layout_alignStart="@+id/textView11"
+                android:layout_below="@+id/textView11"
+                android:layout_marginTop="16dp"
                 android:cursorVisible="false"
                 android:focusable="false"
                 android:focusableInTouchMode="false"
-                android:textSize="12sp"
-                android:layout_above="@+id/fab_createChal"
-                android:layout_alignStart="@+id/btnCategory" />
+                android:onClick="@{() -> test.showAddFriendToChallengeFragment()}"
+                android:text="Add Friends"
+                android:textSize="12sp" />
 
             <EditText
                 android:id="@+id/btnCategory"

@@ -44,6 +44,7 @@ import be.nmct.howest.darem.Loader.ParticipantsLoader;
 import be.nmct.howest.darem.Transforms.CircleTransform;
 import be.nmct.howest.darem.Viewmodel.ChallengeOverviewFragmentViewModel;
 import be.nmct.howest.darem.auth.AuthHelper;
+import be.nmct.howest.darem.database.CategoriesData;
 import be.nmct.howest.darem.databinding.FragmentInviteDetailBinding;
 
 
@@ -81,8 +82,13 @@ public class InviteDetailFragment extends Fragment implements LoaderManager.Load
             String challengeCat = getArguments().getString("challengeCat");
             challengeId = getArguments().getString("challengeID");
 
+            int i = CategoriesData.checkCategory(challengeCat);
+
+            ChallengeCategory.setImageResource(CategoriesData.imgIds[i]);
+
             ChallengeName.setText(challengeName);
             ChallengeDescription.setText(challengeDesc);
+
 
             getLoaderManager().initLoader(0, null, this);
         }

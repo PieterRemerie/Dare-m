@@ -107,14 +107,14 @@ public class InviteOverviewFragment extends Fragment implements LoaderManager.Lo
             int colnr3 = mCursor.getColumnIndex(Challenge.Columns._ID);
             int colnr4 = mCursor.getColumnIndex(Challenge.Columns.COLUMN_CATEGORY);
 
-            int i = checkCategory(mCursor.getString(colnr4));
+            int i = CategoriesData.checkCategory(mCursor.getString(colnr4));
 
             holder.textViewChallengeNaam.setText(mCursor.getString(colnr1));
             holder.imageViewCategory.setImageResource(CategoriesData.imgIds[i]);
             holder.challengeId = mCursor.getString(colnr3);
             holder.challengeName = mCursor.getString(colnr1);
             holder.challengeDescription = mCursor.getString(colnr2);
-            holder.challengeCategory = "nog geen category";
+            holder.challengeCategory = mCursor.getString(colnr4);
         }
 
         @Override
@@ -122,15 +122,6 @@ public class InviteOverviewFragment extends Fragment implements LoaderManager.Lo
             return mCursor.getCount();
         }
 
-        public int checkCategory (String cat){
-            int result = 0;
-            for(int i = 0 ; i < CategoriesData.categories.length ; i++){
-                if(CategoriesData.categories[i].contains(cat)){
-                    result = i;
-                }
-            }
-            return result;
-        }
     }
 
     public class InviteOverviewFragmentViewHolder extends RecyclerView.ViewHolder{

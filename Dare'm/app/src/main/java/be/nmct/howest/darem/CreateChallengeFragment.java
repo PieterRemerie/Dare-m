@@ -39,8 +39,11 @@ import java.lang.reflect.Array;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
+import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -213,6 +216,8 @@ public class CreateChallengeFragment extends Fragment {
                 js.put("category", newChallenge.getCategory());
                 js.put("creatorId", AccessToken.getCurrentAccessToken().getUserId());
                 js.put("isCompleted", 0);
+                js.put("endDate", newChallenge.getDate());
+
 
                 DataOutputStream os = new DataOutputStream(conn.getOutputStream());
                 os.writeBytes(js.toString());
