@@ -43,6 +43,7 @@ import java.io.OutputStreamWriter;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
+import java.util.Arrays;
 import java.util.concurrent.ExecutionException;
 
 import javax.net.ssl.HttpsURLConnection;
@@ -106,12 +107,7 @@ public class LoginActivity extends AppCompatActivity {
 
         // READ permissions voor FACEBOOK gegevens op te laden
         loginFB = (LoginButton) findViewById(R.id.btnLoginFB);
-        loginFB.setReadPermissions("public_profile");
-        loginFB.setReadPermissions("user_friends");
-        loginFB.setReadPermissions("email");
-
-        saveCategories();
-
+        loginFB.setReadPermissions(Arrays.asList("public_profile", "email", "user_friends"));
 
         loginFB.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
@@ -137,41 +133,6 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-
-    }
-
-    private void saveCategories() {
-
-        Cursor mData;
-        DatabaseHelper helper = DatabaseHelper.getINSTANCE(getApplicationContext());
-        SQLiteDatabase db = helper.getReadableDatabase();
-        mData = db.query(Contract.CategoryDB.TABLE_NAME,
-                new String[]{
-                        Contract.CategoryColumns._ID}, null, null, null, null, null);
-        mData.getCount();
-
-        if(mData.getCount() <=0){
-            String[] cats = CategoriesData.categories;
-            String[] imgs = CategoriesData.images;
-
-            ContentValues value = new ContentValues();
-
-            for(int i = 0; i < cats.length ; i++){
-                value.put(Contract.CategoryColumns.COLUMN_CATEGORY_NAME, cats[i]);
-                value.put(Contract.CategoryColumns.COLUMN_CATEGORY_IMG, imgs[i]);
-                Log.i("VALUES", value.toString());
-
-                try {
-                    new SaveCategoriesToDBTask(getApplicationContext()).execute(value).get();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                } catch (ExecutionException e) {
-                    e.printStackTrace();
-                }
-
-            }
-
-        }
 
     }
 
@@ -208,9 +169,7 @@ public class LoginActivity extends AppCompatActivity {
 
                     executeAsyncTask(new SaveNewUserToDBTask(context), values);
                 }
-
             }
-
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {

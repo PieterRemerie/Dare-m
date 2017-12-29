@@ -105,6 +105,7 @@ public class AddFriendToChallengeFragment extends Fragment {
         FragmentManager fragmentManager = getFragmentManager();
         Bundle args = new Bundle();
         args.putStringArrayList("key", friendsIdChallenge);
+        args.putStringArrayList("names", names);
         if(bundle.getString("challengeName" )!= null){
             args.putString("challengeName",bundle.getString("challengeName" ));
         }
@@ -113,6 +114,9 @@ public class AddFriendToChallengeFragment extends Fragment {
         }
         if(bundle.getString("challengeDate" )!= null){
             args.putString("challengeDate",bundle.getString("challengeDate" ));
+        }
+        if(bundle.getInt("categoryId" )!= 0){
+            args.putInt("categoryId", bundle.getInt("categoryId" ));
         }
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         CreateChallengeFragment createChallengeFragment = new CreateChallengeFragment();

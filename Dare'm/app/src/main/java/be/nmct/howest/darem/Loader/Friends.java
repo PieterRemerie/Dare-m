@@ -13,8 +13,6 @@ public class Friends {
         public static final String COLUMN_NAME = "name";
         public static final String COLUMN_PICTURE = "picture";
 
-
-
     }
 
 }

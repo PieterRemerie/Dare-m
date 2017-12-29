@@ -44,6 +44,8 @@ import be.nmct.howest.darem.Loader.Challenge;
 import be.nmct.howest.darem.Loader.Friends;
 import be.nmct.howest.darem.Loader.InviteChallenge;
 import be.nmct.howest.darem.auth.AuthHelper;
+import be.nmct.howest.darem.database.CategoriesData;
+import be.nmct.howest.darem.database.Contract;
 
 
 public class InviteOverviewFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
@@ -103,20 +105,25 @@ public class InviteOverviewFragment extends Fragment implements LoaderManager.Lo
             int colnr1 = mCursor.getColumnIndex(Challenge.Columns.COLUMN_NAME);
             int colnr2 = mCursor.getColumnIndex(Challenge.Columns.COLUMN_DESCRIPTION);
             int colnr3 = mCursor.getColumnIndex(Challenge.Columns._ID);
+            int colnr4 = mCursor.getColumnIndex(Challenge.Columns.COLUMN_CATEGORY);
+            int colnr5 = mCursor.getColumnIndex(Challenge.Columns.COLUMN_DATE);
 
+            int i = CategoriesData.checkCategory(mCursor.getString(colnr4));
 
             holder.textViewChallengeNaam.setText(mCursor.getString(colnr1));
-            holder.imageViewCategory.setImageResource(R.drawable.football);
+            holder.imageViewCategory.setImageResource(CategoriesData.imgIds[i]);
             holder.challengeId = mCursor.getString(colnr3);
             holder.challengeName = mCursor.getString(colnr1);
             holder.challengeDescription = mCursor.getString(colnr2);
-            holder.challengeCategory = "nog geen category";
+            holder.challengeCategory = mCursor.getString(colnr4);
+            holder.challengeDate = mCursor.getString(colnr5);
         }
 
         @Override
         public int getItemCount() {
             return mCursor.getCount();
         }
+
     }
 
     public class InviteOverviewFragmentViewHolder extends RecyclerView.ViewHolder{
@@ -128,6 +135,7 @@ public class InviteOverviewFragment extends Fragment implements LoaderManager.Lo
         public String challengeName;
         public String challengeDescription;
         public String challengeCategory;
+        public String challengeDate;
 
         public InviteOverviewFragmentViewHolder(View view) {
             super(view);
@@ -138,28 +146,27 @@ public class InviteOverviewFragment extends Fragment implements LoaderManager.Lo
                 @Override
                 public void onClick(View v) {
                     //new SendPost(challengeId).execute();
-                    showInviteDetailFragment(challengeName, challengeDescription, challengeCategory, challengeId);
+                    showInviteDetailFragment(challengeName, challengeDescription, challengeCategory, challengeId, challengeDate);
                 }
             });
         }
     }
 
-    private void showInviteDetailFragment(String challengeName, String challengeDesc, String challengeCat, String challengeID){
+    private void showInviteDetailFragment(String challengeName, String challengeDesc, String challengeCat, String challengeID, String ChallengeDate){
         Bundle bundle = new Bundle();
         bundle.putString("challengeName", challengeName);
         bundle.putString("challengeDesc", challengeDesc);
         bundle.putString("challengeCat", challengeCat);
         bundle.putString("challengeID", challengeID);
+        bundle.putString("challengeDate", ChallengeDate);
 
         FragmentManager fragmentManager = getFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         InviteDetailFragment inviteDetailFragment = new InviteDetailFragment();
         inviteDetailFragment.setArguments(bundle);
+        fragmentTransaction.remove(this);
         fragmentTransaction.replace(R.id.framelayout_in_invite_overview_activity, inviteDetailFragment);
-        fragmentTransaction.commit();
-
+        fragmentTransaction.addToBackStack(null).commit();
     }
-
-
 
 }

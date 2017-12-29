@@ -11,6 +11,7 @@ public class Challenge {
 
         public static final String COLUMN_NAME = "name";
         public static final String COLUMN_DESCRIPTION = "description";
-
+        public static final String COLUMN_CATEGORY = "category";
+        public static final String COLUMN_DATE = "date";
     }
 }

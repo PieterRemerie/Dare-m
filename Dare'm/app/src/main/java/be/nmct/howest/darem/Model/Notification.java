@@ -6,13 +6,15 @@ package be.nmct.howest.darem.Model;
 
 public class Notification {
     public String friendsId;
+    public String friendName;
     public String message;
 
     public Notification(){
 
     }
-    public Notification(String friendsId, String message){
+    public Notification(String friendsId, String message, String friendName){
         this.friendsId = friendsId;
         this.message = message;
+        this.friendName = friendName;
     }
 }

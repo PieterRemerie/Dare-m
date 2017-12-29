@@ -58,78 +58,135 @@
                 android:layout_alignStart="@+id/txtDescription"
                 android:layout_below="@+id/txtDescription"
                 android:layout_marginTop="14dp"
-                android:text="Date"
+                android:text="Finish Date"
                 android:textStyle="bold" />
 
-            <Button
-                android:id="@+id/btnAddFriendsToUser"
-                android:layout_width="150dp"
+            <TextView
+                android:id="@+id/textView11"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@color/colorPrimary"
-                android:onClick="@{() -> test.showAddFriendToChallengeFragment()}"
-                android:paddingLeft="20dp"
-                android:paddingRight="20dp"
-                android:text="Add Friends"
-                android:textColor="@android:color/white"
-                android:layout_marginTop="76dp"
-                android:layout_alignTop="@+id/btnCategory"
                 android:layout_alignStart="@+id/btnCategory"
-                android:layout_alignEnd="@+id/btnCategory" />
+                android:layout_below="@+id/btnCategory"
+                android:layout_marginTop="11dp"
+                android:text="Friends"
+                android:textStyle="bold" />
 
-            <Button
-                android:id="@+id/btnCategory"
-                android:layout_width="150dp"
+            <TextView
+                android:id="@+id/textView12"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="17dp"
-                android:background="@color/colorPrimary"
-                android:paddingLeft="20dp"
-                android:paddingRight="20dp"
-                android:text="Choose category"
-                android:textColor="@android:color/white"
+                android:layout_marginTop="22dp"
+                android:text="Category"
+                android:textStyle="bold"
                 android:layout_below="@+id/txtDate"
-                android:layout_alignStart="@+id/txtDate"
-                android:layout_alignEnd="@+id/txtDate"
-                android:onClick="@{()-> test.showAddCategoryToChallengeFragment()}"/>
+                android:layout_alignStart="@+id/txtDate" />
+
+            <EditText
+                android:id="@+id/btnAddFriendsToUser"
+                android:layout_width="280dp"
+                android:layout_height="wrap_content"
+                android:layout_alignStart="@+id/textView11"
+                android:layout_below="@+id/textView11"
+                android:layout_marginTop="16dp"
+                android:cursorVisible="false"
+                android:focusable="false"
+                android:focusableInTouchMode="false"
+                android:onClick="@{() -> test.showAddFriendToChallengeFragment()}"
+                android:text="Add Friends"
+                android:textSize="12sp" />
+
+            <EditText
+                android:id="@+id/btnCategory"
+                android:layout_width="280dp"
+                android:layout_height="wrap_content"
+                android:onClick="@{()-> test.showAddCategoryToChallengeFragment()}"
+                android:text="@={Challenge.category}"
+                android:textSize="12sp"
+                android:cursorVisible="false"
+                android:focusable="false"
+                android:focusableInTouchMode="false"
+                android:layout_marginTop="16dp"
+                android:layout_below="@+id/textView12"
+                android:layout_alignStart="@+id/textView12" />
+
 
             <EditText
                 android:id="@+id/txtDescription"
                 android:layout_width="280dp"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/textView4"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="15dp"
+                android:layout_marginTop="11dp"
                 android:ems="10"
-                android:inputType="textPersonName"
-                android:text="@={Challenge.description}"/>
+                android:text="@={Challenge.description}"
+                android:layout_below="@+id/textView4"
+                android:layout_alignStart="@+id/textView4" />
 
             <EditText
                 android:id="@+id/txtDate"
-                android:layout_width="wrap_content"
+                android:layout_width="280dp"
                 android:layout_height="wrap_content"
-                android:layout_alignStart="@+id/txtDescription"
-                android:layout_below="@+id/txtDescription"
-                android:layout_marginTop="45dp"
+                android:layout_marginTop="19dp"
                 android:ems="10"
-                android:inputType="date"
+                android:onClick="@{() -> test.showAddDateToChallengeFragment()}"
                 android:text="@={Challenge.date}"
-                android:layout_alignEnd="@+id/txtDescription" />
+                android:textSize="12sp"
+                android:cursorVisible="false"
+                android:focusable="false"
+                android:focusableInTouchMode="false"
+                android:layout_below="@+id/textView10"
+                android:layout_alignStart="@+id/textView10" />
 
+            <ImageButton
+                android:id="@+id/btnAddFriends"
+                android:onClick="@{() -> test.showAddFriendToChallengeFragment()}"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:src="@drawable/add_challenge_vector"
+                android:background="#00000000"
+                android:layout_alignTop="@+id/btnAddFriendsToUser"
+                android:layout_alignStart="@+id/fab_createChal">
 
+            </ImageButton>
+
+            <ImageButton
+                android:id="@+id/btnCategory2"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_alignEnd="@+id/btnCategory"
+                android:layout_alignTop="@+id/btnCategory"
+                android:background="#00000000"
+                android:onClick="@{()-> test.showAddCategoryToChallengeFragment()}"
+                android:src="@drawable/add_challenge_vector">
+
+            </ImageButton>
+
+            <ImageButton
+                android:id="@+id/imageButton"
+                android:onClick="@{() -> test.showAddDateToChallengeFragment()}"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_alignEnd="@+id/txtDate"
+                android:layout_alignTop="@+id/txtDate"
+                android:background="#00000000"
+                android:src="@drawable/add_challenge_vector">
+
+            </ImageButton>
 
             <com.getbase.floatingactionbutton.FloatingActionButton
                 android:id="@+id/fab_createChal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="bottom|right"
-                android:onClick="@{() -> test.saveNewChallenge()}"
-                android:layout_marginEnd="14dp"
                 android:layout_alignParentBottom="true"
                 android:layout_alignParentEnd="true"
+                android:layout_gravity="bottom|right"
                 android:layout_marginBottom="12dp"
-                app:fab_addButtonColorNormal="#9e0101"
-                app:fab_colorPressed="#9e0001"
+                android:layout_marginEnd="14dp"
+                android:background="?attr/colorPrimaryDark"
+                android:onClick="@{() -> test.saveNewChallenge()}"
                 android:src="@drawable/add_challenge_vector"
-                />
+                app:fab_colorPressed="#9e0101"
+                app:fab_addButtonColorNormal="#9e0101"
+                app:fab_colorNormal="#9e0101"
+               />
 
         </RelativeLayout>
 

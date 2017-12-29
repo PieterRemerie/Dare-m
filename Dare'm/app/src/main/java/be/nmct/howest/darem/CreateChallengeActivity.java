@@ -38,7 +38,7 @@ public class CreateChallengeActivity extends AppCompatActivity
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
+            super.onBackPressed();
     }
 
     @Override
@@ -69,8 +69,6 @@ public class CreateChallengeActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-
-
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
@@ -81,6 +79,6 @@ public class CreateChallengeActivity extends AppCompatActivity
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         CreateChallengeFragment createChallengeFragment = new CreateChallengeFragment();
         fragmentTransaction.replace(R.id.framelayout_in_create_challenge_activity, createChallengeFragment);
-        fragmentTransaction.commit();
+        fragmentTransaction.addToBackStack(null).commit();
     }
 }

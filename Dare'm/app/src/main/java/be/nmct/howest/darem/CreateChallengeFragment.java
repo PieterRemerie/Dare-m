@@ -39,8 +39,13 @@ import java.lang.reflect.Array;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
+import java.sql.Time;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -62,6 +67,7 @@ public class CreateChallengeFragment extends Fragment {
     private MyFirebaseMessagingService myFirebaseMessagingService;
     private Challenge newChallenge = new Challenge();
     private ArrayList<String> friendsId = new ArrayList<String>();
+    private ArrayList<String> friendsNames = new ArrayList<String>();
     private int categoryId;
     private static final String TAG = "FirebaseMessageService";
     JSONArray jsonArray = new JSONArray();
@@ -92,9 +98,14 @@ public class CreateChallengeFragment extends Fragment {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_create_challenge, container, false);
         View v = binding.getRoot();
         bundle = getArguments();
+
+        newChallenge.setCategory("Choose category");
+        newChallenge.setDate("Pick the end date");
+
         if (bundle != null) {
             if (bundle.getStringArrayList("key") != null) {
                 friendsId = bundle.getStringArrayList("key");
+                friendsNames = bundle.getStringArrayList("names");
                 Log.i("CREATE_CHALLENGE", "CHALLENGE FRIENDS TOEGEVOEGD");
 
             }
@@ -113,6 +124,9 @@ public class CreateChallengeFragment extends Fragment {
             if(bundle.getString("challengeDate") != null){
                 newChallenge.setDate(bundle.getString("challengeDate"));
             }
+            /*if(bundle.getString("challengeDate") != null){
+                newChallenge.setDate(bundle.getString("challengeDate"));
+            }*/
 
             //friendsId.add(Integer.parseInt(AccessToken.getCurrentAccessToken().getUserId()));
         }
@@ -132,10 +146,6 @@ public class CreateChallengeFragment extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        /*if(!newChallenge.getName().isEmpty()){
-            Log.i("BLAAAAAAAAA", "dit is niet leeg  " + newChallenge.getName());
-            bundle.putString("Blaa", newChallenge.getName());
-        }*/
     }
 
     @Override
@@ -157,7 +167,7 @@ public class CreateChallengeFragment extends Fragment {
         values.put(Contract.ChallengesColumns.COLUMN_CHALLENGE_CREATOR, AuthHelper.getAccessToken(getContext()));
         values.put(Contract.ChallengesColumns.COLUMN_CHALLENGE_DB, "");
         values.put(Contract.ChallengesColumns.COLUMN_CHALLENGE_CATEGORY,CategoriesData.categories[categoryId] );
-        values.put(Contract.ChallengesColumns.COLUMN_CHALLENGE_DATE, "voorlopig leeg");
+        values.put(Contract.ChallengesColumns.COLUMN_CHALLENGE_DATE, newChallenge.getDate());
 
         executeAsyncTask(new SaveNewChallengeToDBTask(getContext()), values);
     }
@@ -166,7 +176,8 @@ public class CreateChallengeFragment extends Fragment {
         newChallenge.setName("");
         newChallenge.setDescription("");
         newChallenge.setCategoryId(0);
-        newChallenge.setCategory("");
+        newChallenge.setCategory("Choose category");
+        newChallenge.setDate("Pick the end date");
     }
 
     static private <T> void executeAsyncTask(AsyncTask<T, ?, ?> task, T... params) {
@@ -206,9 +217,16 @@ public class CreateChallengeFragment extends Fragment {
                 js.put("name", newChallenge.getName());
                 js.put("description", newChallenge.getDescription());
                 js.put("users", new JSONArray(friendsId));
-                js.put("category", newChallenge.getCategoryId());
+                js.put("category", newChallenge.getCategory());
                 js.put("creatorId", AccessToken.getCurrentAccessToken().getUserId());
-                js.put("isCompleted", "false");
+                js.put("isCompleted", 0);
+
+                SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+                Date mDate = sdf.parse(newChallenge.getDate());
+                long timeInMilliseconds = mDate.getTime();
+
+                js.put("endDate", timeInMilliseconds);
+
 
                 DataOutputStream os = new DataOutputStream(conn.getOutputStream());
                 os.writeBytes(js.toString());
@@ -223,8 +241,10 @@ public class CreateChallengeFragment extends Fragment {
                 if (conn.getResponseCode() == 200) {
                     DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Notifications");
                     reference.removeValue();
-                    Notification notification = new Notification(AccessToken.getCurrentAccessToken().getUserId(), newChallenge.getName());
-                    reference.setValue(notification);
+                    for(Integer i = 0; i < friendsId.size(); i++){
+                        Notification notification = new Notification(friendsId.get(i), newChallenge.getName(), friendsNames.get(i));
+                        reference.setValue(notification);
+                    }
 
                     syncDataManual();
                 }
@@ -240,16 +260,11 @@ public class CreateChallengeFragment extends Fragment {
                 Log.i("ee", "IOException: " + e.getMessage());
             } catch (JSONException e) {
                 e.printStackTrace();
+            } catch (ParseException e) {
+                e.printStackTrace();
             }
         }
 
-    }
-
-    private void sendNotification() {
-        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Notifications");
-        reference.removeValue();
-        Notification notification = new Notification("10212082552953938", "this is a message");
-        reference.setValue(notification);
     }
         private void syncDataManual() {
             Bundle settingsBundle = new Bundle();
@@ -281,8 +296,18 @@ public class CreateChallengeFragment extends Fragment {
         AddCategoryToChallengeFragment addCategoryToChallengeFragment = new AddCategoryToChallengeFragment();
         addCategoryToChallengeFragment.setArguments(innerBundle);
         fragmentTransaction.replace(R.id.framelayout_in_create_challenge_activity, addCategoryToChallengeFragment);
-        fragmentTransaction.commit();
+        fragmentTransaction.addToBackStack(null).commit();
 
+    }
+
+    public void showAddDateToChallengeFragment(){
+        addItemsToBundle();
+        FragmentManager fragmentManager = getFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        AddDateToChallengeFragment addDateToChallengeFragment = new AddDateToChallengeFragment();
+        addDateToChallengeFragment.setArguments(innerBundle);
+        fragmentTransaction.replace(R.id.framelayout_in_create_challenge_activity, addDateToChallengeFragment);
+        fragmentTransaction.addToBackStack(null).commit();
     }
 
     public void addItemsToBundle(){
@@ -292,8 +317,11 @@ public class CreateChallengeFragment extends Fragment {
         if(newChallenge.getDescription() !=null){
             innerBundle.putString("challengeDescr", newChallenge.getDescription());
         }
-        if(newChallenge.getDate() != null){
-            innerBundle.putString("challengeDate", newChallenge.getDescription());
+        if(!newChallenge.getDate().equals("Pick the end date")){
+            innerBundle.putString("challengeDate", newChallenge.getDate());
+        }
+        if(!newChallenge.getCategory().equals("Choose category")){
+            innerBundle.putInt("categoryId", newChallenge.getCategoryId());
         }
     }
 

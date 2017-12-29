@@ -26,6 +26,8 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import be.nmct.howest.darem.Model.Challenge;
@@ -94,22 +96,35 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                 newChallenge.setName(obj.getString("name"));
                 newChallenge.setDescription(obj.getString("description"));
                 newChallenge.setCategory(obj.getString("category"));
+                newChallenge.setDate(obj.getString("endDate"));
 
-                ContentValues values = new ContentValues();
-                values.put(be.nmct.howest.darem.database.Contract.ChallengesColumns.COLUMN_CHALLENGE_NAAM, newChallenge.getName());
-                values.put(be.nmct.howest.darem.database.Contract.ChallengesColumns.COLUMN_CHALLENGE_DESCRIPTION, newChallenge.getDescription());
-                values.put(be.nmct.howest.darem.database.Contract.ChallengesColumns.COLUMN_CHALLENGE_CREATOR, AuthHelper.getAccessToken(getContext()));
-                values.put(be.nmct.howest.darem.database.Contract.ChallengesColumns.COLUMN_CHALLENGE_DB, obj.getString("_id"));
-                values.put(be.nmct.howest.darem.database.Contract.ChallengesColumns.COLUMN_CHALLENGE_CATEGORY, newChallenge.getCategory());
-                values.put(be.nmct.howest.darem.database.Contract.ChallengesColumns.COLUMN_CHALLENGE_DATE, "momenteel leeg");
+                if(currentTimeEndOfDay() < Long.parseLong(newChallenge.getDate())){
+                    ContentValues values = new ContentValues();
+                    values.put(be.nmct.howest.darem.database.Contract.ChallengesColumns.COLUMN_CHALLENGE_NAAM, newChallenge.getName());
+                    values.put(be.nmct.howest.darem.database.Contract.ChallengesColumns.COLUMN_CHALLENGE_DESCRIPTION, newChallenge.getDescription());
+                    values.put(be.nmct.howest.darem.database.Contract.ChallengesColumns.COLUMN_CHALLENGE_CREATOR, AuthHelper.getAccessToken(getContext()));
+                    values.put(be.nmct.howest.darem.database.Contract.ChallengesColumns.COLUMN_CHALLENGE_DB, obj.getString("_id"));
+                    values.put(be.nmct.howest.darem.database.Contract.ChallengesColumns.COLUMN_CHALLENGE_CATEGORY, newChallenge.getCategory());
+                    values.put(be.nmct.howest.darem.database.Contract.ChallengesColumns.COLUMN_CHALLENGE_DATE, newChallenge.getDate());
 
-
-                executeAsyncTask(new SaveNewChallengeToDBTask(getContext()), values);
+                    executeAsyncTask(new SaveNewChallengeToDBTask(getContext()), values);
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
             Log.i("ERROR", e.getMessage());
         }
+    }
+
+    private static long currentTimeEndOfDay(){
+        Date date = new Date();
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        calendar.set(Calendar.HOUR_OF_DAY, 23);
+        calendar.set(Calendar.MINUTE, 59);
+        calendar.set(Calendar.SECOND, 59);
+        long timeToMilliseconds = calendar.getTimeInMillis();
+        return timeToMilliseconds;
     }
 
     private void DeletePreviousDB() throws RemoteException, OperationApplicationException {
@@ -165,5 +180,4 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
             task.execute(params);
         }
     }
-
 }

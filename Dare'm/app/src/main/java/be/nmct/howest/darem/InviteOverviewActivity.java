@@ -13,8 +13,14 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.facebook.AccessToken;
+import com.facebook.FacebookSdk;
+import com.facebook.login.LoginManager;
+
 import be.nmct.howest.darem.Navigation.Navigation;
 import be.nmct.howest.darem.R;
+import be.nmct.howest.darem.auth.AuthHelper;
+import be.nmct.howest.darem.database.DatabaseHelper;
 
 public class InviteOverviewActivity extends AppCompatActivity {
 
@@ -50,6 +56,20 @@ public class InviteOverviewActivity extends AppCompatActivity {
                         intent = new Intent(getApplicationContext(), InviteOverviewActivity.class);
                         startActivity(intent);
                         break;
+                    case R.id.logoutUser:
+                        try {
+                            AuthHelper.logUserOff(getApplicationContext());
+                            FacebookSdk.sdkInitialize(getApplicationContext());
+                            LoginManager.getInstance().logOut();
+                            AccessToken.setCurrentAccessToken(null);
+                            DatabaseHelper.DeletePreviousDBUser(getApplicationContext());
+                            intent = new Intent(getApplicationContext(), LoginActivity.class);
+                            startActivity(intent);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+
+                        break;
                 }
                 drawer.closeDrawers();
                 return false;
@@ -69,5 +89,14 @@ public class InviteOverviewActivity extends AppCompatActivity {
         fragmentTransaction.replace(R.id.framelayout_in_invite_overview_activity, inviteOverviewFragment);
         fragmentTransaction.commit();
 
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (getFragmentManager().getBackStackEntryCount() == 0) {
+            this.finish();
+        } else {
+            getFragmentManager().popBackStack();
+        }
     }
 }

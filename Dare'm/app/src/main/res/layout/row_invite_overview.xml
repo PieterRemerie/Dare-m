@@ -15,6 +15,7 @@
                 android:contentDescription="@string/categoryimage"
                 android:layout_gravity="center"
                 android:layout_weight="0.2"
+                android:padding="5dp"
                 android:layout_width="65dp"
                 android:layout_height="65dp"/>
 

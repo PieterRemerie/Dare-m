@@ -17,6 +17,7 @@ import android.app.Fragment;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
+import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,6 +31,7 @@ import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -44,7 +46,9 @@ import be.nmct.howest.darem.Loader.ParticipantsLoader;
 import be.nmct.howest.darem.Transforms.CircleTransform;
 import be.nmct.howest.darem.Viewmodel.ChallengeOverviewFragmentViewModel;
 import be.nmct.howest.darem.auth.AuthHelper;
+import be.nmct.howest.darem.database.CategoriesData;
 import be.nmct.howest.darem.databinding.FragmentInviteDetailBinding;
+import be.nmct.howest.darem.sync.SyncManual;
 
 
 public class InviteDetailFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>   {
@@ -56,6 +60,7 @@ public class InviteDetailFragment extends Fragment implements LoaderManager.Load
     View v;
     TextView ChallengeName;
     TextView ChallengeDescription;
+    TextView textViewDate;
     ImageView ChallengeCategory;
     Button btnAccept;
     Button btnDecline;
@@ -74,6 +79,7 @@ public class InviteDetailFragment extends Fragment implements LoaderManager.Load
         ChallengeCategory = (ImageView) v.findViewById(R.id.imageView5);
         btnAccept = (Button) v.findViewById(R.id.btnAcceptInviteDetail);
         btnDecline = (Button) v.findViewById(R.id.btnDeclineInviteDetail);
+        textViewDate = (TextView) v.findViewById(R.id.txtDate);
 
         if (getArguments() != null) {
             String challengeName = getArguments().getString("challengeName");
@@ -81,8 +87,16 @@ public class InviteDetailFragment extends Fragment implements LoaderManager.Load
             String challengeCat = getArguments().getString("challengeCat");
             challengeId = getArguments().getString("challengeID");
 
+            int i = CategoriesData.checkCategory(challengeCat);
+
+            ChallengeCategory.setImageResource(CategoriesData.imgIds[i]);
+
             ChallengeName.setText(challengeName);
             ChallengeDescription.setText(challengeDesc);
+
+            String dateString = DateFormat.format("dd/MM:yyyy", Long.parseLong(getArguments().getString("challengeDate"))).toString();
+            textViewDate.setText("Ends on: " +  dateString);
+
 
             getLoaderManager().initLoader(0, null, this);
         }
@@ -193,7 +207,7 @@ public class InviteDetailFragment extends Fragment implements LoaderManager.Load
                 Log.i("MSG", conn.getResponseMessage());
 
                 if(conn.getResponseCode() == 200){
-                    syncDataManual();
+                    SyncManual.syncDataManual(getContext());
                 }
                 conn.disconnect();
                 Log.i("ee", "SEND: DONE");
@@ -212,16 +226,4 @@ public class InviteDetailFragment extends Fragment implements LoaderManager.Load
         }
 
     }
-
-    private void syncDataManual() {
-        Bundle settingsBundle = new Bundle();
-        settingsBundle.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);
-        settingsBundle.putBoolean(ContentResolver.SYNC_EXTRAS_EXPEDITED, true);
-
-        if (AuthHelper.getAccount(getContext())!= null) {
-            getContext().getContentResolver().requestSync(AuthHelper.getAccount(getContext()), be.nmct.howest.darem.provider.Contract.AUTHORITY, settingsBundle);
-        }
-    }
-
-
 }

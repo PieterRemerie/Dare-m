@@ -30,6 +30,16 @@ public class CategoriesData {
 
     };
 
+    public static int checkCategory (String cat){
+        int result = 0;
+        for(int i = 0 ; i < CategoriesData.categories.length ; i++){
+            if(CategoriesData.categories[i].contains(cat)){
+                result = i;
+            }
+        }
+        return result;
+    }
+
 
     public final static int[] imgIds = new int[]{R.mipmap.baseball, R.mipmap.basketball, R.mipmap.bodybuilding, R.mipmap.boxing,
             R.mipmap.cycling, R.mipmap.dancing, R.mipmap.football, R.mipmap.golf,
