@@ -266,8 +266,6 @@ public class CreateChallengeFragment extends Fragment {
         }
 
     }
-
-
         private void syncDataManual() {
             Bundle settingsBundle = new Bundle();
             settingsBundle.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);
