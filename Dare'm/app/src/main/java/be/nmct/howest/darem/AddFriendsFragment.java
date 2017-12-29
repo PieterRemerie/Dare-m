@@ -122,7 +122,7 @@ public class AddFriendsFragment extends Fragment implements LoaderManager.Loader
         }
 
         @Override
-        public void onBindViewHolder(AddFriendsViewHolder holder, int position) {
+        public void onBindViewHolder(final AddFriendsViewHolder holder, int position) {
             mCursorAddFriends.moveToPosition(position);
 
             final int colnr1 = mCursorAddFriends.getColumnIndex(Friends.Columns.COLUMN_NAME);
@@ -147,6 +147,7 @@ public class AddFriendsFragment extends Fragment implements LoaderManager.Loader
                 @Override
                 public void onClick(View v) {
 
+                    holder.btnAddFriends.setEnabled(false);
                     ContentValues values = new ContentValues();
 
                     values.put(Contract.FriendsColumns.COLUMN_FRIEND_FULLNAME, friendName);

@@ -17,6 +17,7 @@ import android.app.Fragment;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
+import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,6 +31,7 @@ import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -58,6 +60,7 @@ public class InviteDetailFragment extends Fragment implements LoaderManager.Load
     View v;
     TextView ChallengeName;
     TextView ChallengeDescription;
+    TextView textViewDate;
     ImageView ChallengeCategory;
     Button btnAccept;
     Button btnDecline;
@@ -76,6 +79,7 @@ public class InviteDetailFragment extends Fragment implements LoaderManager.Load
         ChallengeCategory = (ImageView) v.findViewById(R.id.imageView5);
         btnAccept = (Button) v.findViewById(R.id.btnAcceptInviteDetail);
         btnDecline = (Button) v.findViewById(R.id.btnDeclineInviteDetail);
+        textViewDate = (TextView) v.findViewById(R.id.txtDate);
 
         if (getArguments() != null) {
             String challengeName = getArguments().getString("challengeName");
@@ -89,6 +93,9 @@ public class InviteDetailFragment extends Fragment implements LoaderManager.Load
 
             ChallengeName.setText(challengeName);
             ChallengeDescription.setText(challengeDesc);
+
+            String dateString = DateFormat.format("dd/MM:yyyy", Long.parseLong(getArguments().getString("challengeDate"))).toString();
+            textViewDate.setText("Ends on: " +  dateString);
 
 
             getLoaderManager().initLoader(0, null, this);

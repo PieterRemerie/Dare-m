@@ -11,6 +11,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.support.v7.widget.RecyclerView;
+import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -44,7 +45,9 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -69,6 +72,7 @@ public class ChallengeDetailFragment extends Fragment implements LoaderManager.L
     TextView textViewDescription;
     Challenge challenge;
     ImageView imgCategory;
+    TextView textViewDate;
     private ArrayList<String> friends = new ArrayList<String>();
     private ArrayList<String> friendsId = new ArrayList<String>();
     private JSONArray jsonArray = new JSONArray();
@@ -98,9 +102,13 @@ public class ChallengeDetailFragment extends Fragment implements LoaderManager.L
         textViewTitle = (TextView) v.findViewById(R.id.txtTitle);
         textViewDescription = (TextView) v.findViewById(R.id.txtDescription);
         imgCategory = (ImageView) v.findViewById(R.id.imgCategoryDetail);
+        textViewDate = (TextView) v.findViewById(R.id.txtDate);
 
         textViewTitle.setText(challenge.getName());
         textViewDescription.setText(challenge.getDescription());
+
+        String dateString = DateFormat.format("dd/MM:yyyy", Long.parseLong(challenge.getDate())).toString();
+        textViewDate.setText("Ends on: " +  dateString);
 
         Log.i("Category", challenge.getCategoryId() + "  " + challenge.getCategory());
 

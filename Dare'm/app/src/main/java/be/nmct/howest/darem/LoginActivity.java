@@ -43,6 +43,7 @@ import java.io.OutputStreamWriter;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
+import java.util.Arrays;
 import java.util.concurrent.ExecutionException;
 
 import javax.net.ssl.HttpsURLConnection;
@@ -106,12 +107,7 @@ public class LoginActivity extends AppCompatActivity {
 
         // READ permissions voor FACEBOOK gegevens op te laden
         loginFB = (LoginButton) findViewById(R.id.btnLoginFB);
-        loginFB.setReadPermissions("public_profile");
-        loginFB.setReadPermissions("user_friends");
-        loginFB.setReadPermissions("email");
-
-
-
+        loginFB.setReadPermissions(Arrays.asList("public_profile", "email", "user_friends"));
 
         loginFB.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
