@@ -36,6 +36,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.squareup.picasso.Picasso;
 
+
+import be.nmct.howest.darem.Loader.Friends;
+import be.nmct.howest.darem.Loader.ParticipantsLoader;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;

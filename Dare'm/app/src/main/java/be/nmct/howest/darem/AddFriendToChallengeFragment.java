@@ -105,6 +105,7 @@ public class AddFriendToChallengeFragment extends Fragment {
         FragmentManager fragmentManager = getFragmentManager();
         Bundle args = new Bundle();
         args.putStringArrayList("key", friendsIdChallenge);
+        args.putStringArrayList("names", names);
         if(bundle.getString("challengeName" )!= null){
             args.putString("challengeName",bundle.getString("challengeName" ));
         }

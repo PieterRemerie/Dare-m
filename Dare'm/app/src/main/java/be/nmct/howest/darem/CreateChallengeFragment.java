@@ -67,6 +67,7 @@ public class CreateChallengeFragment extends Fragment {
     private MyFirebaseMessagingService myFirebaseMessagingService;
     private Challenge newChallenge = new Challenge();
     private ArrayList<String> friendsId = new ArrayList<String>();
+    private ArrayList<String> friendsNames = new ArrayList<String>();
     private int categoryId;
     private static final String TAG = "FirebaseMessageService";
     JSONArray jsonArray = new JSONArray();
@@ -104,6 +105,7 @@ public class CreateChallengeFragment extends Fragment {
         if (bundle != null) {
             if (bundle.getStringArrayList("key") != null) {
                 friendsId = bundle.getStringArrayList("key");
+                friendsNames = bundle.getStringArrayList("names");
                 Log.i("CREATE_CHALLENGE", "CHALLENGE FRIENDS TOEGEVOEGD");
 
             }
@@ -235,11 +237,15 @@ public class CreateChallengeFragment extends Fragment {
                 Log.i("STATUS", String.valueOf(conn.getResponseCode()));
                 Log.i("MSG", conn.getResponseMessage());
 
+
                 if (conn.getResponseCode() == 200) {
                     DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Notifications");
                     reference.removeValue();
-                    Notification notification = new Notification(AccessToken.getCurrentAccessToken().getUserId(), newChallenge.getName());
-                    reference.setValue(notification);
+                    for(Integer i = 0; i < friendsId.size(); i++){
+                        Notification notification = new Notification(friendsId.get(i), newChallenge.getName(), friendsNames.get(i));
+                        reference.setValue(notification);
+                    }
+
 
                     syncDataManual();
                 }
@@ -262,12 +268,6 @@ public class CreateChallengeFragment extends Fragment {
 
     }
 
-    private void sendNotification() {
-        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Notifications");
-        reference.removeValue();
-        Notification notification = new Notification("10212082552953938", "this is a message");
-        reference.setValue(notification);
-    }
 
         private void syncDataManual() {
             Bundle settingsBundle = new Bundle();
