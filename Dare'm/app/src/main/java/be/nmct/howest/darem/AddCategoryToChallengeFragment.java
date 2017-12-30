@@ -3,32 +3,22 @@ package be.nmct.howest.darem;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.app.LoaderManager;
-import android.content.Context;
 import android.content.Loader;
 import android.database.Cursor;
-import android.media.Image;
-import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import org.w3c.dom.Text;
-
-import java.util.ArrayList;
-
-import be.nmct.howest.darem.Model.Category;
 import be.nmct.howest.darem.database.CategoriesData;
-import be.nmct.howest.darem.database.CategoryLoader;
+import be.nmct.howest.darem.Loader.CategoryLoader;
 import be.nmct.howest.darem.database.Contract;
 
 
@@ -162,6 +152,8 @@ public class AddCategoryToChallengeFragment extends Fragment implements LoaderMa
         if(bundle.getString("challengeDate" )!= null){
             args.putString("challengeDate",bundle.getString("challengeDate" ));
         }
+        args.putStringArrayList("key", bundle.getStringArrayList("friends"));
+
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         CreateChallengeFragment createChallengeFragment = new CreateChallengeFragment();
         createChallengeFragment.setArguments(args);

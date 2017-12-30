@@ -43,6 +43,7 @@ public class AddDateToChallengeFragment extends Fragment {
         Calendar c = Calendar.getInstance();
 
         datePicker = (DatePicker) v.findViewById(R.id.datePicker);
+        datePicker.setMinDate(System.currentTimeMillis());
 
         datePicker.init(c.get(c.YEAR), c.get(c.MONTH), c.get(c.DAY_OF_MONTH), new DatePicker.OnDateChangedListener(){
 
@@ -85,6 +86,7 @@ public class AddDateToChallengeFragment extends Fragment {
         if(bundle.getInt("categoryId" )!= 0){
             args.putInt("categoryId", bundle.getInt("categoryId" ));
         }
+        args.putStringArrayList("key", bundle.getStringArrayList("friends"));
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         CreateChallengeFragment createChallengeFragment = new CreateChallengeFragment();
         createChallengeFragment.setArguments(args);

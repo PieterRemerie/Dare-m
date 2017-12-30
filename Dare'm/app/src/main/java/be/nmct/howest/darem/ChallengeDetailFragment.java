@@ -213,10 +213,10 @@ public class ChallengeDetailFragment extends Fragment implements LoaderManager.L
             map.put(id, name);
             int width = 150;
             int height = 150;
-            LinearLayout.LayoutParams parms = new LinearLayout.LayoutParams(width,height);
+            LinearLayout.LayoutParams parms = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
             iv.setLayoutParams(parms);
             final ViewGroup.MarginLayoutParams lpt =(ViewGroup.MarginLayoutParams) iv.getLayoutParams();
-            lpt.setMargins( 10,lpt.topMargin, 10,lpt.bottomMargin);
+            lpt.setMargins( 5,lpt.topMargin, 5,lpt.bottomMargin);
             iv.setLayoutParams(lpt);
             data.moveToNext();
         }

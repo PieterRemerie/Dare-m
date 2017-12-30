@@ -100,7 +100,6 @@ public class ChatActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
 
-
         progressDialog = new ProgressDialog(this);
         chatBubbles = new ArrayList<>();
         listView = (ListView) findViewById(R.id.list_msg);
@@ -109,14 +108,14 @@ public class ChatActivity extends AppCompatActivity {
         btnImage = (ImageView) findViewById(R.id.btnImage);
         btnCamera = (ImageView) findViewById(R.id.btnCamera);
 
-        adapter = new MessageAdapter(this, R.layout.left_chat_bubble, chatBubbles);
-        listView.setAdapter(adapter);
-
         /*linearLayout = (LinearLayout) findViewById(R.id.layout1);
         relativeLayout = (RelativeLayout) findViewById(R.id.layout2);
         sendButton = (ImageView)findViewById(R.id.btn_chat_send);
         messageArea = (EditText)findViewById(R.id.msg_type);
         scrollView = (ScrollView)findViewById(R.id.scrollView);*/
+
+        adapter = new MessageAdapter(this, R.layout.left_chat_bubble, chatBubbles);
+        listView.setAdapter(adapter);
 
         if(savedInstanceState == null){
             Bundle bundle = getIntent().getExtras();
@@ -153,73 +152,75 @@ public class ChatActivity extends AppCompatActivity {
         });
 
 
-
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        Firebase.setAndroidContext(this);
 
-        mStorage = FirebaseStorage.getInstance().getReference();
-        reference1 = new Firebase("https://gastleshowest2017-dc94f.firebaseio.com/messages/" + challenge.getDatabaseId() +"/_friends" );
-        reference3 = new Firebase("https://gastleshowest2017-dc94f.firebaseio.com/chat/" + challenge.getDatabaseId() + "/users/");
-        reference4 = new Firebase("https://gastleshowest2017-dc94f.firebaseio.com/chat/"+ challenge.getDatabaseId() + "/messages/");
+        if(reference1 == null && reference3 == null && reference4 == null){
+            Firebase.setAndroidContext(this);
 
-        reference4.addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                Map map = dataSnapshot.getValue(Map.class);
-                String message = "";
-                String image = "";
-                if(map.get("message") != null){
-                    message = map.get("message").toString();
-                }
-                String userName = map.get("user").toString();
-                String naam = mapje.get(userName);
-                if(map.get("image") != null){
-                    image = map.get("image").toString();
-                }
+            mStorage = FirebaseStorage.getInstance().getReference();
+            reference1 = new Firebase("https://gastleshowest2017-dc94f.firebaseio.com/messages/" + challenge.getDatabaseId() +"/_friends" );
+            reference3 = new Firebase("https://gastleshowest2017-dc94f.firebaseio.com/chat/" + challenge.getDatabaseId() + "/users/");
+            reference4 = new Firebase("https://gastleshowest2017-dc94f.firebaseio.com/chat/"+ challenge.getDatabaseId() + "/messages/");
 
-                if(Objects.equals(image, "")){
-                    if(AccessToken.getCurrentAccessToken().getUserId().equals(userName)){
-                        addMessageBox(message, "YOU", 1);
-                    }else{
-                        addMessageBox(message, naam, 2);
+            reference4.addChildEventListener(new ChildEventListener() {
+                @Override
+                public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                    Map map = dataSnapshot.getValue(Map.class);
+                    String message = "";
+                    String image = "";
+                    if(map.get("message") != null){
+                        message = map.get("message").toString();
                     }
-                }else if(Objects.equals(message, "")){
-                    if(AccessToken.getCurrentAccessToken().getUserId().equals(AccessToken.getCurrentAccessToken().getUserId())){
-                        addMessageBox(image, "YOU", 3);
-                        progressDialog.dismiss();
-
-                    }else{
-                        addMessageBox(image, naam, 4);
-
+                    String userName = map.get("user").toString();
+                    String naam = mapje.get(userName);
+                    if(map.get("image") != null){
+                        image = map.get("image").toString();
                     }
+
+                    if(Objects.equals(image, "")){
+                        if(AccessToken.getCurrentAccessToken().getUserId().equals(userName)){
+                            addMessageBox(message, "YOU", 1);
+                        }else{
+                            addMessageBox(message, naam, 2);
+                        }
+                    }else if(Objects.equals(message, "")){
+                        if(AccessToken.getCurrentAccessToken().getUserId().equals(AccessToken.getCurrentAccessToken().getUserId())){
+                            addMessageBox(image, "YOU", 3);
+                            progressDialog.dismiss();
+
+                        }else{
+                            addMessageBox(image, naam, 4);
+
+                        }
+                    }
+
                 }
 
-            }
+                @Override
+                public void onChildChanged(DataSnapshot dataSnapshot, String s) {
 
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                }
 
-            }
+                @Override
+                public void onChildRemoved(DataSnapshot dataSnapshot) {
 
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
+                }
 
-            }
+                @Override
+                public void onChildMoved(DataSnapshot dataSnapshot, String s) {
 
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+                }
 
-            }
+                @Override
+                public void onCancelled(FirebaseError firebaseError) {
 
-            @Override
-            public void onCancelled(FirebaseError firebaseError) {
-
-            }
-        });
+                }
+            });
+        }
     }
 
     public  boolean isReadStoragePermissionGranted() {
@@ -329,9 +330,9 @@ public class ChatActivity extends AppCompatActivity {
                 map.put("user", AccessToken.getCurrentAccessToken().getUserId());
                 reference4.push().setValue(map);
                 progressDialog.dismiss();
-
             }
         });
+
     }
 
     @Override

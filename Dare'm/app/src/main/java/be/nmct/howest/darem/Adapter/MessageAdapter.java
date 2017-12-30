@@ -80,7 +80,7 @@ public class MessageAdapter extends ArrayAdapter<ChatBubble> {
                 @Override
                 public void onSuccess(byte[] bytes) {
                     bitmap = BitmapFactory.decodeByteArray(bytes,0,bytes.length);
-                    holder.image.setImageBitmap(RotateBitmap(Bitmap.createScaledBitmap(bitmap, 350,350,true), 90));
+                    holder.image.setImageBitmap(RotateBitmap(Bitmap.createScaledBitmap(bitmap, 350,260,true), 0));
                     bitmap.recycle();
                     holder.name.setText(ChatBubble.getName());
 

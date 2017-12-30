@@ -24,20 +24,18 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
                 android:layout_centerHorizontal="true"
-                android:layout_marginTop="15dp"
                 android:fontFamily="sans-serif"
                 android:text="DM Challenge"
                 android:textColor="#000000"
-                android:textSize="36sp"
+                android:textSize="18sp"
                 android:textStyle="bold" />
 
             <ImageView
                 android:id="@+id/imgCategoryDetail"
-                android:layout_width="75dp"
-                android:layout_height="75dp"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
                 android:layout_below="@+id/txtTitle"
                 android:layout_centerHorizontal="true"
-                android:layout_marginTop="17dp"
                 app:srcCompat="@drawable/football" />
 
             <TextView
@@ -52,46 +50,47 @@
 
             <View
                 android:id="@+id/SplitLine_hor1"
-                android:layout_width="130dp"
+                android:layout_width="250dp"
                 android:layout_height="2dp"
-                android:layout_marginTop="118dp"
-                android:layout_toStartOf="@+id/imageView5"
+                android:layout_alignParentStart="true"
+                android:layout_below="@+id/txtTitle"
+                android:layout_marginTop="26dp"
                 android:background="#000000"
                 android:visibility="visible" />
 
             <View
                 android:id="@+id/SplitLine_hor2"
-                android:layout_width="130dp"
+                android:layout_width="250dp"
                 android:layout_height="2dp"
                 android:layout_alignParentEnd="true"
-                android:layout_marginTop="118dp"
-                android:layout_toEndOf="@+id/imageView5"
+                android:layout_alignTop="@+id/SplitLine_hor1"
                 android:background="#000000"
                 android:visibility="visible" />
 
             <HorizontalScrollView
+                android:id="@+id/horizontalScrollView2"
                 android:layout_width="match_parent"
-                android:layout_height="80dp"
+                android:layout_height="40dp"
+                android:layout_alignParentStart="true"
                 android:layout_below="@+id/txtDescription"
-                android:layout_marginTop="25dp"
+                android:layout_marginTop="16dp"
                 android:background="#eaeaea">
 
                 <LinearLayout
                     android:id="@+id/LinearLayoutImage"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_marginBottom="15dp"
-                    android:layout_marginLeft="3dp"
-                    android:layout_marginRight="3dp"
-                    android:layout_marginTop="15dp"
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginLeft="1dp"
+                    android:layout_marginRight="1dp"
+                    android:layout_marginTop="5dp"
                     android:orientation="horizontal" />
             </HorizontalScrollView>
 
             <Button
                 android:id="@+id/button2"
-                android:layout_width="170dp"
+                android:layout_width="280dp"
                 android:layout_height="wrap_content"
-                android:layout_alignEnd="@+id/SplitLine_hor2"
                 android:layout_alignParentBottom="true"
                 android:layout_alignParentStart="true"
                 android:background="#8c0017"
@@ -102,11 +101,10 @@
 
             <Button
                 android:id="@+id/btnCompleted"
-                android:layout_width="match_parent"
+                android:layout_width="285dp"
                 android:layout_height="wrap_content"
-                android:layout_above="@+id/button2"
-                android:layout_alignEnd="@+id/SplitLine_hor2"
-                android:layout_marginBottom="13dp"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentEnd="true"
                 android:background="#179301"
                 android:fontFamily="monospace"
                 android:text="COMPLETED"
@@ -117,9 +115,9 @@
                 android:id="@+id/txtDate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_above="@+id/btnCompleted"
+                android:layout_below="@+id/horizontalScrollView2"
                 android:layout_centerHorizontal="true"
-                android:layout_marginBottom="11dp"
+                android:layout_marginTop="10dp"
                 android:text="Ends on: 13/01/2018" />
 
         </RelativeLayout>

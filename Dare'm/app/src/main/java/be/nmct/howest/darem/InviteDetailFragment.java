@@ -43,6 +43,7 @@ import javax.net.ssl.HttpsURLConnection;
 
 import be.nmct.howest.darem.Loader.Friends;
 import be.nmct.howest.darem.Loader.ParticipantsLoader;
+import be.nmct.howest.darem.Model.Challenge;
 import be.nmct.howest.darem.Transforms.CircleTransform;
 import be.nmct.howest.darem.Viewmodel.ChallengeOverviewFragmentViewModel;
 import be.nmct.howest.darem.auth.AuthHelper;
@@ -67,6 +68,8 @@ public class InviteDetailFragment extends Fragment implements LoaderManager.Load
 
     String challengeId;
 
+    Challenge challenge;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
@@ -84,19 +87,16 @@ public class InviteDetailFragment extends Fragment implements LoaderManager.Load
         textViewDate = (TextView) v.findViewById(R.id.txtDate);
 
         if (getArguments() != null) {
-            String challengeName = getArguments().getString("challengeName");
-            String challengeDesc = getArguments().getString("challengeDesc");
-            String challengeCat = getArguments().getString("challengeCat");
-            challengeId = getArguments().getString("challengeID");
+            challenge = getArguments().getParcelable("challenge");
 
-            int i = CategoriesData.checkCategory(challengeCat);
+            int i = CategoriesData.checkCategory(challenge.getCategory());
 
             ChallengeCategory.setImageResource(CategoriesData.imgIds[i]);
 
-            ChallengeName.setText(challengeName);
-            ChallengeDescription.setText(challengeDesc);
+            ChallengeName.setText(challenge.getName());
+            ChallengeDescription.setText(challenge.getDescription());
 
-            String dateString = DateFormat.format("dd/MM/yyyy", Long.parseLong(getArguments().getString("challengeDate"))).toString();
+            String dateString = DateFormat.format("dd/MM/yyyy", Long.parseLong(challenge.getDate())).toString();
             textViewDate.setText("Ends on: " +  dateString);
 
 
@@ -106,14 +106,14 @@ public class InviteDetailFragment extends Fragment implements LoaderManager.Load
         btnAccept.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                new SendPost(challengeId, "accept").execute();
+                new SendPost(challenge.getDatabaseId(), "accept").execute();
             }
         });
 
         btnDecline.setOnClickListener((new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                new SendPost(challengeId, "decline").execute();
+                new SendPost(challenge.getDatabaseId(), "decline").execute();
             }
         }));
 
@@ -124,8 +124,8 @@ public class InviteDetailFragment extends Fragment implements LoaderManager.Load
 
     @Override
     public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
-        Log.i("challengeDDDD", challengeId);
-        return new ParticipantsLoader(this.getContext(), challengeId);
+        Log.i("challengeDDDD", challenge.getDatabaseId());
+        return new ParticipantsLoader(this.getContext(), challenge.getDatabaseId());
     }
 
     @Override
@@ -150,12 +150,15 @@ public class InviteDetailFragment extends Fragment implements LoaderManager.Load
             ImageView iv = new ImageView(getContext());
             Picasso.with(v.getContext()).load(data.getString(colnr3)).transform(new CircleTransform()).into(iv);
             horizontalScrollView.addView(iv);
+            //friends.add(data.getString(colnr2));
+            String id = data.getString(colnr1);
+            String name = data.getString(colnr2);
             int width = 150;
             int height = 150;
-            LinearLayout.LayoutParams parms = new LinearLayout.LayoutParams(width,height);
+            LinearLayout.LayoutParams parms = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
             iv.setLayoutParams(parms);
             final ViewGroup.MarginLayoutParams lpt =(ViewGroup.MarginLayoutParams) iv.getLayoutParams();
-            lpt.setMargins( 10,lpt.topMargin, 10,lpt.bottomMargin);
+            lpt.setMargins( 5,lpt.topMargin, 5,lpt.bottomMargin);
             iv.setLayoutParams(lpt);
             data.moveToNext();
         }

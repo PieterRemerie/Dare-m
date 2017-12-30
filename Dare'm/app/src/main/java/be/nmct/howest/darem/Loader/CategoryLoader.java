@@ -1,10 +1,13 @@
-package be.nmct.howest.darem.database;
+package be.nmct.howest.darem.Loader;
 
 import android.content.AsyncTaskLoader;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+
+import be.nmct.howest.darem.database.Contract;
+import be.nmct.howest.darem.database.DatabaseHelper;
 
 /**
  * Created by katri on 21/12/2017.

@@ -28,7 +28,7 @@
                 android:layout_alignParentTop="true"
                 android:layout_alignStart="@+id/editText2"
                 android:layout_marginTop="43dp"
-                android:text="Name"
+                android:text="Challenge name"
                 android:textStyle="bold" />
 
             <EditText
@@ -92,7 +92,7 @@
                 android:focusable="false"
                 android:focusableInTouchMode="false"
                 android:onClick="@{() -> test.showAddFriendToChallengeFragment()}"
-                android:text="Add Friends"
+                android:text="@={Challenge.friends}"
                 android:textSize="12sp" />
 
             <EditText

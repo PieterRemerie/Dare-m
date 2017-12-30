@@ -42,7 +42,7 @@ import javax.net.ssl.HttpsURLConnection;
 
 import be.nmct.howest.darem.Loader.Challenge;
 import be.nmct.howest.darem.Loader.Friends;
-import be.nmct.howest.darem.Loader.InviteChallenge;
+import be.nmct.howest.darem.Loader.InviteChallengeLoader;
 import be.nmct.howest.darem.auth.AuthHelper;
 import be.nmct.howest.darem.database.CategoriesData;
 import be.nmct.howest.darem.database.Contract;
@@ -69,7 +69,7 @@ public class InviteOverviewFragment extends Fragment implements LoaderManager.Lo
 
     @Override
     public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
-        return new InviteChallenge(this.getContext());
+        return new InviteChallengeLoader(this.getContext());
     }
 
     @Override
@@ -112,11 +112,15 @@ public class InviteOverviewFragment extends Fragment implements LoaderManager.Lo
 
             holder.textViewChallengeNaam.setText(mCursor.getString(colnr1));
             holder.imageViewCategory.setImageResource(CategoriesData.imgIds[i]);
-            holder.challengeId = mCursor.getString(colnr3);
-            holder.challengeName = mCursor.getString(colnr1);
-            holder.challengeDescription = mCursor.getString(colnr2);
-            holder.challengeCategory = mCursor.getString(colnr4);
-            holder.challengeDate = mCursor.getString(colnr5);
+
+
+
+            holder.challenge = new be.nmct.howest.darem.Model.Challenge();
+            holder.challenge.setDatabaseId(mCursor.getString(colnr3));
+            holder.challenge.setName(mCursor.getString(colnr1));
+            holder.challenge.setDescription(mCursor.getString(colnr2));
+            holder.challenge.setCategory(mCursor.getString(colnr4));
+            holder.challenge.setDate(mCursor.getString(colnr5));
         }
 
         @Override
@@ -131,11 +135,7 @@ public class InviteOverviewFragment extends Fragment implements LoaderManager.Lo
         public final ImageView imageViewCategory;
         public final TextView textViewChallengeNaam;
 
-        public String challengeId;
-        public String challengeName;
-        public String challengeDescription;
-        public String challengeCategory;
-        public String challengeDate;
+        public be.nmct.howest.darem.Model.Challenge challenge;
 
         public InviteOverviewFragmentViewHolder(View view) {
             super(view);
@@ -146,19 +146,15 @@ public class InviteOverviewFragment extends Fragment implements LoaderManager.Lo
                 @Override
                 public void onClick(View v) {
                     //new SendPost(challengeId).execute();
-                    showInviteDetailFragment(challengeName, challengeDescription, challengeCategory, challengeId, challengeDate);
+                    showInviteDetailFragment(challenge);
                 }
             });
         }
     }
 
-    private void showInviteDetailFragment(String challengeName, String challengeDesc, String challengeCat, String challengeID, String ChallengeDate){
+    private void showInviteDetailFragment(be.nmct.howest.darem.Model.Challenge challenge){
         Bundle bundle = new Bundle();
-        bundle.putString("challengeName", challengeName);
-        bundle.putString("challengeDesc", challengeDesc);
-        bundle.putString("challengeCat", challengeCat);
-        bundle.putString("challengeID", challengeID);
-        bundle.putString("challengeDate", ChallengeDate);
+        bundle.putParcelable("challenge", challenge);
 
         FragmentManager fragmentManager = getFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();

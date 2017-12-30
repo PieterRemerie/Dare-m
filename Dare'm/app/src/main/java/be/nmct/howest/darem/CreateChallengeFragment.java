@@ -101,13 +101,14 @@ public class CreateChallengeFragment extends Fragment {
 
         newChallenge.setCategory("Choose category");
         newChallenge.setDate("Pick the end date");
+        newChallenge.setFriends("Friends added (0)");
 
         if (bundle != null) {
             if (bundle.getStringArrayList("key") != null) {
                 friendsId = bundle.getStringArrayList("key");
                 friendsNames = bundle.getStringArrayList("names");
                 Log.i("CREATE_CHALLENGE", "CHALLENGE FRIENDS TOEGEVOEGD");
-
+                newChallenge.setFriends("Friends added (" + friendsId.size() + ")");
             }
             if (bundle.getInt("categoryId") != 0) {
                 categoryId = bundle.getInt("categoryId");
@@ -154,8 +155,12 @@ public class CreateChallengeFragment extends Fragment {
     }
 
     public void saveNewChallenge() {
-        saveChallengeToDb();
-        new SendPost().execute();
+        if(newChallenge.getName() != null && newChallenge.getDescription() != null && newChallenge.getDate() != null && newChallenge.getCategory() != null && friendsId.size() != 0){
+            saveChallengeToDb();
+            new SendPost().execute();
+        }else{
+            Toast.makeText(getContext(), "Not all fields are filled in!", Toast.LENGTH_SHORT).show();
+        }
     }
 
 
@@ -289,7 +294,6 @@ public class CreateChallengeFragment extends Fragment {
         AddFriendToChallengeFragment addFriendToChallengeFragment = new AddFriendToChallengeFragment();
         addFriendToChallengeFragment.setArguments(innerBundle);
         fragmentTransaction.replace(R.id.framelayout_in_create_challenge_activity, addFriendToChallengeFragment);
-        fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
     }
 
@@ -301,7 +305,7 @@ public class CreateChallengeFragment extends Fragment {
         AddCategoryToChallengeFragment addCategoryToChallengeFragment = new AddCategoryToChallengeFragment();
         addCategoryToChallengeFragment.setArguments(innerBundle);
         fragmentTransaction.replace(R.id.framelayout_in_create_challenge_activity, addCategoryToChallengeFragment);
-        fragmentTransaction.addToBackStack(null).commit();
+        fragmentTransaction.commit();
 
     }
 
@@ -312,7 +316,7 @@ public class CreateChallengeFragment extends Fragment {
         AddDateToChallengeFragment addDateToChallengeFragment = new AddDateToChallengeFragment();
         addDateToChallengeFragment.setArguments(innerBundle);
         fragmentTransaction.replace(R.id.framelayout_in_create_challenge_activity, addDateToChallengeFragment);
-        fragmentTransaction.addToBackStack(null).commit();
+        fragmentTransaction.commit();
     }
 
     public void addItemsToBundle(){
@@ -328,6 +332,7 @@ public class CreateChallengeFragment extends Fragment {
         if(!newChallenge.getCategory().equals("Choose category")){
             innerBundle.putInt("categoryId", newChallenge.getCategoryId());
         }
+        innerBundle.putStringArrayList("friends", friendsId);
     }
 
 

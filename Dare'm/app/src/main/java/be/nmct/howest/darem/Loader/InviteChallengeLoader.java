@@ -25,12 +25,12 @@ import be.nmct.howest.darem.auth.AuthHelper;
  * Created by michv on 14/12/2017.
  */
 
-public class InviteChallenge extends AsyncTaskLoader<Cursor> {
+public class InviteChallengeLoader extends AsyncTaskLoader<Cursor> {
 
     private Cursor mCursor;
     private static Object lock = new Object();
 
-    public InviteChallenge(Context context) {
+    public InviteChallengeLoader(Context context) {
         super(context);
     }
 
