@@ -36,9 +36,6 @@ public class HttpGetRequest extends AsyncTask<String, Void, String> {
 
     @Override
     protected String doInBackground(String... params) {
-        //String info = getDataFromUrl("https://darem.herokuapp.com/userprofile?authToken=" + AccessToken.getCurrentAccessToken().getUserId());
-        // return info;
-
         String stringUrl = params[0];
         String result;
         String inputLine;

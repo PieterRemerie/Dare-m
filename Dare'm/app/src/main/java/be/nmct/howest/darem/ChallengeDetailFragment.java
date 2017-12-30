@@ -76,9 +76,6 @@ public class ChallengeDetailFragment extends Fragment implements LoaderManager.L
     Challenge challenge;
     ImageView imgCategory;
     TextView textViewDate;
-    private ArrayList<String> friends = new ArrayList<String>();
-    private ArrayList<String> friendsId = new ArrayList<String>();
-    private JSONArray jsonArray = new JSONArray();
     HashMap<String, String> map = new HashMap<String, String>();
     Button button;
     Button buttonCompleted;
@@ -207,12 +204,9 @@ public class ChallengeDetailFragment extends Fragment implements LoaderManager.L
             }
 
             horizontalScrollView.addView(iv);
-            //friends.add(data.getString(colnr2));
             String id = data.getString(colnr1);
             String name = data.getString(colnr2);
             map.put(id, name);
-            int width = 150;
-            int height = 150;
             LinearLayout.LayoutParams parms = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
             iv.setLayoutParams(parms);
             final ViewGroup.MarginLayoutParams lpt =(ViewGroup.MarginLayoutParams) iv.getLayoutParams();

@@ -64,13 +64,10 @@ import be.nmct.howest.darem.firebase.MyFirebaseMessagingService;
 public class CreateChallengeFragment extends Fragment {
 
     private FragmentCreateChallengeBinding binding;
-    private MyFirebaseMessagingService myFirebaseMessagingService;
     private Challenge newChallenge = new Challenge();
     private ArrayList<String> friendsId = new ArrayList<String>();
     private ArrayList<String> friendsNames = new ArrayList<String>();
     private int categoryId;
-    private static final String TAG = "FirebaseMessageService";
-    JSONArray jsonArray = new JSONArray();
     private Bundle bundle;
     private Bundle innerBundle = new Bundle();
 

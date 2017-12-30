@@ -24,9 +24,6 @@ import be.nmct.howest.darem.database.Contract;
 
 public class AddCategoryToChallengeFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>{
 
-    //ArrayList<String> names = new ArrayList<String>();
-    //ArrayList<String> photos = new ArrayList<String>();
-
     private RecyclerView recyclerViewAddCategory;
     private AddCategoryRecycleViewAdapter addCategoryRecycleViewAdapter;
     private Bundle bundle;

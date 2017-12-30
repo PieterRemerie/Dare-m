@@ -67,12 +67,8 @@ import be.nmct.howest.darem.auth.AuthHelper;
 
 public class ChatActivity extends AppCompatActivity {
 
-    LinearLayout linearLayout;
-    RelativeLayout relativeLayout;
-    ImageView sendButton;
     EditText messageArea;
-    ScrollView scrollView;
-    Firebase reference1, reference2, reference3, reference4;
+    Firebase reference1, reference3, reference4;
     ArrayList<String> friends;
     Challenge challenge;
     ImageView btnImage;
@@ -83,17 +79,13 @@ public class ChatActivity extends AppCompatActivity {
     private static final int CAMERA_INTENT = 2;
     private ProgressDialog progressDialog;
     private StorageReference filepath;
-    private FirebaseStorage storage;
     private Uri downloadUri;
 
-    //Bitmap bitmap;
 
     private ListView listView;
     private View btnSend;
-    boolean myMessage = true;
     private List<ChatBubble> chatBubbles;
     private ArrayAdapter<ChatBubble> adapter;
-    private JSONArray object = null;
     HashMap<String, String> mapje = new HashMap<String, String>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -107,12 +99,6 @@ public class ChatActivity extends AppCompatActivity {
         messageArea = (EditText)findViewById(R.id.msg_type);
         btnImage = (ImageView) findViewById(R.id.btnImage);
         btnCamera = (ImageView) findViewById(R.id.btnCamera);
-
-        /*linearLayout = (LinearLayout) findViewById(R.id.layout1);
-        relativeLayout = (RelativeLayout) findViewById(R.id.layout2);
-        sendButton = (ImageView)findViewById(R.id.btn_chat_send);
-        messageArea = (EditText)findViewById(R.id.msg_type);
-        scrollView = (ScrollView)findViewById(R.id.scrollView);*/
 
         adapter = new MessageAdapter(this, R.layout.left_chat_bubble, chatBubbles);
         listView.setAdapter(adapter);

@@ -36,8 +36,6 @@ public class FBFriendsLoader extends AsyncTaskLoader<Cursor> {
 
     private Cursor mCursor;
     private static Object lock = new Object();
-    AccessToken accessToken = AccessToken.getCurrentAccessToken();
-
 
     public FBFriendsLoader(Context context) {
         super(context);

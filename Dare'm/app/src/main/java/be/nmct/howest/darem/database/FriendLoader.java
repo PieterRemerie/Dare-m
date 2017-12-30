@@ -12,11 +12,9 @@ import android.database.sqlite.SQLiteDatabase;
 public class FriendLoader extends AsyncTaskLoader<Cursor>{
 
     private Cursor mData;
-    private Context mContext;
 
     public FriendLoader(Context context){
         super(context);
-        mContext = context;
     }
 
     protected  void onStartLoading() {

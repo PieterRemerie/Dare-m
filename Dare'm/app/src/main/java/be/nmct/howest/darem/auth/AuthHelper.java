@@ -17,7 +17,6 @@ import java.io.IOException;
 
 public class AuthHelper {
     private static AccountManager mAccountManager;
-    private static AccountAuthenticatorResponse mAccountAuthenticatorResponse;
 
     public static String getUsername(Context context){
         mAccountManager = AccountManager.get(context);

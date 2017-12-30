@@ -64,7 +64,6 @@ public class LoginActivity extends AppCompatActivity {
 
     CallbackManager callbackManager;
     LoginButton loginFB;
-    JSONObject profileInformation;
 
     private AccountManager mAccountManager;
     private AccountAuthenticatorResponse mAccountAuthenticatorResponse;
