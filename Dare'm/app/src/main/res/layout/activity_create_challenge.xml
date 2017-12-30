@@ -13,9 +13,7 @@
         android:id="@+id/framelayout_in_create_challenge_activity"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="visible"
-        tools:layout_editor_absoluteY="8dp"
-        tools:layout_editor_absoluteX="8dp">
+        android:visibility="visible">
 
     </FrameLayout>
 

@@ -20,13 +20,11 @@
 
     <DatePicker
         android:id="@+id/datePicker"
-        android:layout_width="365dp"
+        android:layout_width="match_parent"
         android:layout_height="484dp"
-        android:layout_weight="1.84"
-        android:layout_gravity="center_horizontal"
+        android:layout_centerHorizontal="true"
         android:calendarTextColor="#9e0101"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginBottom="19dp" />
+        android:layout_alignParentEnd="true" android:layout_margin="5dp"/>
 
 </RelativeLayout>
