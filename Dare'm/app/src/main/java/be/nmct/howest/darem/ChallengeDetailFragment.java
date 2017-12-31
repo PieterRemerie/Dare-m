@@ -143,6 +143,8 @@ public class ChallengeDetailFragment extends Fragment implements LoaderManager.L
         buttonCompleted.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                buttonCompleted.setEnabled(false);
+                buttonCompleted.setBackgroundColor(Color.GRAY);
                new SendPUT().execute();
             }
         });
@@ -202,8 +204,10 @@ public class ChallengeDetailFragment extends Fragment implements LoaderManager.L
                 Picasso.with(v.getContext()).load(data.getString(colnr3)).transform(new CircleTransform()).into(iv);
             }else{
                 Picasso.with(v.getContext()).load(data.getString(colnr3)).transform(new RoundedTransformColorBorder()).into(iv);
-                buttonCompleted.setEnabled(false);
-                buttonCompleted.setBackgroundColor(Color.GRAY);
+                if(data.getString(colnr1).equals(AuthHelper.getAccessToken(getContext()))){
+                    buttonCompleted.setEnabled(false);
+                    buttonCompleted.setBackgroundColor(Color.GRAY);
+                }
             }
 
             horizontalScrollView.addView(iv);
