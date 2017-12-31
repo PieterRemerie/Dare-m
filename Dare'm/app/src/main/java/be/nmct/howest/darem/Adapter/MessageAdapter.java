@@ -25,7 +25,9 @@ import com.squareup.picasso.Picasso;
 
 import java.io.InputStream;
 import java.net.URI;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import be.nmct.howest.darem.ChatActivity;
 import be.nmct.howest.darem.Model.ChatBubble;
@@ -41,7 +43,7 @@ public class MessageAdapter extends ArrayAdapter<ChatBubble> {
     private List<ChatBubble> messages;
     private FirebaseStorage mStorage;
     private Bitmap bitmap;
-
+    private Map<String, Bitmap> mBitmapCache = new HashMap<String, Bitmap>();
 
     public MessageAdapter(@NonNull Activity context, @LayoutRes int resource, @NonNull List<ChatBubble> objects) {
         super(context, resource, objects);
@@ -74,21 +76,26 @@ public class MessageAdapter extends ArrayAdapter<ChatBubble> {
         }
         if(holder.image != null && holder.name != null){
             mStorage = FirebaseStorage.getInstance();
-            StorageReference storageReference = mStorage.getReferenceFromUrl(ChatBubble.getContent());
-            final long ONE_MEGABYTE = 1024 * 1024;
-            storageReference.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
-                @Override
-                public void onSuccess(byte[] bytes) {
-                    bitmap = BitmapFactory.decodeByteArray(bytes,0,bytes.length);
-                    holder.image.setImageBitmap(RotateBitmap(Bitmap.createScaledBitmap(bitmap, 350,260,true), 0));
-                    bitmap.recycle();
-                    holder.name.setText(ChatBubble.getName());
 
-                }
+            if(mBitmapCache.containsKey(ChatBubble.getContent())){
+                holder.image.setImageBitmap(mBitmapCache.get(ChatBubble.getContent()));
+                holder.name.setText(ChatBubble.getName());
+            }else{
+                StorageReference storageReference = mStorage.getReferenceFromUrl(ChatBubble.getContent());
+                final long ONE_MEGABYTE = 1024 * 1024;
+                storageReference.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+                    @Override
+                    public void onSuccess(byte[] bytes) {
+                        bitmap = BitmapFactory.decodeByteArray(bytes,0,bytes.length);
+                        mBitmapCache.put(ChatBubble.getContent().toString(), RotateBitmap(Bitmap.createScaledBitmap(bitmap, 264,149,true), 0));
+                        holder.image.setImageBitmap(RotateBitmap(Bitmap.createScaledBitmap(bitmap, 264,149,true), 0));
+                        holder.name.setText(ChatBubble.getName());
 
-            });
+                    }
+
+                });
+            }
             //Picasso.with(getContext()).load(ChatBubble.getContent()).into(holder.image);
-
         }
         return convertView;
     }

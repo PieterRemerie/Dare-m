@@ -7,6 +7,7 @@ import android.accounts.AuthenticatorException;
 import android.accounts.OperationCanceledException;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.app.ProgressDialog;
 import android.content.ContentProviderOperation;
 import android.content.ContentResolver;
 import android.content.ContentValues;
@@ -88,22 +89,19 @@ public class ChallengeActivity extends AppCompatActivity {
 
     private static final String TAG = "FirebaseMessageService";
     boolean connected = false;
+    NavigationView navigationView;
+    View view;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        saveCategories();
-        FirebaseMessaging.getInstance().subscribeToTopic(AuthHelper.getDbToken(getApplicationContext()));
-
-        View view = getLayoutInflater().inflate(R.layout.activity_challenge, null);
-
+        view = getLayoutInflater().inflate(R.layout.activity_challenge, null);
         setContentView(R.layout.activity_challenge);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         final DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
@@ -152,8 +150,6 @@ public class ChallengeActivity extends AppCompatActivity {
             showChallengesOverviewFragment();
         }
 
-        SyncManual.syncDataManual(getApplicationContext());
-
         final FloatingActionButton fabChallenges = (FloatingActionButton) findViewById(R.id.fab_addChallenge);
         fabChallenges.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -170,13 +166,20 @@ public class ChallengeActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+        FirebaseMessaging.getInstance().subscribeToTopic(AuthHelper.getDbToken(getApplicationContext()));
+        SyncManual.syncDataManual(getApplicationContext());
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
         checkInternet();
         if (connected) {
             Navigation.setHeader(navigationView, view);
         } else {
             Navigation.setHeaderOfflineData(navigationView, view);
         }
-
+        saveCategories();
         Toast.makeText(this.getBaseContext(), "welcome: " + AuthHelper.getUsername(this) + " AUTHTOKEN: " + AuthHelper.getAccessToken(this) + " DBToken: " + AuthHelper.getDbToken(this), Toast.LENGTH_LONG).show();
     }
 

@@ -3,15 +3,18 @@ package be.nmct.howest.darem;
 import android.accounts.Account;
 import android.accounts.AccountAuthenticatorResponse;
 import android.accounts.AccountManager;
+import android.app.ProgressDialog;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.content.OperationApplicationException;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.databinding.DataBindingUtil;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
+import android.os.RemoteException;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.telecom.Call;
@@ -113,6 +116,13 @@ public class LoginActivity extends AppCompatActivity {
             public void onSuccess(LoginResult loginResult) {
                 Intent intent = new Intent(LoginActivity.this, ChallengeActivity.class);
                 if(!AuthHelper.isUserLoggedIn(getApplicationContext())){
+                    try {
+                        DatabaseHelper.DeletePreviousDBUser(getApplicationContext());
+                    } catch (RemoteException e) {
+                        e.printStackTrace();
+                    } catch (OperationApplicationException e) {
+                        e.printStackTrace();
+                    }
                     new SendPost(loginResult.getAccessToken().getToken()).execute();
                     saveNewUser();
                     startActivity(intent);

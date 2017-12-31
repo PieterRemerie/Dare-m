@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.icu.util.Freezable;
 import android.media.Image;
 import android.os.AsyncTask;
@@ -201,6 +202,8 @@ public class ChallengeDetailFragment extends Fragment implements LoaderManager.L
                 Picasso.with(v.getContext()).load(data.getString(colnr3)).transform(new CircleTransform()).into(iv);
             }else{
                 Picasso.with(v.getContext()).load(data.getString(colnr3)).transform(new RoundedTransformColorBorder()).into(iv);
+                buttonCompleted.setEnabled(false);
+                buttonCompleted.setBackgroundColor(Color.GRAY);
             }
 
             horizontalScrollView.addView(iv);
