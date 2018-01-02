@@ -10,12 +10,15 @@ import android.net.Uri;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.LinearLayoutCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -66,6 +69,8 @@ public class MessageAdapter extends ArrayAdapter<ChatBubble> {
                 convertView = inflater.inflate(R.layout.right_chat_bubble, parent, false);
         } else if(ChatBubble.getType() == 3){
             convertView = inflater.inflate(R.layout.left_image_chat, parent, false);
+        } else if (ChatBubble.getType() == 4){
+            convertView = inflater.inflate(R.layout.right_image_chat, parent, false);
         }
         holder = new ViewHolder(convertView);
 
@@ -78,6 +83,8 @@ public class MessageAdapter extends ArrayAdapter<ChatBubble> {
             mStorage = FirebaseStorage.getInstance();
 
             if(mBitmapCache.containsKey(ChatBubble.getContent())){
+
+                scaleImage(holder.image,mBitmapCache.get(ChatBubble.getContent()), 300);
                 holder.image.setImageBitmap(mBitmapCache.get(ChatBubble.getContent()));
                 holder.name.setText(ChatBubble.getName());
             }else{
@@ -87,8 +94,9 @@ public class MessageAdapter extends ArrayAdapter<ChatBubble> {
                     @Override
                     public void onSuccess(byte[] bytes) {
                         bitmap = BitmapFactory.decodeByteArray(bytes,0,bytes.length);
-                        mBitmapCache.put(ChatBubble.getContent().toString(), RotateBitmap(Bitmap.createScaledBitmap(bitmap, 264,149,true), 0));
-                        holder.image.setImageBitmap(RotateBitmap(Bitmap.createScaledBitmap(bitmap, 264,149,true), 0));
+                        mBitmapCache.put(ChatBubble.getContent(), bitmap);
+                        scaleImage(holder.image,bitmap, 300);
+                        holder.image.setImageBitmap(bitmap);
                         holder.name.setText(ChatBubble.getName());
 
                     }
@@ -99,12 +107,23 @@ public class MessageAdapter extends ArrayAdapter<ChatBubble> {
         }
         return convertView;
     }
+    private void scaleImage(ImageView image, Bitmap bitmap, int newScale){
+        int originalWidth = bitmap.getWidth();
+        int originalHeight =  bitmap.getHeight();
+        if(originalHeight > originalWidth){
+            float scale =  (float) newScale / originalWidth;
+            Integer newHeight = (int) Math.round(originalHeight * scale);
+            image.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+            image.getLayoutParams().width = newScale;
+            image.getLayoutParams().height = newHeight;
+        }else{
+            float scale =  (float) newScale / originalHeight;
+            Integer newWidth = (int) Math.round(originalWidth * scale);
+            image.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+            image.getLayoutParams().width = newWidth;
+            image.getLayoutParams().height = newScale;
+        }
 
-    public static Bitmap RotateBitmap(Bitmap source, float angle)
-    {
-        Matrix matrix = new Matrix();
-        matrix.postRotate(angle);
-        return Bitmap.createBitmap(source, 0, 0, source.getWidth(), source.getHeight(), matrix, true);
     }
 
     @Override
@@ -121,12 +140,22 @@ public class MessageAdapter extends ArrayAdapter<ChatBubble> {
         private TextView msg;
         private TextView name;
         private ImageView image;
-        //private TextView otherName;
         public ViewHolder(View v){
 
             msg = (TextView) v.findViewById(R.id.txt_msg);
             name = (TextView) v.findViewById(R.id.friendName);
             image = (ImageView) v.findViewById(R.id.imageChat);
+
+            if(image != null){
+                image.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
+                    }
+                });
+            }
         }
     }
+
+
 }

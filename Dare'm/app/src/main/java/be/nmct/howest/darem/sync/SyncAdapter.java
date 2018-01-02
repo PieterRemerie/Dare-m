@@ -14,6 +14,13 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.RemoteException;
 import android.util.Log;
+import android.widget.Toast;
+
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -169,6 +176,8 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
         contentResolver.applyBatch(Contract.AUTHORITY, operationList);
         syncResult.stats.numDeletes++;
     }
+
+
 
     static private <T> void executeAsyncTask(AsyncTask<T, ?, ?> task, T... params) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {

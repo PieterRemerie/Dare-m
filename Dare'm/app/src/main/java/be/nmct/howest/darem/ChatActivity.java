@@ -169,17 +169,18 @@ public class ChatActivity extends AppCompatActivity {
 
                     if(Objects.equals(image, "")){
                         if(AccessToken.getCurrentAccessToken().getUserId().equals(userName)){
-                            addMessageBox(message, "YOU", 1);
+                            addMessageBox(message, "You", 1);
                         }else{
                             addMessageBox(message, naam, 2);
                         }
                     }else if(Objects.equals(message, "")){
-                        if(AccessToken.getCurrentAccessToken().getUserId().equals(AccessToken.getCurrentAccessToken().getUserId())){
+                        if(AccessToken.getCurrentAccessToken().getUserId().equals(userName)){
                             addMessageBox(image, "YOU", 3);
                             progressDialog.dismiss();
 
                         }else{
                             addMessageBox(image, naam, 4);
+                            progressDialog.dismiss();
 
                         }
                     }
@@ -222,7 +223,7 @@ public class ChatActivity extends AppCompatActivity {
                 return false;
             }
         }
-        else { //permission is automatically granted on sdk<23 upon installation
+        else {
             Log.v("","Permission is granted1");
             return true;
         }
@@ -241,7 +242,7 @@ public class ChatActivity extends AppCompatActivity {
                 return false;
             }
         }
-        else { //permission is automatically granted on sdk<23 upon installation
+        else {
             Log.v("","Permission is granted2");
             return true;
         }
