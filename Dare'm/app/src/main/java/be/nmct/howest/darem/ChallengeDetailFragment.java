@@ -30,11 +30,15 @@ import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 import com.squareup.picasso.Picasso;
 
 
@@ -251,6 +255,8 @@ public class ChallengeDetailFragment extends Fragment implements LoaderManager.L
                 JSONObject js = new JSONObject();
                 js.put("authToken", AuthHelper.getAccessToken(getContext()));
                 js.put("challengeID", challenge.getDatabaseId());
+
+
 
                 DataOutputStream os = new DataOutputStream(conn.getOutputStream());
                 os.writeBytes(js.toString());
