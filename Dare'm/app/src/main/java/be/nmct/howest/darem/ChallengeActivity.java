@@ -180,7 +180,6 @@ public class ChallengeActivity extends AppCompatActivity {
             Navigation.setHeaderOfflineData(navigationView, view);
         }
         saveCategories();
-        Toast.makeText(this.getBaseContext(), "welcome: " + AuthHelper.getUsername(this) + " AUTHTOKEN: " + AuthHelper.getAccessToken(this) + " DBToken: " + AuthHelper.getDbToken(this), Toast.LENGTH_LONG).show();
     }
 
     @Override

@@ -83,8 +83,6 @@ public class MessageAdapter extends ArrayAdapter<ChatBubble> {
             mStorage = FirebaseStorage.getInstance();
 
             if(mBitmapCache.containsKey(ChatBubble.getContent())){
-
-                scaleImage(holder.image,mBitmapCache.get(ChatBubble.getContent()), 300);
                 holder.image.setImageBitmap(mBitmapCache.get(ChatBubble.getContent()));
                 holder.name.setText(ChatBubble.getName());
             }else{
@@ -94,16 +92,13 @@ public class MessageAdapter extends ArrayAdapter<ChatBubble> {
                     @Override
                     public void onSuccess(byte[] bytes) {
                         bitmap = BitmapFactory.decodeByteArray(bytes,0,bytes.length);
-                        mBitmapCache.put(ChatBubble.getContent(), bitmap);
-                        scaleImage(holder.image,bitmap, 300);
+                        mBitmapCache.put(ChatBubble.getContent().toString(), bitmap);
                         holder.image.setImageBitmap(bitmap);
                         holder.name.setText(ChatBubble.getName());
-
                     }
 
                 });
             }
-            //Picasso.with(getContext()).load(ChatBubble.getContent()).into(holder.image);
         }
         return convertView;
     }
@@ -146,16 +141,7 @@ public class MessageAdapter extends ArrayAdapter<ChatBubble> {
             name = (TextView) v.findViewById(R.id.friendName);
             image = (ImageView) v.findViewById(R.id.imageChat);
 
-            if(image != null){
-                image.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-
-                    }
-                });
-            }
         }
     }
-
 
 }

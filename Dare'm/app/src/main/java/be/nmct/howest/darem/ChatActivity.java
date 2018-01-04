@@ -91,7 +91,7 @@ public class ChatActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
-
+        mStorage = FirebaseStorage.getInstance().getReference();
         progressDialog = new ProgressDialog(this);
         chatBubbles = new ArrayList<>();
         listView = (ListView) findViewById(R.id.list_msg);
@@ -168,13 +168,13 @@ public class ChatActivity extends AppCompatActivity {
                     }
 
                     if(Objects.equals(image, "")){
-                        if(AccessToken.getCurrentAccessToken().getUserId().equals(userName)){
+                        if(AuthHelper.getAccessToken(getApplicationContext()).equals(userName)){
                             addMessageBox(message, "You", 1);
                         }else{
                             addMessageBox(message, naam, 2);
                         }
                     }else if(Objects.equals(message, "")){
-                        if(AccessToken.getCurrentAccessToken().getUserId().equals(userName)){
+                        if(AuthHelper.getAccessToken(getApplicationContext()).equals(userName)){
                             addMessageBox(image, "YOU", 3);
                             progressDialog.dismiss();
 
@@ -305,7 +305,7 @@ public class ChatActivity extends AppCompatActivity {
         filepath = mStorage.child(challenge.getName()).child(AuthHelper.getAccessToken(getApplicationContext()) + System.currentTimeMillis());
         Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 15, bytes);
+        Bitmap.createScaledBitmap(bitmap, 528, 298, true).compress(Bitmap.CompressFormat.JPEG, 15, bytes);
         byte[] compressed = bytes.toByteArray();
         UploadTask uploadTask = filepath.putBytes(compressed);
         uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {

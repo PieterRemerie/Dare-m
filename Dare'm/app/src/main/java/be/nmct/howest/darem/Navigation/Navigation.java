@@ -20,6 +20,7 @@ import java.util.concurrent.ExecutionException;
 import be.nmct.howest.darem.Loader.HttpGetRequest;
 import be.nmct.howest.darem.R;
 import be.nmct.howest.darem.Transforms.CircleTransform;
+import be.nmct.howest.darem.auth.AuthHelper;
 import be.nmct.howest.darem.database.Contract;
 import be.nmct.howest.darem.database.DatabaseHelper;
 
@@ -37,7 +38,7 @@ public class Navigation {
         TextView txtUserMail = (TextView) header.findViewById(R.id.txtUserEmail);
         ImageView imgUser = (ImageView) header.findViewById(R.id.imgUserPhoto);
 
-        String url = "https://darem.herokuapp.com/userprofile?authToken=" + AccessToken.getCurrentAccessToken().getUserId();
+        String url = "https://darem.herokuapp.com/userprofile?authToken=" + AuthHelper.getAccessToken(view.getContext());
         String result = null;
         JSONArray jsonUser = null;
         HttpGetRequest getRequest = new HttpGetRequest();
