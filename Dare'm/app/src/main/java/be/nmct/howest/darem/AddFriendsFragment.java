@@ -25,6 +25,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.facebook.AccessToken;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
@@ -40,7 +42,9 @@ import javax.net.ssl.HttpsURLConnection;
 
 import be.nmct.howest.darem.Loader.Friends;
 import be.nmct.howest.darem.Loader.FBFriendsLoader;
+import be.nmct.howest.darem.Model.Notification;
 import be.nmct.howest.darem.Transforms.CircleTransform;
+import be.nmct.howest.darem.auth.AuthHelper;
 import be.nmct.howest.darem.database.Contract;
 import be.nmct.howest.darem.database.SaveNewFriendToDBTask;
 import be.nmct.howest.darem.database.SaveNewUserToDBTask;
@@ -235,6 +239,11 @@ public class AddFriendsFragment extends Fragment implements LoaderManager.Loader
 
                 Log.i("STATUS", String.valueOf(conn.getResponseCode()));
                 Log.i("MSG" , conn.getResponseMessage());
+
+                DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Invites");
+                reference.removeValue();
+                Notification notification = new Notification(friendId, "", AuthHelper.getUsername(getContext()));
+                reference.setValue(notification);
 
                 conn.disconnect();
 

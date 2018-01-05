@@ -20,7 +20,9 @@ import com.google.android.gms.common.internal.zzas;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
+import be.nmct.howest.darem.AddFriendsActivity;
 import be.nmct.howest.darem.InviteOverviewActivity;
 import be.nmct.howest.darem.R;
 import be.nmct.howest.darem.auth.AuthHelper;
@@ -46,8 +48,15 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
     }
     private void sendNotification(Map<String, String> payload){
-        Intent intent = new Intent(getApplicationContext(), InviteOverviewActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        Intent intent;
+        if(Objects.equals(payload.get("id"), "1")){
+            intent = new Intent(getApplicationContext(), InviteOverviewActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        }else{
+            intent = new Intent(getApplicationContext(), AddFriendsActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+
+        }
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent,
                 PendingIntent.FLAG_ONE_SHOT);
 

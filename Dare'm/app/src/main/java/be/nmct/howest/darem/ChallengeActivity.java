@@ -34,6 +34,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.messaging.FirebaseMessaging;
+import com.google.firebase.messaging.FirebaseMessagingService;
 import com.squareup.picasso.Picasso;
 
 import android.os.RemoteException;
@@ -167,6 +168,8 @@ public class ChallengeActivity extends AppCompatActivity {
             }
         });
         FirebaseMessaging.getInstance().subscribeToTopic(AuthHelper.getDbToken(getApplicationContext()));
+        FirebaseMessaging.getInstance().subscribeToTopic(AuthHelper.getAccessToken(getApplicationContext()));
+        Log.v("authtoken", AuthHelper.getAccessToken(getApplicationContext()));
         SyncManual.syncDataManual(getApplicationContext());
     }
 
