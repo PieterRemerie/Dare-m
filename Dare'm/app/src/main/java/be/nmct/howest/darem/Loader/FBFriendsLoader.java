@@ -89,6 +89,7 @@ public class FBFriendsLoader extends AsyncTaskLoader<Cursor> {
 
                 JSONArray info = RequestLoader.RequestInfoProfile();
                 String json = jsonDownloader.jsonUser(getContext());
+                JSONArray jsonUser = new JSONArray(json);
 
                 try {
 
@@ -97,7 +98,7 @@ public class FBFriendsLoader extends AsyncTaskLoader<Cursor> {
                         MatrixCursor.RowBuilder row;
                         for (int i = 0; i < info.length(); i++) {
                             JSONObject obj = info.getJSONObject(i);
-                            if(!json.toString().contains(obj.getString("id"))){
+                            if(!jsonUser.getJSONObject(0).getString("friends").contains(obj.getString("id"))){
                                 row = cursor.newRow();
                                 row.add(obj.getString("id"));
                                 row.add(obj.getString("name"));

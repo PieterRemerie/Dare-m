@@ -26,6 +26,7 @@ import be.nmct.howest.darem.AddFriendsActivity;
 import be.nmct.howest.darem.InviteOverviewActivity;
 import be.nmct.howest.darem.R;
 import be.nmct.howest.darem.auth.AuthHelper;
+import be.nmct.howest.darem.sync.SyncManual;
 
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
     private static final String TAG = "FirebaseMessageService";
@@ -53,6 +54,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             intent = new Intent(getApplicationContext(), InviteOverviewActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         }else{
+            SyncManual.syncDataManual(getApplicationContext());
             intent = new Intent(getApplicationContext(), AddFriendsActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
