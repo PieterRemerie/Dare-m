@@ -8,18 +8,17 @@
         android:id="@+id/friendName"
         android:text=""
         android:textSize="10dp"
-        android:layout_alignParentRight="true"
         android:paddingBottom="5dp"/>
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
+        android:layout_alignParentLeft="true"
         android:background="@drawable/bubble_out_9"
         android:orientation="vertical"
         android:paddingBottom="10dp"
         android:layout_below="@id/friendName">
         <TextView
-            android:layout_margin="5dp"
+            android:layout_margin="7dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/txt_msg"

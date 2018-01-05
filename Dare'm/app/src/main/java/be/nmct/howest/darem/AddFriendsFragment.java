@@ -162,7 +162,6 @@ public class AddFriendsFragment extends Fragment implements LoaderManager.Loader
                     new SendPost(friendID).execute();
 
                     Toast.makeText(getContext(), name + " is toegevoegd aan uw vrienden", Toast.LENGTH_SHORT).show();
-                    getLoaderManager().restartLoader(0, null, AddFriendsFragment.this);
                     Log.i("AddFRIENDS", "COMPLETED");
                 }
             });
@@ -229,7 +228,6 @@ public class AddFriendsFragment extends Fragment implements LoaderManager.Loader
                 js.put("userOne", AccessToken.getCurrentAccessToken().getUserId().toString());
                 js.put("userTwo","" + friendId);
 
-                Log.i("jsonobject", js.toString());
 
                 DataOutputStream os = new DataOutputStream(conn.getOutputStream());
                 os.writeBytes(js.toString());
@@ -244,6 +242,8 @@ public class AddFriendsFragment extends Fragment implements LoaderManager.Loader
                 reference.removeValue();
                 Notification notification = new Notification(friendId, "", AuthHelper.getUsername(getContext()));
                 reference.setValue(notification);
+                getLoaderManager().destroyLoader(0);
+                getLoaderManager().initLoader(0, null, AddFriendsFragment.this);
 
                 conn.disconnect();
 

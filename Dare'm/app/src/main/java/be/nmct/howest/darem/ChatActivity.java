@@ -175,7 +175,7 @@ public class ChatActivity extends AppCompatActivity {
                         }
                     }else if(Objects.equals(message, "")){
                         if(AuthHelper.getAccessToken(getApplicationContext()).equals(userName)){
-                            addMessageBox(image, "YOU", 3);
+                            addMessageBox(image, "You", 3);
                             progressDialog.dismiss();
 
                         }else{
