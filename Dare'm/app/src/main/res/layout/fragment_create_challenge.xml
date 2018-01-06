@@ -137,13 +137,13 @@
 
             <ImageButton
                 android:id="@+id/btnAddFriends"
-                android:onClick="@{() -> test.showAddFriendToChallengeFragment()}"
                 android:layout_width="35dp"
                 android:layout_height="35dp"
-                android:src="@drawable/add_challenge_vector"
-                android:background="#00000000"
+                android:layout_alignEnd="@+id/btnAddFriendsToUser"
                 android:layout_alignTop="@+id/btnAddFriendsToUser"
-                android:layout_alignStart="@+id/fab_createChal">
+                android:background="#00000000"
+                android:onClick="@{() -> test.showAddFriendToChallengeFragment()}"
+                android:src="@drawable/add_challenge_vector">
 
             </ImageButton>
 

@@ -160,9 +160,7 @@ public class AddFriendsFragment extends Fragment implements LoaderManager.Loader
                     executeAsyncTask(new SaveNewFriendToDBTask(getContext()), values);
 
                     new SendPost(friendID).execute();
-
                     Toast.makeText(getContext(), name + " is toegevoegd aan uw vrienden", Toast.LENGTH_SHORT).show();
-                    Log.i("AddFRIENDS", "COMPLETED");
                 }
             });
 
@@ -238,12 +236,14 @@ public class AddFriendsFragment extends Fragment implements LoaderManager.Loader
                 Log.i("STATUS", String.valueOf(conn.getResponseCode()));
                 Log.i("MSG" , conn.getResponseMessage());
 
-                DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Invites");
-                reference.removeValue();
-                Notification notification = new Notification(friendId, "", AuthHelper.getUsername(getContext()));
-                reference.setValue(notification);
-                getLoaderManager().destroyLoader(0);
-                getLoaderManager().initLoader(0, null, AddFriendsFragment.this);
+                if (conn.getResponseCode() == 200) {
+                    DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Invites");
+                    reference.removeValue();
+                    Notification notification = new Notification(friendId, "", AuthHelper.getUsername(getContext()));
+                    reference.setValue(notification);
+                    getLoaderManager().destroyLoader(0);
+                    getLoaderManager().initLoader(0, null, AddFriendsFragment.this);
+                }
 
                 conn.disconnect();
 

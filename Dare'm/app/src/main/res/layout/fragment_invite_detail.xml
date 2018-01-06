@@ -91,36 +91,47 @@
                         android:orientation="horizontal" />
                 </HorizontalScrollView>
 
-                <Button
-                    android:id="@+id/btnDeclineInviteDetail"
-                    android:layout_width="165dp"
-                    android:layout_height="78dp"
-                    android:background="#eaeaea"
-                    android:backgroundTint="#eaeaea"
-                    android:text="Decline"
-                    android:textColor="#7c0000"
-                    android:textSize="30sp"
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
                     android:layout_alignParentBottom="true"
-                    android:layout_alignParentStart="true" />
+                    android:layout_alignParentStart="true"
+                    android:id="@+id/linearLayout">
 
-                <Button
-                    android:id="@+id/btnAcceptInviteDetail"
-                    android:layout_width="165dp"
-                    android:layout_height="78dp"
-                    android:background="#eaeaea"
-                    android:text="Accept"
-                    android:textColor="#167c00"
-                    android:textSize="30sp"
-                    android:layout_alignParentBottom="true"
-                    android:layout_alignParentEnd="true" />
+                    <Button
+                        android:id="@+id/btnDeclineInviteDetail"
+                        android:layout_width="0dp"
+                        android:layout_height="78dp"
+                        android:layout_alignParentBottom="true"
+                        android:layout_alignParentStart="true"
+                        android:layout_weight="0.50"
+                        android:background="#eaeaea"
+                        android:backgroundTint="#eaeaea"
+                        android:text="Decline"
+                        android:textColor="#7c0000"
+                        android:textSize="30sp" />
+
+                    <Button
+                        android:id="@+id/btnAcceptInviteDetail"
+                        android:layout_width="0dp"
+                        android:layout_height="78dp"
+                        android:layout_alignParentBottom="true"
+                        android:layout_alignParentEnd="true"
+                        android:layout_weight="0.50"
+                        android:background="#eaeaea"
+                        android:text="Accept"
+                        android:textColor="#167c00"
+                        android:textSize="30sp" />
+                </LinearLayout>
+
 
                 <TextView
                     android:id="@+id/txtDate"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_above="@+id/btnDeclineInviteDetail"
+                    android:layout_above="@+id/linearLayout"
                     android:layout_centerHorizontal="true"
-                    android:layout_marginBottom="17dp"
+                    android:layout_marginBottom="15dp"
                     android:text="Ends on: 18/02/2018" />
 
             </RelativeLayout>
